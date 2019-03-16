@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=Cygwin-Windows
 CND_ARTIFACT_DIR_Debug=dist/Debug/Cygwin-Windows
-CND_ARTIFACT_NAME_Debug=sum
-CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin-Windows/sum
+CND_ARTIFACT_NAME_Debug=1-d_augment
+CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin-Windows/1-d_augment
 CND_PACKAGE_DIR_Debug=dist/Debug/Cygwin-Windows/package
-CND_PACKAGE_NAME_Debug=sum.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin-Windows/package/sum.tar
+CND_PACKAGE_NAME_Debug=1-daugment.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin-Windows/package/1-daugment.tar
 # Release configuration
 CND_PLATFORM_Release=Cygwin-Windows
 CND_ARTIFACT_DIR_Release=dist/Release/Cygwin-Windows
-CND_ARTIFACT_NAME_Release=sum
-CND_ARTIFACT_PATH_Release=dist/Release/Cygwin-Windows/sum
+CND_ARTIFACT_NAME_Release=1-d_augment
+CND_ARTIFACT_PATH_Release=dist/Release/Cygwin-Windows/1-d_augment
 CND_PACKAGE_DIR_Release=dist/Release/Cygwin-Windows/package
-CND_PACKAGE_NAME_Release=sum.tar
-CND_PACKAGE_PATH_Release=dist/Release/Cygwin-Windows/package/sum.tar
+CND_PACKAGE_NAME_Release=1-daugment.tar
+CND_PACKAGE_PATH_Release=dist/Release/Cygwin-Windows/package/1-daugment.tar
 #
 # include compiler specific variables
 #

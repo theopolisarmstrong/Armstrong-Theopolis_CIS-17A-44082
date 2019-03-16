@@ -2,7 +2,7 @@
  * File:   main.cpp
  * Author: Armstrong, Theopolis
  * Created on March 15th, 2019, 6:12 PM
- * Purpose: Output an array of sums of previous elementscin the original array
+ * Purpose: Output an array of sums of previous elements in the original array
  */
 
 //System Libraries
@@ -24,12 +24,23 @@ int main(int argc, char** argv) {
     //Set the random number seed
     
     //Declare Variables
+    int *input, *sums, size;
     
     //Initialize or input i.e. set variable values
+    input = getData(size);
     
     //Map inputs -> outputs
+    sums = sumAry(input, size);
+    
     
     //Display the outputs
+    prntAry(input, size);
+    cout << endl;
+    prntAry(sums, size);
+    
+    //Delete arrays
+    delete [] input;
+    delete [] sums;
 
     //Exit stage right or left!
     return 0;
@@ -46,12 +57,22 @@ int *getData(int &size){
 }
 
 //Return the array with successive sums
-int *sumAry(const int *,int){
-    
+int *sumAry(const int *array, int size){
+    int *sums = new int(size),
+            max = 1; //Sums array position while summing
+    for (int i = 0; i < size; i++){ //Iterate through entire sums array
+        int sum = 0; 
+        for (int j = 0; j < max; j++){ //Add previous elements for sum
+            sum += array[j];
+        }
+        sums[i] = sum; //Add sum to sums array
+        max++;
+    }
+    return sums;
 }
 
 //Print the array
-void prntDat(int *array, int size){
+void prntAry(const int *array, int size){
     for (int i = 0; i < size; i++){
         (i == size - 1) ? cout << array[i] : cout << array[i] << ' ';
     }
