@@ -25,18 +25,18 @@ int main(int argc, char** argv) {
     
     //Declare Variables
     int *input = nullptr, *pushed = nullptr, size, augSize;
-    augSize = size++;
     
     //Initialize or input i.e. set variable values
     input = getData(size);
     
     //Map inputs -> outputs
-    pushed = augment(input, augSize);
+    pushed = augment(input, size);
+    augSize = size + 1;
     
     //Display the outputs
-    prntAry(input, size - 1);
+    prntAry(input, size);
     cout << endl;
-    prntAry(pushed, size);
+    prntAry(pushed, augSize);
     
     //De-allocate dynamic arrays and pointers
     delete [] input;
