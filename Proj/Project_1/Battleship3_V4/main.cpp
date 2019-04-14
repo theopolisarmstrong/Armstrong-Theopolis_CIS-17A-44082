@@ -1,13 +1,15 @@
 /*
  * File:   main.cpp
  * Author: Theopolis Armstrong
- * Created on April 13, 2019
+ * Created on April 14, 2019 6:00 AM
  * Purpose: Project 1 - Battleship 3
  *
  * Title raw ASCII art generated using http://www.patorjk.com/software/taag/
  *
  * Working representation of progress at Battleship 3 V3 main file
  *  Completed player vs computer initialization/structure integration
+ *  Completed player vs player initialization/structure integration
+ *  Completed player vs computer gameplay loop
  */
 
 //System Libraries
@@ -30,8 +32,8 @@ const unsigned char SHIPNUM = 3; //Number of available ship types
 const unsigned char NAMELEN = 9; //Length of player name
 
 //Enumerators
-enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER};
-enum Options {NONE = -1, EXIT = 0, PVCPU, PVP, LOAD, WINNER};
+enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size
+enum Options {NONE = -1, EXIT = 0, PVCPU, PVP, LOAD, WINNER}; //Menu choice options/game modes
 
 //Structures
 struct Player{
@@ -49,6 +51,7 @@ void valid(char&, const char, const char, const char, const string);
 void valid(char&, const char, const char, const char, const char, const string);
 bool valShip(char** ships, const char type, const char orient, const char posX, const char posY); //Validate ship position
 void maxVal(char&, const char, const string); //Ensures input is below max value
+void minVal(char&, const char, const string);
 
 void bubble(vector<char>& a); //Bubble sort a vector
 void select(vector<char>& a); //Selection sort a vector
@@ -65,8 +68,10 @@ void map(char**, const char);   //Output map
 void cpuMap(char**, const char, const Mapping type = PATROL);   //Generate computer player ship positions
 void pMap(Player*, const char, const Mapping type = PATROL);
 //void sunk(char health[]);     requires ship positions validation
-void genTar(char& targetX, char& targetY);  //Generate unique random targets for computer player
-void updateV(char x, char y, vector<char>& pastX, vector<char>& pastY);
+void genTar(char& targetX, char& targetY, const char&);  //Generate unique random targets for computer player
+void updateV(const char &x, const char &y, vector<char>& pastX, vector<char>& pastY);
+bool turn(char, char, Player*, Player*);  //Player turn; pass opposing player's ship placements for comparison
+bool testEnd(char**, const char&);  //Test game end condition
 void chart(vector<char> health);    //chart hit and miss vector
 void saveProg(fstream &); //Save game progress to file
 void loadProg(const fstream &); //Initialize game w/ data from file
@@ -79,8 +84,8 @@ int main(int argc, char** argv) {
     srand(static_cast<unsigned int>(time(0)));
     
     //Declare Variables
-    enum Winner {CPU, P1, P2};
-    enum PlayInd {PI1, PI2}; //Index of player
+    enum Winner {CPU_WIN, P1_WIN, P2_WIN};
+    enum PlayInd {P1, P2, CPU = 1}; //Index of player
     const char PLAYNUM = 2; //Number of players
     const string WIN = "win.dat";
     const string SAVE = "save.dat";
@@ -91,7 +96,8 @@ int main(int argc, char** argv) {
     Winner winner; //winner of the game
     bool end = false; //end game flag
     char choice; //menu choice
-    short size; //Map size
+    char size = 0; //Map size
+    float health = 0.0f;
     
     char targetX, targetY;  //Target coordinates
     
@@ -107,28 +113,28 @@ int main(int argc, char** argv) {
                 cout << "Initializing Player vs. Computer game mode.\nEnter a 0 at any time to quit.\n";
                 cout << "Enter map size: ";
                 cin >> size;
+                size -= CHARNUM;
+                minVal(size, 4, "Error: Size too low.\n");
                 gameMode = PVCPU; //Set game mode
                 //Initialize player structures
-                players[PI1] = initShip(size);
-                players[PI2] = initShip(size);
-                strlcpy(players[PI1]->name, "Player 1", NAMELEN);
-                strlcpy(players[PI2]->name, "Computer", NAMELEN);
+                players[P1] = initShip(size);
+                players[CPU] = initShip(size);
+                strlcpy(players[P1]->name, "Player 1", NAMELEN);
+                strlcpy(players[CPU]->name, "Computer", NAMELEN);
                 
                 //Set ship positions
                 cout << "Setting CPU ship placements...\n";
                 //Place computer player ships
-                cpuMap(players[PI2]->ships, size, CARRIER);
-                cpuMap(players[PI2]->ships, size, DESTROY);
-                cpuMap(players[PI2]->ships, size);
-                map(players[PI2]->ships, size);
+                cpuMap(players[CPU]->ships, size, CARRIER);
+                cpuMap(players[CPU]->ships, size, DESTROY);
+                cpuMap(players[CPU]->ships, size);
+                //                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
                 //Input and set player ships
-                cout << "Place you Aircraft Carrier.\n";
-                pMap(players[PI1], size, CARRIER);
-                cout << "Place you Destroyer.\n";
-                pMap(players[PI1], size, DESTROY);
-                cout << "Place you Patrol Boat.\n";
-                pMap(players[PI1], size, PATROL);
-                cout << endl;
+                pMap(players[P1], size, CARRIER);
+                pMap(players[P1], size, DESTROY);
+                pMap(players[P1], size, PATROL);
+                cout << endl;//1 9 v 3 1 n h 4 3 n v 1 1 n
+                break;
             case PVP:
                 //Initialize game
                 cout << "Initializing Player vs. Player game mode.\nEnter a 0 at any time to quit.\n";
@@ -136,39 +142,34 @@ int main(int argc, char** argv) {
                 cin >> size;
                 gameMode = PVP; //Set game mode
                 //Initialize player structures
-                players[PI1] = initShip(size);
-                players[PI2] = initShip(size);
-                strlcpy(players[PI1]->name, "Player 1", NAMELEN);
-                strlcpy(players[PI2]->name, "Player 2", NAMELEN);
+                players[P1] = initShip(size);
+                players[P2] = initShip(size);
+                strlcpy(players[P1]->name, "Player 1", NAMELEN);
+                strlcpy(players[P2]->name, "Player 2", NAMELEN);
                 
                 //Set ship positions
-                cout << "Place you Aircraft Carrier.\n";
-                pMap(players[PI1], size, CARRIER);
-                cout << "Place you Destroyer.\n";
-                pMap(players[PI1], size, DESTROY);
-                cout << "Place you Patrol Boat.\n";
-                pMap(players[PI1], size);
+                pMap(players[P1], size, CARRIER);
+                pMap(players[P1], size, DESTROY);
+                pMap(players[P1], size);
                 cout << endl;
-                cout << "Place you Aircraft Carrier.\n";
-                pMap(players[PI2], size, CARRIER);
-                cout << "Place you Destroyer.\n";
-                pMap(players[PI2], size, DESTROY);
-                cout << "Place you Patrol Boat.\n";
-                pMap(players[PI2], size);
+                pMap(players[P2], size, CARRIER);
+                pMap(players[P2], size, DESTROY);
+                pMap(players[P2], size);
                 cout << endl;
                 
-                for (int i = 0; i < size; i++){
-                    for (int j =0; j < size; j++){
-                        cout << static_cast<int>(players[PI1]->ships[i][j]) << ' ';
-                    }
-                    cout << endl;
-                }
-                for (int i = 0; i < size; i++){
-                    for (int j =0; j < size; j++){
-                        cout << static_cast<int>(players[PI2]->ships[i][j]) << ' ';
-                    }
-                    cout << endl;
-                }
+                //                for (int i = 0; i < size; i++){
+                //                    for (int j =0; j < size; j++){
+                //                        cout << static_cast<int>(players[P1]->ships[i][j]) << ' ';
+                //                    }
+                //                    cout << endl;
+                //                }
+                //                cout << endl;
+                //                for (int i = 0; i < size; i++){
+                //                    for (int j =0; j < size; j++){
+                //                        cout << static_cast<int>(players[P2]->ships[i][j]) << ' ';
+                //                    }
+                //                    cout << endl;
+                //                }
                 break;
             case EXIT:
                 cout << "Goodbye.\n";
@@ -177,7 +178,68 @@ int main(int argc, char** argv) {
         }
     }
     
+    //Gameplay loop
+    cout << "********\n" <<"*BEGIN!*\n" << "********\n\n";
+    switch(gameMode){
+            //Player vs. CPU
+        case PVCPU:{
+            while(!end){
+                //Player turn
+                cout << "\nPlayer's turn: \n";
+                //Get and validate target coordinates
+                cout << "Enter a target coordinates: ";
+                cin >> targetX;
+                targetX -= CHARNUM;
+                maxVal(targetX, size,  "Error: Target x-axis out of range.\n"); //Validate target x coordinate
+                cin >> targetY;
+                targetY -= CHARNUM;
+                maxVal(targetY, size, "Error: Target y-axis out of range.\n");  //Validate target y coordinate
+                
+                turn(targetX, targetY, players[CPU], players[P1]) ? hit = "Hit!" : hit = "Miss!"; //Check for and calculate hit or miss
+                map(players[P1]->ships, size);
+                cout << hit << endl;
+                //Calculate and display health
+                cout << "Health: ";
+                health = 0.0f;
+                for (char i : players[P1]->health){
+                    cout << static_cast<int>(i) << ' ';
+                    health += i;
+                }
+                cout << setprecision(2) << fixed;
+                cout << "\nTotal health: " << (health / 6) * 100 << '%' << endl;
+                
+                //Test for computer loss
+                if (testEnd(players[CPU]->ships, size)){
+                    end = true;
+                    winner = P1_WIN;
+                }
+                
+                //                map(players[CPU]->ships, size); //Map CPU ships for debugging
+                
+                //Computer Turn
+                cout << "\nComputer's turn: \n";
+                genTar(targetX, targetY, size);
+                cout << "The computer targets (" << static_cast<int>(targetX) << ", " << static_cast<int>(targetY) << ")." << endl;
+                turn(targetX, targetY, players[P1], players[CPU]) ? hit = "Computer hits!" : hit = "Computer misses!";  //Take computer's turn using random X and Y target coord's [1-size of map]
+                cout << hit << endl;
+                //Test for player loss
+                if (testEnd(players[P1]->ships, size)){
+                    end = true;
+                    winner = CPU_WIN;
+                }
+            }
+        }
+            break;
+        case PVP:{
+            
+        }
+            break;
+    }
+    
     //Exit stage right or left!
+    for (char i = 0; i < PLAYNUM; i++){
+        delete players[i];
+    }
     return 0;
 }
 
@@ -188,6 +250,17 @@ void maxVal(char& input, const char maxVal, const string error){
         exit(0);
     }
     while (input > maxVal && input != 9){
+        cout << error << endl;
+        cin >> input;
+        input -= CHARNUM;
+    }
+}
+void minVal(char& input, const char minVal, const string error){
+    if (input-CHARNUM == EXIT){
+        cout << "Goodbye!\n";
+        exit(0);
+    }
+    while (input < minVal && input != 9){
         cout << error << endl;
         cin >> input;
         input -= CHARNUM;
@@ -490,10 +563,80 @@ void pMap(Player* p, const char size, Mapping type){
         if (answer == 'y' || answer == 'Y'){
             repos = true;
             //Re-initialize temporary ship position array with current ship positions
-            destroy(temp, size);
             copyMap(p->ships, temp, size);
         }
     }while(repos);
     copyMap(temp, p->ships, size);
     destroy(temp, size);
 }
+
+void updateV(const char &x, const char &y, vector<char>& pastX, vector<char>& pastY){
+    pastX.push_back(x);
+    pastY.push_back(y);
+}
+
+void genTar(char& targetX, char& targetY, const char &size){
+    static vector<char> pastX;  //Previous X-axis targets
+    static vector<char> pastY;  //Previous Y-axis targets
+    
+    //Initialize targets with random coordinates
+    targetX = rand()%size+1;
+    targetY = rand()%size+1;
+    
+    //Generate unique random X and Y targets
+    for(int i = 0; i < pastX.size(); i++){
+        if (targetX == pastX[i] && targetY == pastY[i]){
+            i = 0;
+            targetX = rand()%size+1;
+            targetY = rand()%size+1;
+        }
+    }
+    //Update past target vectors
+    updateV(targetX, targetY, pastX, pastY);
+}
+
+//(const char&, const char, const Player*, Player*)
+bool turn(char targetX, char targetY, Player* target, Player* p){
+    targetX -= 1;
+    targetY -= 1;
+    if (target->ships[targetY][targetX] > 0){   //Ship is present
+        //Modify ship health
+        switch(target->ships[targetY][targetX]){
+            case CARRIER:
+                target->health[CARRIER-1] -= 1;
+                break;
+            case DESTROY:
+                target->health[DESTROY-1] -= 1;
+                break;
+            case PATROL:
+                target->health[PATROL-1] -= 1;
+                break;
+        }
+        //Indicate ship hit on map
+        target->ships[targetY][targetX] = HIT;
+        p->turns.push_back(HIT);
+        //Notify ship hit
+        return true;
+    } else if (target->ships[targetY][targetX] == 0){   //Ship is not present
+        target->ships[targetY][targetX] = MISS;
+        p->turns.push_back(MISS);
+        return false;
+    } else if (target->ships[targetY][targetX] == -1 || target->ships[targetY][targetX] == -2){ //Target coordinates previously targeted
+        p->turns.push_back(MISS);
+        return false;
+    } else return false;
+}
+
+bool testEnd(char** ships, const char &size){
+    bool end = true;    //End gameplay loop flag
+    for (int row = 0; row < size; row++){
+        for (int col = 0; col < size; col++){
+            if (ships[row][col] > 0)
+                end = false;
+        }
+    }
+    return end;
+}
+
+//Quick init testing values
+//1 4 v 2 1 n h 4 3 n v 1 1 n 1 1 n
