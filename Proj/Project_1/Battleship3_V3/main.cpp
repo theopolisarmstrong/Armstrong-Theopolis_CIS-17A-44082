@@ -24,37 +24,39 @@ using namespace std;
 //Global Constants, no Global Variables are allowed
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
 const unsigned char CHARNUM = 48;   //Char constant to integer constant conversion
-const unsigned char MAP = 5; //Size of the map
+const unsigned char SHIPNUM = 3; //Number of available ship types
+const unsigned char NAMELEN = 9; //Length of player name
 
 //Enumerators
 enum Mapping {HIT = -2, MISS = -1, PATROL, DESTROY, CARRIER};
 
 //Structures
 struct Player{
-    char name[3];
+    char name[NAMELEN];
     char** ships; //Dynamically allocated array of ship positions
-    char* health = {1, 2, 3}; //health of ships; health[1]=carrier, health[2]=destroyer, health[3]=patrol
+    char* health[SHIPNUM] = {PATROL, DESTROY, CARRIER}; //health of ships; health[1]=carrier, health[2]=destroyer, health[3]=patrol
     vector<char> turns;
 };
 
 //Function Prototypes
 //Validation inputs and overloads; exit if input is 0
-bool valid(char& input, char val1, char val2, string error);
-bool valid(char& input, char val1, char val2, char val3, string error);
-bool valid(char& input, char val1, char val2, char val3, char val4, string error);
-bool max(char& input, char maxVal, string error);
+void valid(char&, const char, const char, const string);
+void valid(char&, const char, const char, const char, const string);
+void valid(char&, const char, const char, const char, const char, const string);
+bool max(char&, char, string); //Ensures input is below max value
 
-void bubble(vector<char>& a);
-void select(vector<char>& a);
+void bubble(vector<char>& a); //Bubble sort a vector
+void select(vector<char>& a); //Selection sort a vector
 
 //Game functions
-void title();   //Output title header
-char menu(char& choice);    //Output menu and receives player's menu choice
-void initP(char *);
-char** initCPU(const char size);
-void map(char** ships, const char size);   //Output map
-void cpuMap(char**, const char, const unsigned char ship = 1);   //Generate computer player ship positions
-void pMap(char ships[][MAP], unsigned char type = 1);   //Input player 1 ship positions
+void title(); //Output title header
+char menu(char& choice); //Output menu and receives player's menu choice
+Player* initShip(const char size); //Initialize player structure
+void copyMap(char**, char**, const char); //Copy map to another 2D array
+void map(char** ships, const char size); //Output map
+void cpuMap(char**, const char, const unsigned char type = 1); //Generate computer player ship positions
+void pMap(Player*, const char, const unsigned char type = 1); //Input player 1 ship positions
+
 //void sunk(char health[]);     requires ship positions validation
 void genTar(char& targetX, char& targetY);  //Generate unique random targets for computer player
 void updateV(char x, char y, vector<char>& pastX, vector<char>& pastY);
@@ -72,34 +74,21 @@ int main(int argc, char** argv) {
     srand(static_cast<unsigned int>(time(0)));
     
     //Declare Variables
-    const unsigned char PVCPU = 1; //player vs computer game mode flag
-    const unsigned char PVP = 2;   //player vs player game mode flag
-    const unsigned char CPU = 1;  //CPU win condition
-    const unsigned char P1 = 2;   //Player 1 win condition
-    const unsigned char P2 = 3;   //Player 2 win condition
-    
+    enum Mode {NONE, PVCPU, PVP, EXIT = 9}; //Gamemode
+    enum Winner {CPU, P1, P2}; //Winner of the game
+    enum PlayInd {PI1, PI2}; //Index of player
+    const char PLAYNUM = 2; //Number of players
     const string WIN = "win.dat";
     const string SAVE = "save.dat";
     
-    bool end = false;   //end game flag
-    char winner = 0;    //winner of the game
-    char gameMode = 0;  //game mode chosen in menu
-    char choice;    //menu choice
-    char size;
-    Player p1, p2, cpu;
-    
-//    char p1Ships[MAP][MAP] = {0};  //positions of player 1 ships w/ test initialization
-//    char p2Ships[MAP][MAP] = {0};  //positions of player 2 ships
-//    char cShips[MAP][MAP] = {0}; //positions of computer player ships
-//    char p1Heal[] = {1, 2, 3};  //health of player 1 ships; heal[1] =carrier heal[2]=destroyer heal[3]=patrol
-//    char p2Heal[] = {1, 2, 3};  //health of player 2 ships
-//    char cHeal[] = {1, 2, 3};  //health of player 3 ships
-    
+    Player* players[PLAYNUM];
+
+    Mode gameMode = NONE; //Game mode chosen in menu
+    Winner winner; //Winner of the game
+    bool end = false; //End game flag
+    char choice; //Menu choice
+    char size; //Map size
     char targetX, targetY;  //Target coordinates
-    
-//    vector<char> p1Turns;   //total turns taken by player 1, player 2 and CPU; 1 = hit, 0 = miss
-//    vector<char> p2Turns;
-//    vector<char> cTurns;
     
     string hit;   //Indicates a hit
     string winName; //Name of the winner
@@ -111,24 +100,27 @@ int main(int argc, char** argv) {
         switch(menu(choice)){
             case PVCPU:
                 cout << "Initializing Player vs. Computer game mode.\nEnter a 0 at any time to quit.\n";
-                //Initialize game mode and ships
-                gameMode = PVCPU;   //Initialize game mode
                 cout << "Enter map size: ";
                 cin >> size;
-                cout << "Initializing CPU ships...\n";
-                cpu.ships = initCPU(size);
-                //Initialize computer player ships
-                cpuMap(cpu.ships, size, CARRIER);
-                cpuMap(cpu.ships, size, DESTROY);
-                cpuMap(cpu.ships, size);
-                map(cpu.ships, size);
-                //Initialize player ship positions
+                gameMode = PVCPU; //Set game mode
+                players[PI1] = initShip(size);
+                players[PI2] = initShip(size);
+                strcpy(players[PI1]->name, "Player 1");
+                strcpy(players[PI2]->name, "Computer");
+                
+                cout << "Setting CPU ship placements...\n";
+                //Place computer player ships
+                cpuMap(players[PI2]->ships, size, CARRIER);
+                cpuMap(players[PI2]->ships, size, DESTROY);
+                cpuMap(players[PI2]->ships, size);
+                map(players[PI2]->ships, size);
+                //Input and set player ships
                 cout << "Place you Aircraft Carrier.\n";
-                pMap(p1Ships, CARRIER);
+                pMap(players[PI1], size, CARRIER);
                 cout << "Place you Destroyer.\n";
-                pMap(p1Ships, DESTROY);
+                pMap(players[PI1], size, DESTROY);
                 cout << "Place you Patrol Boat.\n";
-                pMap(p1Ships, PATROL);
+                pMap(players[PI1], size, PATROL);
                 cout << endl;
                 break;
             case PVP:
