@@ -1,8 +1,8 @@
 /*
  * File:   main.cpp
  * Author: Theopolis Armstrong
- * Created on April 14, 2019 8:54 AM
- * Purpose: Project 1 - Battleship 3 V5
+ * Created on April 14, 2019 12:30 PM
+ * Purpose: Project 1 - Battleship 3 V6
  *
  * Title raw ASCII art generated using http://www.patorjk.com/software/taag/
  *
@@ -11,7 +11,7 @@
  *  Completed player vs player initialization/structure integration
  *  Completed player vs computer gameplay loop
  *  Completed player vs player gameplay loop
- *  WIP Saving, loading,
+ *  Completed reading and writing to binary file
  */
 
 //System Libraries
