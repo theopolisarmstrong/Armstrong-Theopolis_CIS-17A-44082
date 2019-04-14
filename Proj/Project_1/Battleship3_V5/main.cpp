@@ -10,6 +10,8 @@
  *  Completed player vs computer initialization/structure integration
  *  Completed player vs player initialization/structure integration
  *  Completed player vs computer gameplay loop
+ *  Completed player vs player gameplay loop
+ *  WIP Saving, loading,
  */
 
 //System Libraries
@@ -30,10 +32,12 @@ using namespace std;
 const unsigned char CHARNUM = 48;   //Char constant to integer constant conversion
 const unsigned char SHIPNUM = 3; //Number of available ship types
 const unsigned char NAMELEN = 9; //Length of player name
+const string S_FILE = "save.dat"; //Save file name
 
 //Enumerators
 enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size
-enum Options {NONE = -1, EXIT = 0, PVCPU, PVP, LOAD, WINNER}; //Menu choice options/game modes
+enum Options {NONE = 0, PVCPU, PVP, LOAD, SAVE = (static_cast<int>('s')-CHARNUM), SAVE_S = (static_cast<int>('S')-CHARNUM), EXIT = (static_cast<int>('e')-CHARNUM), EXIT_E = (static_cast<int>('E')-CHARNUM)}; //Menu choice options/game modes
+enum Winner {NO_WIN = -1, P1_WIN, P2_WIN, CPU_WIN = 1}; //Winner of the game
 
 //Structures
 struct Player{
@@ -49,12 +53,8 @@ struct Player{
 void valid(char&, const char, const char, const string);
 void valid(char&, const char, const char, const char, const string);
 void valid(char&, const char, const char, const char, const char, const string);
-bool valShip(char** ships, const char type, const char orient, const char posX, const char posY); //Validate ship position
 void maxVal(char&, const char, const string); //Ensures input is below max value
-void minVal(char&, const char, const string);
-
-void bubble(vector<char>& a); //Bubble sort a vector
-void select(vector<char>& a); //Selection sort a vector
+void minVal(char&, const char, const string); //Ensures input is above min value
 
 void destroy(char**, const char); //De-allocates two dimensional dynamic array
 
@@ -67,42 +67,33 @@ void copyMap(char**, char**, const char);
 void map(char**, const char);   //Output map
 void cpuMap(char**, const char, const Mapping type = PATROL);   //Generate computer player ship positions
 void pMap(Player*, const char, const Mapping type = PATROL);
-//void sunk(char health[]);     requires ship positions validation
+//void sunk(char health[]);     TODO: requires ship positions validation
 void genTar(char& targetX, char& targetY, const char&);  //Generate unique random targets for computer player
 void updateV(const char &x, const char &y, vector<char>& pastX, vector<char>& pastY);
-bool turn(char, char, Player*, Player*);  //Player turn; pass opposing player's ship placements for comparison
+bool attack(char, char, Player*, Player*);  //Player turn; pass opposing player's ship placements for comparison
 bool testEnd(char**, const char&);  //Test game end condition
+Winner turn(Player*, Player*, const char, bool&);
 void chart(vector<char> health);    //chart hit and miss vector
-void saveProg(fstream &); //Save game progress to file
-void loadProg(const fstream &); //Initialize game w/ data from file
-void saveWin(string file, string winner, vector<char> turns);   //save win stats to file
-void loadWin(string file); //load win stats from file
-
+void saveProg(const Player*, const Player*); //Save game progress to file
+void loadProg(Player*, Player*); //Initialize game w/ data from file
 //Execution Begins Here!
 int main(int argc, char** argv) {
     //Set the random number seed
     srand(static_cast<unsigned int>(time(0)));
     
     //Declare Variables
-    enum Winner {CPU_WIN, P1_WIN, P2_WIN};
     enum PlayInd {P1, P2, CPU = 1}; //Index of player
     const char PLAYNUM = 2; //Number of players
-    const string WIN = "win.dat";
-    const string SAVE = "save.dat";
     
     Player* players[PLAYNUM];
     
     Options gameMode = NONE; //game mode chosen in menu
-    Winner winner; //winner of the game
+    Winner winner = NO_WIN; //winner of the game
     bool end = false; //end game flag
     char choice; //menu choice
     char size = 0; //Map size
-    float health = 0.0f;
-    
     char targetX, targetY;  //Target coordinates
-    
     string hit;   //Indicates a hit
-    string winName; //Name of the winner
     
     //Initialize game
     title();
@@ -110,7 +101,7 @@ int main(int argc, char** argv) {
         switch(menu(choice)){
             case PVCPU:
                 //Initialize game
-                cout << "Initializing Player vs. Computer game mode.\nEnter a 0 at any time to quit.\n";
+                cout << "Initializing Player vs. Computer game mode.\nEnter " << static_cast<char>(EXIT_E+CHARNUM) << " at any time to quit.\n";
                 cout << "Enter map size: ";
                 cin >> size;
                 size -= CHARNUM;
@@ -133,13 +124,15 @@ int main(int argc, char** argv) {
                 pMap(players[P1], size, CARRIER);
                 pMap(players[P1], size, DESTROY);
                 pMap(players[P1], size, PATROL);
-                cout << endl;//1 9 v 3 1 n h 4 3 n v 1 1 n
+                cout << endl;
                 break;
             case PVP:
                 //Initialize game
                 cout << "Initializing Player vs. Player game mode.\nEnter a 0 at any time to quit.\n";
                 cout << "Enter map size: ";
                 cin >> size;
+                size -= CHARNUM;
+                minVal(size, 4, "Error: Size too low.\n");
                 gameMode = PVP; //Set game mode
                 //Initialize player structures
                 players[P1] = initShip(size);
@@ -156,22 +149,9 @@ int main(int argc, char** argv) {
                 pMap(players[P2], size, DESTROY);
                 pMap(players[P2], size);
                 cout << endl;
-                
-                //                for (int i = 0; i < size; i++){
-                //                    for (int j =0; j < size; j++){
-                //                        cout << static_cast<int>(players[P1]->ships[i][j]) << ' ';
-                //                    }
-                //                    cout << endl;
-                //                }
-                //                cout << endl;
-                //                for (int i = 0; i < size; i++){
-                //                    for (int j =0; j < size; j++){
-                //                        cout << static_cast<int>(players[P2]->ships[i][j]) << ' ';
-                //                    }
-                //                    cout << endl;
-                //                }
                 break;
             case EXIT:
+            case EXIT_E:
                 cout << "Goodbye.\n";
                 return 0;
                 break;
@@ -180,63 +160,48 @@ int main(int argc, char** argv) {
     
     //Gameplay loop
     cout << "********\n" <<"*BEGIN!*\n" << "********\n\n";
+    cout << "Enter " << static_cast<char>(EXIT_E+CHARNUM) << " at any time to quit.\n";
+    cout << "Enter " << static_cast<char>(SAVE_S+CHARNUM) << " at any time to save and quit.\n";
     switch(gameMode){
             //Player vs. CPU
         case PVCPU:{
             while(!end){
                 //Player turn
-                cout << "\nPlayer's turn: \n";
-                //Get and validate target coordinates
-                cout << "Enter a target coordinates: ";
-                cin >> targetX;
-                targetX -= CHARNUM;
-                maxVal(targetX, size,  "Error: Target x-axis out of range.\n"); //Validate target x coordinate
-                cin >> targetY;
-                targetY -= CHARNUM;
-                maxVal(targetY, size, "Error: Target y-axis out of range.\n");  //Validate target y coordinate
-                
-                turn(targetX, targetY, players[CPU], players[P1]) ? hit = "Hit!" : hit = "Miss!"; //Check for and calculate hit or miss
-                map(players[P1]->ships, size);
-                cout << hit << endl;
-                //Calculate and display health
-                cout << "Health: ";
-                health = 0.0f;
-                for (char i : players[P1]->health){
-                    cout << static_cast<int>(i) << ' ';
-                    health += i;
-                }
-                cout << setprecision(2) << fixed;
-                cout << "\nTotal health: " << (health / 6) * 100 << '%' << endl;
-                
-                //Test for computer loss
-                if (testEnd(players[CPU]->ships, size)){
-                    end = true;
-                    winner = P1_WIN;
-                }
-                
-                //                map(players[CPU]->ships, size); //Map CPU ships for debugging
-                
+                winner = turn(players[CPU], players[P1], size, end);
+                map(players[CPU]->ships, size); //Map CPU ships for debugging
                 //Computer Turn
-                cout << "\nComputer's turn: \n";
-                genTar(targetX, targetY, size);
-                cout << "The computer targets (" << static_cast<int>(targetX) << ", " << static_cast<int>(targetY) << ")." << endl;
-                turn(targetX, targetY, players[P1], players[CPU]) ? hit = "Computer hits!" : hit = "Computer misses!";  //Take computer's turn using random X and Y target coord's [1-size of map]
-                cout << hit << endl;
-                //Test for player loss
-                if (testEnd(players[P1]->ships, size)){
-                    end = true;
-                    winner = CPU_WIN;
+                if (!end){
+                    cout << "\nComputer's turn: \n";
+                    genTar(targetX, targetY, size);
+                    cout << "The computer targets (" << static_cast<int>(targetX) << ", " << static_cast<int>(targetY) << ")." << endl;
+                    attack(targetX, targetY, players[P1], players[CPU]) ? hit = "Computer hits!" : hit = "Computer misses!";  //Take computer's turn using random X and Y target coord's [1-size of map]
+                    cout << hit << endl;
+                    //Test for player loss
+                    if (testEnd(players[P1]->ships, size)){
+                        end = true;
+                        winner = CPU_WIN;
+                    }
                 }
             }
-        }
-            break;
+            break;}
         case PVP:{
-            
-        }
-            break;
+            while(!end){
+                //Player 1's turn
+                winner = turn(players[P2], players[P1], size, end);
+                //Player 2 Turn
+                if(!end){
+                    winner = turn(players[P1], players[P2], size, end);
+                }
+            }
+            break;}
     }
     
     //Exit stage right or left!
+    cout << endl << players[winner]->name << " wins!\n";
+    cout << "Hit ratio chart: \n";
+    chart(players[winner]->turns);
+    cout << endl;
+    //De-allocate players' structures
     for (char i = 0; i < PLAYNUM; i++){
         delete players[i];
     }
@@ -245,62 +210,56 @@ int main(int argc, char** argv) {
 
 //Validation
 void maxVal(char& input, const char maxVal, const string error){
-    if (input-CHARNUM == EXIT){
+    if (input == EXIT || input == EXIT_E){
         cout << "Goodbye!\n";
         exit(0);
     }
-    while (input > maxVal && input != 9){
+    while (input > maxVal && input != EXIT && input != SAVE){
         cout << error << endl;
         cin >> input;
         input -= CHARNUM;
     }
 }
 void minVal(char& input, const char minVal, const string error){
-    if (input-CHARNUM == EXIT){
+    if (input == EXIT || input == EXIT_E){
         cout << "Goodbye!\n";
         exit(0);
     }
-    while (input < minVal && input != 9){
+    while (input < minVal && input != EXIT && input != SAVE){
         cout << error << endl;
         cin >> input;
         input -= CHARNUM;
     }
 }
 void valid(char& input, const char val1, const char val2, const string error){
-    if (input-CHARNUM == EXIT){
+    if (input == EXIT || input == EXIT_E){
         cout << "Goodbye!\n";
         exit(0);
     }
-    while (input != val1 && input != val2 && input != 9){
+    while (input != val1 && input != val2 && input != EXIT && input != SAVE){
         cout << error << endl;
         cin >> input;
     }
 }
 void valid(char& input, const char val1, const char val2, const char val3, const string error){
-    if (input-CHARNUM == EXIT){
+    if (input == EXIT || input == EXIT_E){
         cout << "Goodbye!\n";
         exit(0);
     }
-    while (input != val1 && input != val2 && input != val3 && input != 9){
+    while (input != val1 && input != val2 && input != val3 && input != EXIT && input != SAVE){
         cout << error << endl;
         cin >> input;
     }
 }
 void valid(char& input, const char val1, const char val2, const char val3, const char val4, const string error){
-    if (input-CHARNUM == EXIT){
+    if (input == EXIT || input == EXIT_E){
         cout << "Goodbye!\n";
         exit(0);
     }
-    while (input != val1 && input != val2 && input != val3 && input != val4 && input != 9){
+    while (input != val1 && input != val2 && input != val3 && input != val4 && input != EXIT && input != SAVE){
         cout << error << endl;
         cin >> input;
     }
-}
-bool valShip(char** ships, const char type, const char orient, const char posX, const char posY){
-    for(int i = posX; i < posX + type; i++){
-        if (ships[i][posY]) return false;
-    }
-    return true;
 }
 
 void destroy(char** array, const char size){
@@ -326,12 +285,11 @@ char menu(char& choice){
     cout << "1. Player vs. CPU\n";
     cout << "2. Player vs. Player\n";
     cout << "3. Load game from file\n";
-    cout << "4. Display last winner\n";
-    cout << "0. Exit\n";
+    cout << "E. Exit\n";
     
     cin >> choice;
     choice -= CHARNUM; //convert ascii code to integer
-    while (choice != PVCPU && choice != PVP && choice != LOAD && choice != WINNER && choice != EXIT){
+    while (choice != PVCPU && choice != PVP && choice != LOAD && choice != SAVE && choice != EXIT){
         cout << "Error: Invalid menu choice\n";
         cin >> choice;
         choice -= CHARNUM; //convert ascii code to integer
@@ -595,8 +553,7 @@ void genTar(char& targetX, char& targetY, const char &size){
     updateV(targetX, targetY, pastX, pastY);
 }
 
-//(const char&, const char, const Player*, Player*)
-bool turn(char targetX, char targetY, Player* target, Player* p){
+bool attack(char targetX, char targetY, Player* target, Player* p){
     targetX -= 1;
     targetY -= 1;
     if (target->ships[targetY][targetX] > 0){   //Ship is present
@@ -636,6 +593,76 @@ bool testEnd(char** ships, const char &size){
         }
     }
     return end;
+}
+
+Winner turn(Player* target, Player* p, const char size, bool &end){
+    Winner win;
+    char targetX, targetY;
+    string hit; //Indicate a hit or miss
+    float health = 0.0f; //Overall ship health percentage
+    
+    cout << "\n" << p->name << "'s turn: \n";
+    //Get and validate target coordinates
+    cout << "Enter a target coordinates: ";
+    cin >> targetX;
+    targetX -= CHARNUM;
+    if(targetX == SAVE || targetX == SAVE_S){
+        saveProg(target, p);
+    }
+    maxVal(targetX, size, "Error: Target x-axis out of range.\n"); //Validate target x coordinate
+    cin >> targetY;
+    targetY -= CHARNUM;
+    if(targetX == SAVE || targetX == SAVE_S){
+        saveProg(target, p);
+    }
+    maxVal(targetY, size, "Error: Target y-axis out of range.\n");  //Validate target y coordinate
+    attack(targetX, targetY, target, p) ? hit = "Hit!" : hit = "Miss!"; //Check for and calculate hit or miss
+    map(p->ships, size);
+    cout << hit << endl;
+    //Calculate and display health
+    cout << "Health: ";
+    health = 0.0f;
+    for (char i : p->health){
+        cout << static_cast<int>(i) << ' ';
+        health += i;
+    }
+    cout << setprecision(2) << fixed;
+    cout << "\nTotal health: " << (health / 6) * 100 << '%' << endl;
+    
+    //Test for computer loss
+    if (testEnd(target->ships, size)){
+        end = true;
+        win = P1_WIN;
+    } else win = NO_WIN;
+    return win;
+}
+
+void chart(vector<char> turns){
+    for (char i : turns){
+        switch(i){
+            case MISS:
+                cout << "O ";
+                break;
+            case HIT:
+                cout << "X ";
+                break;
+        }
+    }
+    cout << endl;
+}
+
+void saveProg(const Player* p1, const Player* p2){
+    fstream file(S_FILE, ios::out | ios::binary);
+    cout << "Saving...\n";
+    file.write(reinterpret_cast<const char*>(p1), sizeof(p1));
+    file.write(reinterpret_cast<const char*>(p2), sizeof(p2));
+    cout << "Progress saved.\n";
+    file.close();
+    cout << "Quiting.\n";
+    exit(0);
+}
+void loadProg(Player* p1, Player* p2){
+    
 }
 
 //Quick init testing values
