@@ -1,8 +1,8 @@
 /*
  * File:   main.cpp
  * Author: Theopolis Armstrong
- * Created on April 14, 2019 12:30 PM
- * Purpose: Project 1 - Battleship 3 V6
+ * Created on April 14, 2019 8:54 AM
+ * Purpose: Project 1 - Battleship 3 V5
  *
  * Title raw ASCII art generated using http://www.patorjk.com/software/taag/
  *
@@ -11,7 +11,7 @@
  *  Completed player vs player initialization/structure integration
  *  Completed player vs computer gameplay loop
  *  Completed player vs player gameplay loop
- *  Completed reading and writing to binary file
+ *  WIP Saving, loading,
  */
 
 //System Libraries
@@ -44,7 +44,6 @@ struct Player{
     char name[NAMELEN];
     char** ships; //Dynamically allocated array of ship positions
     char health[SHIPNUM] = {PATROL, DESTROY, CARRIER}; //Array of ship health
-    float percent = 0.0f; //Hit percentage
 };
 
 //Function Prototypes
@@ -72,8 +71,10 @@ void updateV(const char &x, const char &y, vector<char>& pastX, vector<char>& pa
 bool attack(char, char, Player*, Player*);  //Player turn; pass opposing player's ship placements for comparison
 bool testEnd(char**, const char&);  //Test game end condition
 Winner turn(Player*, Player*, const char, bool&);
-void saveProg(const Player*, const Player*); //Save game progress to file
-Options loadProg(Player*, Player*); //Initialize game w/ data from file
+void save(const Player*);
+void load();
+//void saveProg(const Player*, const Player*); //Save game progress to file
+//Options loadProg(Player*, Player*); //Initialize game w/ data from file
 //Execution Begins Here!
 int main(int argc, char** argv) {
     //Set the random number seed
@@ -117,7 +118,7 @@ int main(int argc, char** argv) {
                 cpuMap(players[CPU]->ships, size, CARRIER);
                 cpuMap(players[CPU]->ships, size, DESTROY);
                 cpuMap(players[CPU]->ships, size);
-//                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
+                //                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
                 //Input and set player ships
                 pMap(players[P1], size, CARRIER);
                 pMap(players[P1], size, DESTROY);
@@ -149,7 +150,7 @@ int main(int argc, char** argv) {
                 cout << endl;
                 break;
             case LOAD:
-                gameMode = loadProg(players[P1], players[P2]);
+                load();
                 break;
             case EXIT:
             case EXIT_E:
@@ -162,7 +163,7 @@ int main(int argc, char** argv) {
     //Gameplay loop
     cout << "********\n" <<"*BEGIN!*\n" << "********\n\n";
     cout << "Enter " << static_cast<char>(EXIT_E+CHARNUM) << " at any time to quit.\n";
-    cout << "Enter " << static_cast<char>(SAVE_S+CHARNUM) << " at any time to save and quit.\n";
+    //    cout << "Enter " << static_cast<char>(SAVE_S+CHARNUM) << " at any time to save and quit.\n";
     switch(gameMode){
             //Player vs. CPU
         case PVCPU:{
@@ -199,6 +200,7 @@ int main(int argc, char** argv) {
     
     //Exit stage right or left!
     cout << endl << players[winner]->name << " wins!\n";
+    save(players[winner]);
     //De-allocate players' structures
     for (char i = 0; i < PLAYNUM; i++){
         delete players[i];
@@ -600,15 +602,15 @@ Winner turn(Player* target, Player* p, const char size, bool &end){
     cout << "Enter a target coordinates: ";
     cin >> targetX;
     targetX -= CHARNUM;
-    if(targetX == SAVE || targetX == SAVE_S){
-        saveProg(target, p);
-    }
+    //    if(targetX == SAVE || targetX == SAVE_S){
+    //        saveProg(target, p);
+    //    }
     maxVal(targetX, size, "Error: Target x-axis out of range.\n"); //Validate target x coordinate
     cin >> targetY;
     targetY -= CHARNUM;
-    if(targetX == SAVE || targetX == SAVE_S){
-        saveProg(target, p);
-    }
+    //    if(targetX == SAVE || targetX == SAVE_S){
+    //        saveProg(target, p);
+    //    }
     maxVal(targetY, size, "Error: Target y-axis out of range.\n");  //Validate target y coordinate
     attack(targetX, targetY, target, p) ? hit = "Hit!" : hit = "Miss!"; //Check for and calculate hit or miss
     map(p->ships, size);
@@ -645,28 +647,27 @@ void chart(vector<char> turns){
     cout << endl;
 }
 
-void saveProg(const Player* p1, const Player* p2){
+void save(const Player* p1){
     fstream file(S_FILE, ios::out | ios::binary);
-    cout << "Saving...\n";
-    file.write(reinterpret_cast<const char*>(&p1), sizeof(p1));
-    file.write(reinterpret_cast<const char*>(&p2), sizeof(p2));
-    cout << "Progress saved.\n";
-    file.close();
-    cout << "Quitting.\n";
-    exit(0);
+    file.write(reinterpret_cast<const char*>(&p1->name), NAMELEN);
+    file.write(reinterpret_cast<const char*>(&p1->health), SHIPNUM);
 }
-Options loadProg(Player* p1, Player* p2){
-    Options mode = PVCPU;
+void load(){
     fstream file(S_FILE, ios::in | ios::binary);
-    if(!file)
-        cout << "Error opening file.";
-    else {
-        file.read(reinterpret_cast<char*>(&p1), sizeof(p1));
-        file.read(reinterpret_cast<char*>(&p2), sizeof(p2));
-        (strcmp(p1->name, "Computer") == 0 || strcmp(p2->name, "Computer") == 0) ? mode = PVCPU : mode = PVP;
+    char name[NAMELEN], health[SHIPNUM], total = 0;
+    
+    if(!file){ //Ensure file opened correctly
+        cout << "Error loading file";
+    } else {
+        file.read(reinterpret_cast<char*>(&name), NAMELEN);
+        file.read(reinterpret_cast<char*>(&health), SHIPNUM);
+        
+        //Calculate health total
+        for (char i = 0; i < SHIPNUM; i++)
+            total+=health[i];
+        
+        cout << name << " won the game with " << static_cast<int>(total) << " health remaining!\n";
     }
-    file.close();
-    return mode;
 }
 
 //Quick init testing values
