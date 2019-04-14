@@ -29,6 +29,7 @@ const unsigned char NAMELEN = 9; //Length of player name
 
 //Enumerators
 enum Mapping {HIT = -2, MISS = -1, PATROL, DESTROY, CARRIER};
+enum Options {NONE, PVCPU, PVP, LOAD, WINNER, EXIT = 9};
 
 //Structures
 struct Player{
@@ -43,7 +44,7 @@ struct Player{
 void valid(char&, const char, const char, const string);
 void valid(char&, const char, const char, const char, const string);
 void valid(char&, const char, const char, const char, const char, const string);
-bool max(char&, char, string); //Ensures input is below max value
+void maxVal(char&, const char, const string); //Ensures input is below max value
 
 void bubble(vector<char>& a); //Bubble sort a vector
 void select(vector<char>& a); //Selection sort a vector
@@ -74,7 +75,6 @@ int main(int argc, char** argv) {
     srand(static_cast<unsigned int>(time(0)));
     
     //Declare Variables
-    enum Mode {NONE, PVCPU, PVP, EXIT = 9}; //Gamemode
     enum Winner {CPU, P1, P2}; //Winner of the game
     enum PlayInd {PI1, PI2}; //Index of player
     const char PLAYNUM = 2; //Number of players
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
     
     Player* players[PLAYNUM];
 
-    Mode gameMode = NONE; //Game mode chosen in menu
+    Options gameMode = NONE; //Game mode chosen in menu
     Winner winner; //Winner of the game
     bool end = false; //End game flag
     char choice; //Menu choice
@@ -144,10 +144,10 @@ int main(int argc, char** argv) {
                 pMap(p2Ships);
                 cout << endl;
                 break;
-            case 4: //load last win
+            case WINNER: //load last win
                 loadWin(WIN);
                 break;
-            case 0:
+            case EXIT:
                 cout << "Goodbye.\n";
                 return 0;
                 break;
@@ -298,6 +298,18 @@ int main(int argc, char** argv) {
     //Exit stage right or left!
     return 0;
 }
+
+void maxVal(char& input, const char maxVal, const string error){
+    if (input == 0 || input == '0'){
+        cout << "Goodbye!\n";
+        exit(0);
+    }
+    while (input > maxVal && input != 9){
+        cout << error << endl;
+        cin >> input;
+        input -= CHARNUM;
+    }
+}
 void valid(char& input, const char val1, const char val2, const string error){
     if (input == 0 || input == '0'){
         cout << "Goodbye!\n";
@@ -307,7 +319,6 @@ void valid(char& input, const char val1, const char val2, const string error){
         cout << error << endl;
         cin >> input;
     }
-    return true;
 }
 void valid(char& input, const char val1, const char val2, const char val3, const string error){
     if (input == 0 || input == '0'){
@@ -318,7 +329,6 @@ void valid(char& input, const char val1, const char val2, const char val3, const
         cout << error << endl;
         cin >> input;
     }
-    return true;
 }
 void valid(char& input, const char val1, const char val2, const char val3, const char val4, const string error){
     if (input == 0 || input == '0'){
@@ -329,19 +339,6 @@ void valid(char& input, const char val1, const char val2, const char val3, const
         cout << error << endl;
         cin >> input;
     }
-    return true;
-}
-bool max(char& input, char maxVal, string error){
-    if (input == 0 || input == '0'){
-        cout << "Goodbye!\n";
-        exit(0);
-    }
-    while (input > maxVal && input != 9){
-        cout << error << endl;
-        cin >> input;
-        input -= CHARNUM;
-    }
-    return true;
 }
 
 void bubble(vector<char>& a){
@@ -370,7 +367,7 @@ void select(vector<char>& a){
         a[start] = a[minPos];
         a[minPos] = temp;
     }
-}//Sort by row
+} //Selection
 
 void title(){
     cout << " ____        _   _   _           _     _" << endl;
@@ -393,7 +390,7 @@ char menu(char& choice){
     
     cin >> choice;
     choice -= CHARNUM; //convert ascii code to integer
-    while (choice != 1 && choice != 2 && choice != 3 && choice != 0){
+    while (choice != PVCPU && choice != PVP && choice != LOAD && choice != WINNER && choice != EXIT){
         cout << "Error: Invalid menu choice\n";
         cin >> choice;
         choice -= CHARNUM; //convert ascii code to integer
