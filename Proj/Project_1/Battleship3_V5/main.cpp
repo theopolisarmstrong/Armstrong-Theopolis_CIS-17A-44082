@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
                 cpuMap(players[CPU]->ships, size, CARRIER);
                 cpuMap(players[CPU]->ships, size, DESTROY);
                 cpuMap(players[CPU]->ships, size);
-                //                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
+//                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
                 //Input and set player ships
                 pMap(players[P1], size, CARRIER);
                 pMap(players[P1], size, DESTROY);
@@ -654,8 +654,8 @@ void chart(vector<char> turns){
 void saveProg(const Player* p1, const Player* p2){
     fstream file(S_FILE, ios::out | ios::binary);
     cout << "Saving...\n";
-    file.write(reinterpret_cast<const char*>(p1), sizeof(p1));
-    file.write(reinterpret_cast<const char*>(p2), sizeof(p2));
+    file.write(reinterpret_cast<const char*>(&p1), sizeof(p1));
+    file.write(reinterpret_cast<const char*>(&p2), sizeof(p2));
     cout << "Progress saved.\n";
     file.close();
     cout << "Quiting.\n";
