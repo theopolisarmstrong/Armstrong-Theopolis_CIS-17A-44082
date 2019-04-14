@@ -34,7 +34,7 @@ enum Mapping {HIT = -2, MISS = -1, PATROL, DESTROY, CARRIER};
 struct Player{
     char name[NAMELEN];
     char** ships; //Dynamically allocated array of ship positions
-    char* health[SHIPNUM] = {PATROL, DESTROY, CARRIER}; //health of ships; health[1]=carrier, health[2]=destroyer, health[3]=patrol
+    Mapping health[SHIPNUM] = {PATROL, DESTROY, CARRIER}; //health of ships; health[1]=carrier, health[2]=destroyer, health[3]=patrol
     vector<char> turns;
 };
 
@@ -105,8 +105,8 @@ int main(int argc, char** argv) {
                 gameMode = PVCPU; //Set game mode
                 players[PI1] = initShip(size);
                 players[PI2] = initShip(size);
-                strcpy(players[PI1]->name, "Player 1");
-                strcpy(players[PI2]->name, "Computer");
+                strlcpy(players[PI1]->name, "Player 1", NAMELEN);
+                strlcpy(players[PI2]->name, "Computer", NAMELEN);
                 
                 cout << "Setting CPU ship placements...\n";
                 //Place computer player ships
@@ -298,8 +298,7 @@ int main(int argc, char** argv) {
     //Exit stage right or left!
     return 0;
 }
-
-bool valid(char& input, char val1, char val2, string error){
+void valid(char& input, const char val1, const char val2, const string error){
     if (input == 0 || input == '0'){
         cout << "Goodbye!\n";
         exit(0);
@@ -310,7 +309,7 @@ bool valid(char& input, char val1, char val2, string error){
     }
     return true;
 }
-bool valid(char& input, char val1, char val2, char val3, string error){
+void valid(char& input, const char val1, const char val2, const char val3, const string error){
     if (input == 0 || input == '0'){
         cout << "Goodbye!\n";
         exit(0);
@@ -321,7 +320,7 @@ bool valid(char& input, char val1, char val2, char val3, string error){
     }
     return true;
 }
-bool valid(char& input, char val1, char val2, char val3, char val4, string error){
+void valid(char& input, const char val1, const char val2, const char val3, const char val4, const string error){
     if (input == 0 || input == '0'){
         cout << "Goodbye!\n";
         exit(0);
@@ -388,9 +387,9 @@ char menu(char& choice){
     cout << "Choose a menu item: \n";
     cout << "1. Player vs. CPU\n";
     cout << "2. Player vs. Player\n";
-    cout << "3. Load game from file";
+    cout << "3. Load game from file\n";
     cout << "4. Display last winner\n";
-    cout << "0. Exit\n";
+    cout << "9. Exit\n";
     
     cin >> choice;
     choice -= CHARNUM; //convert ascii code to integer
@@ -402,42 +401,42 @@ char menu(char& choice){
     return choice;
 }
 
-void map(const char ships[][MAP]){
+void map(char** ships, const char size){
     //Output column headers and top divider
     cout << "     ";
-    for (char i = 0; i < MAP * 6; i++){ //iterate though each space in the map output; map size * 6 characters per cell - 3 header characters
+    for (char i = 0; i < size * 6; i++){ //iterate though each space in the map output; map size * 6 characters per cell - 3 header characters
         if (i % 6 == 0)
             cout << i / 6 + 1;
         else
             cout << ' ';
     }
     cout << endl << "   ";
-    for (char i = 0; i < MAP * 6 - 1; i++){
+    for (char i = 0; i < size * 6 - 1; i++){
         cout << '-';
     }
     cout << endl;
     
     //Output table body and row headers
-    for(char row = 0; row < MAP; row++){
+    for(char row = 0; row < size; row++){
         //Padding row
         cout << "  |";
-        for (int i = 0; i < MAP; i++){
+        for (int i = 0; i < size; i++){
             cout << "     |";
         }
         cout << endl;
         
         //Data row
         cout << row + 1 << " |  ";
-        for(char col = 0; col < MAP; col++){
-            if (ships[row][col] == HIT)
+        for(char col = 0; col < size; col++){
+            if (ships[row][col] == -2)
                 cout << 'X';
-            else if (ships[row][col] == MISS)
+            else if (ships[row][col] == -1)
                 cout << 'O';
-            else if (ships[row][col] == PATROL)
+            else if (ships[row][col] == 1)
                 cout << 'P';
-            else if (ships[row][col] == DESTROYER)
+            else if (ships[row][col] == 2)
                 cout << 'D';
-            else if (ships[row][col] == CARRIER)
+            else if (ships[row][col] == 3)
                 cout << 'C';
             else cout << ' ';
             cout << "  |  ";
@@ -446,13 +445,13 @@ void map(const char ships[][MAP]){
         
         //Padding row
         cout << "  |";
-        for (int i = 0; i < MAP; i++)
+        for (int i = 0; i < size; i++)
             cout << "     |";
         cout << endl;
         
         //Dividing row
         cout << "   ";
-        for (char i = 0; i < MAP * 6 - 1; i++){
+        for (char i = 0; i < size * 6 - 1; i++){
             cout << '-';
         }
         cout << endl;
@@ -460,19 +459,20 @@ void map(const char ships[][MAP]){
     cout << "C = Aircraft Carrier (3 spaces), D = Destroyer (2 spaces), P = Patrol Boat (1 space), X = Hit\n";
 }
 
-char** initCPU(const char size){
+Player* initShip(const char size){
+    Player* temp = new Player;
     //Dynamically allocate two dimensional array for ships
-    char ** ships = new char*[size];
+    temp->ships = new char*[size];
     for (int i = 0; i < size; i++){
-        ships[i] = new char[size];
+        temp->ships[i] = new char[size];
     }
     //Initialize ships
     for (int i = 0; i < size; i++){
         for (int j = 0; j < size; j++){
-            ships[i][j] = 0;
+            temp->ships[i][j] = 0;
         }
     }
-    return ships;
+    return temp;
 }
 
 void cpuMap(char** ships, const char size, const unsigned char ship){
@@ -524,22 +524,28 @@ void cpuMap(char** ships, const char size, const unsigned char ship){
     }
 }
 
-void pMap(char ships[][MAP], unsigned char ship){
-    cout << endl << "Position your ship: \n";
+void pMap(Player* p, const char size, const unsigned char type){
     bool repos; //positioning loop flag
     char answer;    //positioning loop prompt input
     char orient = 'v';  //ship orientation
     char posX;  //Starting X-axis position of each ship
     char posY;  //Starting Y-axis position of each ship
     
+    //Create temporary ship position 2D array
+    char** temp = new char*[size];
+    for (char i = 0; i < size; i++)
+        temp[i] = new char[size];    copyMap(p->ships, temp, size);
+    
     //Begin positioning ship
+    cout << endl << p->name << ", position your ship: \n";
     do{
-        map(ships);
+        map(temp, size);
         
         //Determine orientation of the ship
-        if (ship != 1){
+        if (type != PATROL){
             cout << "Is your ship vertical or horizontal [V/h]? ";
             cin >> orient;
+            cout << "orient: " << orient <<endl;
             valid(orient, 'v', 'h', 'V', 'H', "Error: Invalid orientation");
         }
         
@@ -548,17 +554,18 @@ void pMap(char ships[][MAP], unsigned char ship){
             case 'v':
             case 'V':{
                 //Input ship position
-                cout << "Enter the top-most coordinates of the ship (ex. '2 5'): ";
+                cout << "Enter the top-most coordinates of the ship (ex. '5 3'): ";
                 cin >> posX;
                 posX -= CHARNUM; //Convert ASCII code to integer
-                max(posX, MAP, "Error: Invalid y-axis (ensure the ship would not protrude outside the map)\nEnter a new y-axis value: ");
+                maxVal(posX, size, "Error: Invalid x-axis (ensure the ship would not protrude outside the map)\nEnter a new x-axis value: ");
                 cin >> posY;
                 posY -= CHARNUM; //Convert ASCII code to integer
-                max(posY, MAP - (ship - 1), "Error: Invalid y-axis (ensure the ship would not protrude outside the map)\nEnter a new y-axis value: ");
+                cout << "Limit: " << size - (type - 1) << endl;
+                maxVal(posY, size - (type - 1), "Error: Invalid y-axis (ensure the ship would not protrude outside the map)\nEnter a new y-axis value: ");
                 
                 //Position ship
-                for(char row = posY; row < posY + ship; row++){
-                    ships[row - 1][posX - 1] = ship;
+                for(char row = posY; row < posY + type; row++){
+                    temp[row - 1][posX - 1] = type;
                 }
                 break;
             }
@@ -568,29 +575,35 @@ void pMap(char ships[][MAP], unsigned char ship){
                 cout << "Enter the top-most coordinates of the ship (ex. '3 1'): ";
                 cin >> posX;
                 posX -= CHARNUM; //Convert ASCII code to integer
-                max(posX, MAP - (ship - 1), "Error: Invalid x-axis (ensure the ship would not protrude outside the map)\nEnter a new x-axis value: ");
+                maxVal(posX, size - (type - 1), "Error: Invalid x-axis (ensure the ship would not protrude outside the map)\nEnter a new x-axis value: ");
                 cin >> posY;
                 posY -= CHARNUM; //Convert ASCII code to integer
-                max(posY, MAP, "Error: Invalid y-axis (ensure the ship would not protrude outside the map)\nEnter a new y-axis value: ");
+                maxVal(posY, size, "Error: Invalid y-axis (ensure the ship would not protrude outside the map)\nEnter a new y-axis value: ");
                 
                 //Position ship
-                for(char col = posX; col < posX + ship; col++){
-                    ships[posY - 1][col - 1] = ship;
+                for(char col = posX; col < posX + type; col++){
+                    temp[posY - 1][col - 1] = type;
                 }
                 break;
             }
         }
         cout << "Your ships: \n";
-        map(ships);
+        map(temp, size);
         
         //Prompt for repositioning
         repos = false;
         cout << "Would you like to reposition your ship [N/y]? ";
         cin >> answer;
         valid(answer, 'y', 'n', 'Y', 'N', "Error: Invalid answer");
-        if (answer == 'y' || answer == 'Y')
+        if (answer == 'y' || answer == 'Y'){
             repos = true;
+            //Re-initialize temporary ship position array with current ship positions
+            destroy(temp, size);
+            copyMap(p->ships, temp, size);
+        }
     }while(repos);
+    copyMap(temp, p->ships, size);
+    destroy(temp, size);
 }
 
 void updateV(char x, char y, vector<char>& pastX, vector<char>& pastY){
