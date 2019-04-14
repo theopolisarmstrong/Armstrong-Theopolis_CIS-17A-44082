@@ -49,6 +49,8 @@ void maxVal(char&, const char, const string); //Ensures input is below max value
 void bubble(vector<char>& a); //Bubble sort a vector
 void select(vector<char>& a); //Selection sort a vector
 
+void destroy(char**, const char); //De-allocates two dimensional dynamic array
+
 //Game functions
 void title(); //Output title header
 char menu(char& choice); //Output menu and receives player's menu choice
@@ -368,6 +370,13 @@ void select(vector<char>& a){
         a[minPos] = temp;
     }
 } //Selection
+
+void destroy(char** array, const char size){
+    for (char i = 0; i < size; i++){
+        delete array[i];
+    }
+    delete array;
+}
 
 void title(){
     cout << " ____        _   _   _           _     _" << endl;
