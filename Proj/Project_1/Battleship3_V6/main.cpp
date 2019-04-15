@@ -1,17 +1,10 @@
 /*
  * File:   main.cpp
  * Author: Theopolis Armstrong
- * Created on April 14, 2019 8:54 AM
- * Purpose: Project 1 - Battleship 3 V5
+ * Created on April 14, 2019 12:30 pM
+ * Purpose: Project 1 - Battleship 3 V6
  *
  * Title raw ASCII art generated using http://www.patorjk.com/software/taag/
- *
- * Working representation of progress at Battleship 3 V3 main file
- *  Completed player vs computer initialization/structure integration
- *  Completed player vs player initialization/structure integration
- *  Completed player vs computer gameplay loop
- *  Completed player vs player gameplay loop
- *  WIP Saving, loading,
  */
 
 //System Libraries
@@ -35,7 +28,7 @@ const unsigned char NAMELEN = 9; //Length of player name
 const string S_FILE = "save.dat"; //Save file name
 
 //Enumerators
-enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size
+enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size/ship health
 enum Options {NONE = 0, PVCPU, PVP, LOAD, SAVE = (static_cast<int>('s')-CHARNUM), SAVE_S = (static_cast<int>('S')-CHARNUM), EXIT = (static_cast<int>('e')-CHARNUM), EXIT_E = (static_cast<int>('E')-CHARNUM)}; //Menu choice options/game modes
 enum Winner {NO_WIN = -1, P1_WIN, P2_WIN, CPU_WIN = 1}; //Winner of the game
 
@@ -59,7 +52,7 @@ void destroy(char**, const char); //De-allocates two dimensional dynamic array
 //Game functions
 void title();   //Output title header
 char menu(char& choice);    //Output menu and receives player's menu choice
-Player* initShip(const char size);
+Player* initShip(const char size); //Initialize player structure
 string shipName(Mapping); //Return ship name as string
 void copyMap(char**, char**, const char);
 void map(char**, const char);   //Output map
@@ -106,19 +99,20 @@ int main(int argc, char** argv) {
                 size -= CHARNUM;
                 minVal(size, 4, "Error: Size too low.\n");
                 gameMode = PVCPU; //Set game mode
-                //Initialize player structures
+                //Initialize ship arrays
                 players[P1] = initShip(size);
                 players[CPU] = initShip(size);
+                //Initialize names
                 strlcpy(players[P1]->name, "Player 1", NAMELEN);
                 strlcpy(players[CPU]->name, "Computer", NAMELEN);
                 
                 //Set ship positions
-                cout << "Setting CPU ship placements...\n";
+                cout << "Setting CPU ship positions...\n";
                 //Place computer player ships
                 cpuMap(players[CPU]->ships, size, CARRIER);
                 cpuMap(players[CPU]->ships, size, DESTROY);
                 cpuMap(players[CPU]->ships, size);
-                //                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
+//                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
                 //Input and set player ships
                 pMap(players[P1], size, CARRIER);
                 pMap(players[P1], size, DESTROY);
@@ -285,11 +279,11 @@ char menu(char& choice){
     cout << "1. Player vs. CPU\n";
     cout << "2. Player vs. Player\n";
     cout << "3. Load game from file\n";
-    cout << "E. Exit\n";
+    cout << "e. Exit\n";
     
     cin >> choice;
     choice -= CHARNUM; //convert ascii code to integer
-    while (choice != PVCPU && choice != PVP && choice != LOAD && choice != SAVE && choice != EXIT){
+    while (choice != PVCPU && choice != PVP && choice != LOAD && choice != SAVE && choice != EXIT && choice != EXIT_E){
         cout << "Error: Invalid menu choice\n";
         cin >> choice;
         choice -= CHARNUM; //convert ascii code to integer
