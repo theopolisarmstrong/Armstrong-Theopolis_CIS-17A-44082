@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
             while(!end){
                 //Player turn
                 winner = turn(players[CPU], players[P1], size, end);
-                map(players[CPU]->ships, size); //Map CPU ships for debugging
+//                map(players[CPU]->ships, size); //Map CPU ships for debugging
                 //Computer Turn
                 if (!end){
                     cout << "\nComputer's turn: \n";
