@@ -20,14 +20,18 @@ const float TRI = 3;
 
 //Structures
 struct Emp{
-    string company;
-    string address;
     string name;
-    int payInt;
+    int hours;
+    float rate;
+    float payNum;
     string payStr;
 };
 
 //Function Prototypes
+char** new2d(char);
+Emp getEmp();
+Emp outEmp(Emp);
+
 string tenToEng(char); //Convert tens place single digit to English words
 string teenEng(char); //Converts ones place place to teens
 string toEng(char); //Convert single digit to English words
@@ -41,69 +45,101 @@ int main(int argc, char** argv) {
     //Set the random number seed
     
     //Declare Variables
-    Emp* employs = new Emp[3];
-    string payIn = "4484648373";
+    Emp* employs;
+    int empNum = 0;
+    int whole = 0, dec = 0;
     char** pay;
-    char size;
+    char size = 0;
     int place = 1, triplet = 1; //Place of single digit, place of triplet
     
     //Initialize or input i.e. set variable values
-    employs[0].payInt = toInt(payIn);
-    size = ceil(payIn.size() / TRI); //Find size of first dimension
-    //Allocate 2D array
-    pay = new char*[size];
-    for (int i = 0; i < size; i++){
-        pay[i] = new char[3];
+    cout << "How many employees would you like to enter? ";
+    cin >> empNum;
+    //Allocate employee array
+    employs = new Emp[empNum];
+    //Input employee data
+    //3 Jester Lavorre
+    for (int i = 0; i < empNum; i++){
+        cin.ignore();
+        employs[i] = getEmp();
     }
-    //Copy string to 2D array
-    for (int i = 0, j = payIn.size()-1; i < size; i++){
-        for (int k = TRI-1; k >= 0; k--){
-            pay[i][k] = payIn[j];
-            j--;
-        }
-        cout << endl;
+    for (int i = 0; i < empNum; i++){
+        outEmp(employs[i]);
     }
-    reverse(pay, size); //Correct triplet order
-    //Set place to the highest place value
-    for (int i = 0; i < size - 1; i++)
-        place *= 10;
     
-    //Map inputs -> outputs
-    for (int i = 0; i < size; i++){
-        for (int j = 0; j < TRI; j++){
-            if (j == TRI - 1 && pay[i][j] == '1'){ //Output teens
-                cout << "and " << teenEng(pay[i][j+1]) << ' ';
-                j++;
-            } else {
-                cout << tenToEng(pay[i][j]) << ' ';
-                cout << toEng(pay[i][j+1]);
-                j++;
-            }
-        }
-                cout << placeS(place) << ' ';
-            place /= 10; //Move one place back
-    }
-    cout << "Dollars";
-//    for (int i = 0; i < pay.size(); i++){
-//        if (i == pay.size() - 2 && pay[i] == '1'){ //Output teens
-//            cout << "and " << teenEng(pay[i+1]) << ' ';
-//            i++;
-//        } else if (tenThou){
-//            cout << tenToEng(pay[i]) << ' ';
-//        } else {
-//            cout << toEng(pay[i]) << ' ';
-//            cout << placeS(place) << ' ';
+    
+    
+//    size = ceil(payIn.size() / TRI); //Find size of first dimension
+//    //Allocate 2D array
+//    pay = new2d(size);
+//    //Copy string to 2D array
+//    for (int i = 0, j = payIn.size()-1; i < size; i++){
+//        for (int k = TRI-1; k >= 0; k--){
+//            pay[i][k] = payIn[j];
+//            j--;
 //        }
-//        place /= 10; //Move one place back
+//    }
+//    reverse(pay, size); //Correct triplet order
+//    //Set place to the highest place value
+//    for (int i = 0; i < size - 1; i++)
+//        place *= 10;
+//    
+//    for (int i = 0; i < size; i++){
+//        for (int j = 0; j < TRI; j++){
+//            cout << pay[i][j];
+//        }
+//        if (i != size-1) cout << ',';
+//    }
+//    cout << endl;
+//    
+//    //Map inputs -> outputs
+//    cout << "Test: " << static_cast<int>(pay[0][0]) << endl;
+//    for (int i = 0, t = size - 1; i < size; i++){
+//            if (pay[i][0] != 0) cout << toEng(pay[i][0]) << " Hundred ";
+//            if (pay[i][1] == '1'){ //Output teens
+//                cout << teenEng(pay[i][2]) << ' ';
+//            } else {
+//                if (pay[i][1] != 0) cout << tenToEng(pay[i][1]) << ' ';
+//                if (pay[i][2] != 0) cout << toEng(pay[i][2]) << ' ';
+//            }
+//        if (i != size) cout << placeS(t) << ' ';
+//        t--;
 //    }
 //    cout << "Dollars";
     
     //Display the outputs
-//    cout << "Pay: $" << employs[0].payInt << endl;
+//    cout << "Pay: $" << employs[0].payNum << endl;
 //    cout << "Pay: $" << employs[0].payStr;
 
     //Exit stage right or left!
     return 0;
+}
+
+char** new2d(char size){
+    char** a = new char*[size];
+    for (int i = 0; i < size; i++){
+        a[i] = new char[3];
+    }
+}
+
+Emp getEmp(){
+    Emp temp;
+    cout << "Enter the employee's information: \n";
+    cout << "Name: ";
+    getline(cin, temp.name);
+    cout << "Hours: ";
+    cin >> temp.hours;
+    cout << "Pay rate: ";
+    cin >> temp.rate;
+    return temp;
+}
+
+Emp outEmp(Emp e){
+    cout << "Lavish Chateau\n";
+    cout << "Lavish Chateau, Nicodranis\n";
+    cout << "Name: " << e.name << endl;
+    cout << "rate: " << e.rate << endl;
+    cout << "hours: " << e.hours << endl;
 }
 
 string toEng(char n){
