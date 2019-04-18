@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=CPPTemplate
+PROJECTNAME=Midterm_Prob2_GrossPay
 
 # Active Configuration
 DEFAULTCONF=Debug
