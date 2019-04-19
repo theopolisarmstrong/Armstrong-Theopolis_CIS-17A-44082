@@ -34,6 +34,7 @@ char** new2d(char);
 Emp inEmp();
 void outEmp(Emp);
 float calcPay(const float&, const float&);
+string toEng(float);
 
 string tenToEng(char); //Convert tens place single digit to English words
 string teenEng(char); //Converts ones place place to teens
@@ -71,6 +72,8 @@ int main(int argc, char** argv) {
     for (int i = 0; i < empNum; i++){
         employs[i].payNum = calcPay(employs[i].hours, employs[i].rate);
     }
+    //Convert pay to English
+    
     
 //    size = ceil(payIn.size() / TRI); //Find size of first dimension
 //    //Allocate 2D array
