@@ -7,8 +7,8 @@
 
 //System Libraries
 #include <iostream>  //Input/Output Library
-#include <iomanip>
-#include <math.h>
+#include <iomanip> //Input/Output Manipulation
+#include <math.h> //Math Functions
 using namespace std;
 
 //User Libraries
@@ -23,48 +23,46 @@ const unsigned char TRIP_HRS = 50;
 //Structures
 struct Emp{
     string name;
-    int hours;
+    float hours;
     float rate;
     float payNum;
     string payStr;
 };
 
 //Function Prototypes
-char** new2d(char);
-Emp inEmp();
-void outEmp(Emp);
+bool valid(float);
+bool inEmp(Emp&);
+void outEmp(const Emp, const string, const string);
+
 float calcPay(const float&, const float&);
-string toEng(float);
+string toEng(const float &);
+string convert(char**, const char&);
+
+char** new2D(const char, const char);
 
 string tenToEng(char); //Convert tens place single digit to English words
 string teenEng(char); //Converts ones place place to teens
 string toEng(char); //Convert single digit to English words
 string toStr(int); //Converts integer to string to words
-int toInt(string); //Converts string number to int  "5" --> 5
 string placeS(int); //Returns place name for each place
-void reverse(char**, char);
 
 //Execution Begins Here!
 int main(int argc, char** argv) {
     //Set the random number seed
     
     //Declare Variables
-    Emp* employs;
+    const string COMPANY = "Picus Communications Corporation";
+    const string ADDRESS = "4545 Pierre-de-Coubertin Avenue";
+    const int MAXEMP = 1000;
+    
+    Emp employs[MAXEMP];
     int empNum = 0;
-    int whole = 0, dec = 0;
-    char** pay;
-    char size = 0;
-    int place = 1, triplet = 1; //Place of single digit, place of triplet
     
     //Initialize or input i.e. set variable values
-    cout << "How many employees would you like to enter? ";
-    cin >> empNum;
-    //Allocate employee array
-    employs = new Emp[empNum];
     //Input employee data
-    for (int i = 0; i < empNum; i++){
+    while(inEmp(employs[empNum])){
         cin.ignore();
-        employs[i] = inEmp();
+        empNum++;
     }
     
     //Map inputs -> outputs
@@ -73,79 +71,44 @@ int main(int argc, char** argv) {
         employs[i].payNum = calcPay(employs[i].hours, employs[i].rate);
     }
     //Convert pay to English
-    
-    
-//    size = ceil(payIn.size() / TRI); //Find size of first dimension
-//    //Allocate 2D array
-//    pay = new2d(size);
-//    //Copy string to 2D array
-//    for (int i = 0, j = payIn.size()-1; i < size; i++){
-//        for (int k = TRI-1; k >= 0; k--){
-//            pay[i][k] = payIn[j];
-//            j--;
-//        }
-//    }
-//    reverse(pay, size); //Correct triplet order
-//    //Set place to the highest place value
-//    for (int i = 0; i < size - 1; i++)
-//        place *= 10;
-//    
-//    for (int i = 0; i < size; i++){
-//        for (int j = 0; j < TRI; j++){
-//            cout << pay[i][j];
-//        }
-//        if (i != size-1) cout << ',';
-//    }
-//    cout << endl;
-//    
-//    //Map inputs -> outputs
-//    cout << "Test: " << static_cast<int>(pay[0][0]) << endl;
-//    for (int i = 0, t = size - 1; i < size; i++){
-//            if (pay[i][0] != 0) cout << toEng(pay[i][0]) << " Hundred ";
-//            if (pay[i][1] == '1'){ //Output teens
-//                cout << teenEng(pay[i][2]) << ' ';
-//            } else {
-//                if (pay[i][1] != 0) cout << tenToEng(pay[i][1]) << ' ';
-//                if (pay[i][2] != 0) cout << toEng(pay[i][2]) << ' ';
-//            }
-//        if (i != size) cout << placeS(t) << ' ';
-//        t--;
-//    }
-//    cout << "Dollars";
+    for (int i = 0; i < empNum; i++){
+        employs[i].payStr = toEng(employs[i].payNum);
+    }
     
     //Display the outputs
+    cout << endl;
     for (int i = 0; i < empNum; i++){
-        outEmp(employs[i]);
+        outEmp(employs[i], COMPANY, ADDRESS);
+        cout << endl;
     }
-//    cout << "Pay: $" << employs[0].payNum << endl;
-//    cout << "Pay: $" << employs[0].payStr;
 
     //Exit stage right or left!
     return 0;
 }
 
-char** new2d(char size){
-    char** a = new char*[size];
-    for (int i = 0; i < size; i++){
-        a[i] = new char[3];
-    }
+bool valid(const float& in){
+    return true;
 }
 
-Emp inEmp(){
-    Emp temp;
+bool inEmp(Emp &e){
+    float in;
     cout << "Enter the employee's information: \n";
     cout << "Name: ";
-    getline(cin, temp.name);
+    getline(cin, e.name);
     cout << "Hours: ";
-    cin >> temp.hours;
+    cin >> in;
+    if (in < 0) return false;
+    e.hours = in;
     cout << "Pay rate: ";
-    cin >> temp.rate;
-    return temp;
+    cin >> in;
+    if (in < 0) return false;
+    e.rate = in;
+    return true;
 }
-
-void outEmp(Emp e){
-    cout << "Lavish Chateau\n";
-    cout << "Lavish Chateau, Nicodranis\n";
+void outEmp(const Emp e, const string company, const string address){
+    cout << setprecision(2) << fixed;
+    cout << company << '\n';
+    cout << address << '\n';
     cout << "Name: " << e.name << '\t';
     cout << "Amount: " << e.payNum << endl;
     cout << "Amount: " << e.payStr << endl;
@@ -155,16 +118,89 @@ void outEmp(Emp e){
 float calcPay(const float &hours, const float &rate){
     float pay = 0;
     int sing = 0, dub = 0, trip = 0;
-    if (hours <= DUB_HRS){
+    if (hours <= DUB_HRS){ //Calculate normal hours
         return hours * rate;
-    } else if (hours > DUB_HRS && hours < DUB_HRS){
+    } else if (hours > DUB_HRS && hours < DUB_HRS){ //Calculate with double hours
         return (DUB_HRS * rate) + (2 * (hours - DUB_HRS) * rate);
-    } else if (hours > TRIP_HRS){
+    } else if (hours > TRIP_HRS){ //Calculate with double and triple hours
         return (DUB_HRS * rate) + (2 * (TRIP_HRS - DUB_HRS) * rate) + (3 * (hours - TRIP_HRS) * rate);
     }
     return pay;
 }
+//Groups digits in array of triplets to emulate comma notation to name each triplet:
+//8,340,587,201 to [0,0,8][3,4,0][5,8,7][2,0,1]
+//                   Bil    Mil    Thou   
+string toEng(const float &n){
+    string s = "";
+    char* num;
+    char** triplet;
+    int whole = n,
+        dec = (n - whole) * 100,
+        digits = 0,
+        decDigi = 0,
+        size;
+    
+    //Find number of digits
+    for (int i = whole; i > 0; i /= 10){
+        digits++;
+    }
+    if (dec != 0) decDigi = 2; //Adjust digits for cents
+    size = ceil(digits / TRI); //Find the number of triplets
+    //Put number into array of each place value
+    num = new char[digits]; //Allocate place value array
+    for (int i = 0, place = 1; i < digits; i++){
+        num[i] = whole / place % 10; //Set to the place value
+        place *= 10;
+    }
+    //Place numbers into triplets
+    triplet = new2D(size, TRI);
+    for (int i = size - 1, j = 0; i >= 0; i--){
+        for (int k = TRI - 1; k >= 0 && j < digits; k--){
+            triplet[i][k] = num[j];
+            j++;
+        }
+    }
+    //Convert dollars
+    s += convert(triplet, size);
+    s +=  "Dollars";
+    
+    //Convert cents
+    //Put decimal into place value array
+    num = new char[2];
+    num[1] = dec % 10;
+    num[0] = dec / 10 % 10;
+    //Add cents to string
+    s += " and ";
+    for (int i = 0; i < 2; i++){
+        (num[i] != 0) ? s += num[i]+CHARNUM : s += '0';
+    }
+    s += "/100";
+    
+    //De-allocate pointer arrays
+    delete num;
+    for (int i = 0; i < size; i++){
+        delete triplet[i];
+    }
+    delete triplet;
+    
+    return s;
+}
 
+string convert(char** triplet, const char &size){
+    string s;
+    for (int i = 0, t = size - 1; i < size; i++){
+            if (triplet[i][0] != 0) s += toEng(triplet[i][0]) + " Hundred ";
+            if (triplet[i][1] == '1'){ //Output teens
+                s += teenEng(triplet[i][2]) + ' ';
+            } else {
+                if (triplet[i][1] != 0) s += tenToEng(triplet[i][1]) + ' ';
+                if (triplet[i][2] != 0) s += toEng(triplet[i][2]) + ' ';
+            }
+        if (i != size - 1) s +=  placeS(t) + ' ';
+        t--;
+    }
+    return s;
+}
 string toEng(char n){
     switch(n){
         case 1:
@@ -285,16 +321,6 @@ string teenEng(char n){
             break;
     }
 }
-int toInt(string s){
-    int n = 0, place = 1; //Place value; place
-    //Convert each place to a number
-    for(char i = s.size()-1; i >= 0; i--){
-        n += (s[i] - CHARNUM) * place; //Set each place value to it's correct place
-        place *= 10; //Move to next place value
-    }
-    return n;
-}
-
 string placeS(int c){
     string place;
     switch(c){
@@ -311,11 +337,16 @@ string placeS(int c){
     return place;
 }
 
-void reverse(char** a, char size){
-    char* swap;
-    for (int i = 0; i < size / 2; i++){
-        swap = a[i];
-        a[i] = a[size-1-i];
-        a[size-1-i] = swap;
+char** new2D(const char s1, const char s2){
+    char** a = new char*[s1];
+    for (int i = 0; i < s1; i++){
+        a[i] = new char[s2];
     }
+    //Initialize array
+    for (int i = 0; i < s1; i++){
+        for (int j = 0; j < s2; j++){
+            a[i][j] = 0;
+        }
+    }
+    return a;
 }
