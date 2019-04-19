@@ -16,7 +16,9 @@ using namespace std;
 //Global Constants, no Global Variables are allowed
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
 const unsigned char CHARNUM = 48;
-const float TRI = 3; 
+const float TRI = 3;
+const unsigned char DUB_HRS = 40;
+const unsigned char TRIP_HRS = 50;
 
 //Structures
 struct Emp{
@@ -29,8 +31,9 @@ struct Emp{
 
 //Function Prototypes
 char** new2d(char);
-Emp getEmp();
-Emp outEmp(Emp);
+Emp inEmp();
+void outEmp(Emp);
+float calcPay(const float&, const float&);
 
 string tenToEng(char); //Convert tens place single digit to English words
 string teenEng(char); //Converts ones place place to teens
@@ -58,16 +61,16 @@ int main(int argc, char** argv) {
     //Allocate employee array
     employs = new Emp[empNum];
     //Input employee data
-    //3 Jester Lavorre
     for (int i = 0; i < empNum; i++){
         cin.ignore();
-        employs[i] = getEmp();
+        employs[i] = inEmp();
     }
+    
+    //Map inputs -> outputs
+    //Calculate pay
     for (int i = 0; i < empNum; i++){
-        outEmp(employs[i]);
+        employs[i].payNum = calcPay(employs[i].hours, employs[i].rate);
     }
-    
-    
     
 //    size = ceil(payIn.size() / TRI); //Find size of first dimension
 //    //Allocate 2D array
@@ -108,6 +111,9 @@ int main(int argc, char** argv) {
 //    cout << "Dollars";
     
     //Display the outputs
+    for (int i = 0; i < empNum; i++){
+        outEmp(employs[i]);
+    }
 //    cout << "Pay: $" << employs[0].payNum << endl;
 //    cout << "Pay: $" << employs[0].payStr;
 
@@ -122,7 +128,7 @@ char** new2d(char size){
     }
 }
 
-Emp getEmp(){
+Emp inEmp(){
     Emp temp;
     cout << "Enter the employee's information: \n";
     cout << "Name: ";
@@ -134,12 +140,26 @@ Emp getEmp(){
     return temp;
 }
 
-Emp outEmp(Emp e){
+void outEmp(Emp e){
     cout << "Lavish Chateau\n";
     cout << "Lavish Chateau, Nicodranis\n";
-    cout << "Name: " << e.name << endl;
-    cout << "rate: " << e.rate << endl;
-    cout << "hours: " << e.hours << endl;
+    cout << "Name: " << e.name << '\t';
+    cout << "Amount: " << e.payNum << endl;
+    cout << "Amount: " << e.payStr << endl;
+    cout << "Signature Line: \n";
+}
+
+float calcPay(const float &hours, const float &rate){
+    float pay = 0;
+    int sing = 0, dub = 0, trip = 0;
+    if (hours <= DUB_HRS){
+        return hours * rate;
+    } else if (hours > DUB_HRS && hours < DUB_HRS){
+        return (DUB_HRS * rate) + (2 * (hours - DUB_HRS) * rate);
+    } else if (hours > TRIP_HRS){
+        return (DUB_HRS * rate) + (2 * (TRIP_HRS - DUB_HRS) * rate) + (3 * (hours - TRIP_HRS) * rate);
+    }
+    return pay;
 }
 
 string toEng(char n){
