@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
     //Display the outputs
     cout << setw(16) << left << "Account name: " << account->name << endl;
     cout << setw(16) << left << "Address: " << account->address << endl;
-    cout << setw(16) << left << "Account number: " << setfill('0') << setw(5) << account->number << endl;
+    cout << setw(16) << left << "Account number: " << setfill('0') << setw(5) << right << account->number << endl;
     cout << setprecision(2) << fixed;
     cout << setw(16) << left << "Total balance : $" << account->balance << endl;
     if(odBal) cout << "\nYou will be charged an overdraft fee of $" << ODF
@@ -73,6 +73,7 @@ int main(int argc, char** argv) {
     
 
     //Exit stage right or left!
+    delete account;
     return 0;
 }
 

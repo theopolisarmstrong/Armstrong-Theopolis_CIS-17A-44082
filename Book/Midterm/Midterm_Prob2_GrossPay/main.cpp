@@ -24,13 +24,12 @@ const unsigned char TRIP_HRS = 50;
 struct Emp{
     string name;
     float hours;
-    float rate;
-    float payNum;
-    string payStr;
+    float rate; //Hourly rate
+    float payNum; //Numeric amount
+    string payStr; //English amount
 };
 
 //Function Prototypes
-bool valid(float);
 bool inEmp(Emp&);
 void outEmp(const Emp, const string, const string);
 
@@ -51,12 +50,12 @@ int main(int argc, char** argv) {
     //Set the random number seed
     
     //Declare Variables
-    const string COMPANY = "Picus Communications Corporation";
-    const string ADDRESS = "4545 Pierre-de-Coubertin Avenue";
-    const int MAXEMP = 1000;
+    const string COMPANY = "Picus Communications Corporation"; //Company name
+    const string ADDRESS = "4545 Pierre-de-Coubertin Avenue"; //Company address
+    const int MAXEMP = 1000; //Maximum number of employees in employs array
     
     Emp employs[MAXEMP];
-    int empNum = 0;
+    int empNum = 0; //Number of entered employees
     
     //Initialize or input i.e. set variable values
     //Input employee data
@@ -86,10 +85,6 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-bool valid(const float& in){
-    return true;
-}
-
 bool inEmp(Emp &e){
     float in;
     cout << "Enter the employee's information: \n";
@@ -110,14 +105,13 @@ void outEmp(const Emp e, const string company, const string address){
     cout << company << '\n';
     cout << address << '\n';
     cout << "Name: " << e.name << '\t';
-    cout << "Amount: " << e.payNum << endl;
+    cout << "Amount: $" << e.payNum << endl;
     cout << "Amount: " << e.payStr << endl;
     cout << "Signature Line: \n";
 }
 
 float calcPay(const float &hours, const float &rate){
     float pay = 0;
-    int sing = 0, dub = 0, trip = 0;
     if (hours <= DUB_HRS){ //Calculate normal hours
         return hours * rate;
     } else if (hours > DUB_HRS && hours < DUB_HRS){ //Calculate with double hours
@@ -131,14 +125,14 @@ float calcPay(const float &hours, const float &rate){
 //8,340,587,201 to [0,0,8][3,4,0][5,8,7][2,0,1]
 //                   Bil    Mil    Thou   
 string toEng(const float &n){
-    string s = "";
-    char* num;
-    char** triplet;
-    int whole = n,
-        dec = (n - whole) * 100,
-        digits = 0,
-        decDigi = 0,
-        size;
+    string s = ""; //Amount string
+    char* num; //Array of place values
+    char** triplet; //Place values grouped into digits
+    int whole = n, //Whole integer of amount
+        dec = (n - whole) * 100, //Decimal value of amount
+        digits = 0, //Number of digits in the amount
+        decDigi = 0, //Number of decimal digits in the amount
+        size; //Size of triplet array
     
     //Find number of digits
     for (int i = whole; i > 0; i /= 10){
@@ -177,11 +171,11 @@ string toEng(const float &n){
     s += "/100";
     
     //De-allocate pointer arrays
-    delete num;
+    delete [] num;
     for (int i = 0; i < size; i++){
-        delete triplet[i];
+        delete [] triplet[i];
     }
-    delete triplet;
+    delete [] triplet;
     
     return s;
 }
