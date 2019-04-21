@@ -81,6 +81,9 @@ void decrypt(char[], const unsigned char); //Decrypt number array
 
 //Problem 5 Functions
 
+//Problem 6 Functions
+void answers();
+
 //Execution Begins Here
 int main(int argc, char** argv) {
     //Declare Variables
@@ -98,8 +101,8 @@ int main(int argc, char** argv) {
             case '3':{prblm3();break;}
             case '4':{prblm4();break;}
             case '5':{prblm5();break;}
-            case '6':{prblm5();break;}
-            case '7':{prblm5();break;}
+            case '6':{prblm6();break;}
+            case '7':{prblm7();break;}
             default: cout<<"Exiting Menu"<<endl;
         }
     }while(choice>='1'&&choice<='7');
@@ -123,8 +126,8 @@ void menu(){
     cout<<"Type 3 for Structure Statistics program (Problem 3)"<<endl;
     cout<<"Type 4 for Encryption/Decryption program (Problem 4)"<<endl;
     cout<<"Type 5 for Factorial Overflow (Problem 5)"<<endl;
-    cout<<"Type 6 for  (Problem 6)"<<endl;
-    cout<<"Type 7 for  (Problem 7)"<<endl<<endl;
+    cout<<"Type 6 for Float Representation (Problem 6)"<<endl;
+    cout<<"Type 7 for Prime Factor (Problem 7)"<<endl<<endl;
 }
 
 //000000011111111112222222222333333333344444444445555555555666666666677777777778
@@ -751,7 +754,27 @@ void prblm5(){
 //000000011111111112222222222333333333344444444445555555555666666666677777777778
 //345678901234567890123456789012345678901234567890123456789012345678901234567890
 void prblm6(){
+    //Set the random number seed
     
+    //Declare Variables
+    
+    //Initialize or input i.e. set variable values
+    
+    //Map inputs -> outputs
+    
+    //Display the outputs
+    answers();
+
+    //Exit stage right or left!
+}
+
+void answers(){
+    cout << "Dec\t\tBinary\t\tOctal\t\tHex\t\tFloat Rep.\tNeg. Float Rep.\n"
+         << "2.875\t\t10.111\t\t2.7\t\t2.E\t\t5E000002\tA1FFF002\n"
+         << "0.1796875\t0.0010111\t0.134\t\t0.2E\t\t5E0000FE\tA1FFF0FE\n"
+         << "\n59999901 = 1.4\n"
+         << "59999902 = 2.8\n"
+         << "A66667FE = -0.175\n";
 }
 
 //000000011111111112222222222333333333344444444445555555555666666666677777777778
