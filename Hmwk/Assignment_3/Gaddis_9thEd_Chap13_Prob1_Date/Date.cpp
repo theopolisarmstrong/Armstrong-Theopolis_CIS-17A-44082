@@ -4,10 +4,7 @@
  * Created on April 29th, 2019, 9:28 PM
  * Purpose: Date class definition
  */
-#include <iostream>
 #include "Date.h"
-
-using namespace std;
 
 void Date::setMonth(int m){
     if (m >= MONTH_MIN && m <= MONTH_MAX)
@@ -21,7 +18,7 @@ void Date::setDay(int d){
     else cout << "Day out of range\n";
 }
 
-string Date::monStr(int month){
+string Date::monStr(int month) const {
     switch(month){
         case 1:
             return "January";
@@ -58,5 +55,9 @@ string Date::monStr(int month){
             break;
         case 12:
             return "December";
+            break;
+        default:
+            return "";
+            break;
     }
 }

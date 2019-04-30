@@ -23,13 +23,13 @@ public:
     void setMonth(int);
     void setDay(int);
     void setYear(int y){ year = y; }
-    int getMonth(){ return month; }
-    int getDay(){ return day; }
-    int getYear(){ return year; }
-    string monStr(int); //Returns name of month
-    void numeric(){ cout << month << '/' << day << '/' << year; } //Outputs 12/31/2019 format
-    void expand(){ cout << monStr(month) << ' ' << day << ", " << year; } //Outputs December 31, 2019 format
-    void mla(){ cout << day << ' ' << monStr(month) << ' ' << year; } //Outputs 31 December 2019 format
+    int getMonth() const { return month; }
+    int getDay() const { return day; }
+    int getYear() const { return year; }
+    string monStr(int) const; //Returns name of month
+    void numeric() const { cout << month << '/' << day << '/' << year; } //Outputs 12/31/2019 format
+    void expand() const { cout << monStr(month) << ' ' << day << ", " << year; } //Outputs December 31, 2019 format
+    void mla() const { cout << day << ' ' << monStr(month) << ' ' << year; } //Outputs 31 December 2019 format
 };
 
 #endif /* DATE_H */
