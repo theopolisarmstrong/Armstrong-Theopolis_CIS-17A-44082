@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     
     //Initialize or input i.e. set variable values
     cout << "Enter a number between 2 and 10,000: ";
-    cin num;
+    cin >> num;
     
     //Map inputs -> outputs
     ans = factor(num);
@@ -52,17 +52,10 @@ int main(int argc, char** argv) {
 }
 
 Primes *factor(int n){
-    int size = ceil(n/2);
-    Prime a[size];
     Primes *p = new Primes;
-    for (int i = 0; i < size; i++){
-        
-    }
     return p;
 }
 
 void prntPrm(Primes *p){
-    for (int i = 0; i < p.nPrimes; i++){
-        
-    }
+    
 }

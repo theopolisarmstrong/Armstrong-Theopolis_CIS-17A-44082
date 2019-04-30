@@ -44,6 +44,18 @@ struct Emp{
 
 //Problem 5 Structures
 
+//Problem 6 Structures
+
+//Problem 7 Structures
+struct Prime{
+    unsigned char prime;
+    unsigned char power;
+};
+struct Primes{
+    Prime *prime;
+    unsigned char nPrimes;
+};
+
 //Function Prototypes
 void menu();
 void prblm1();
@@ -53,6 +65,7 @@ void prblm4();
 void prblm5();
 void prblm6();
 void prblm7();
+
 //Problem 1 functions
 void valid(float &input, string error);
 float inLoop(const float);
@@ -83,6 +96,10 @@ void decrypt(char[], const unsigned char); //Decrypt number array
 
 //Problem 6 Functions
 void answers();
+
+//Problem 7 Functions
+Primes *factor(int); //Input an integer, return all prime factors
+void prntPrm(Primes *); //Output all prime factors
 
 //Execution Begins Here
 int main(int argc, char** argv) {
@@ -785,5 +802,31 @@ void answers(){
 //000000011111111112222222222333333333344444444445555555555666666666677777777778
 //345678901234567890123456789012345678901234567890123456789012345678901234567890
 void prblm7(){
+    cout << "Incomplete.\n\n";
+    //Set the random number seed
+    
+    //Declare Variables
+    Primes *ans;
+    int num;
+    
+    //Initialize or input i.e. set variable values
+    cout << "Enter a number between 2 and 10,000: ";
+    cin >> num;
+    
+    //Map inputs -> outputs
+    ans = factor(num);
+    
+    //Display the outputs
+    prntPrm(ans);
+
+    //Exit stage right or left!
+}
+
+Primes *factor(int n){
+    Primes *p = new Primes;
+    return p;
+}
+
+void prntPrm(Primes *p){
     
 }
