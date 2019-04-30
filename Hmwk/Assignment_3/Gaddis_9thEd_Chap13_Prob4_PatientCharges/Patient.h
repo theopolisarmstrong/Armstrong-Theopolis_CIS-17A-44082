@@ -15,29 +15,33 @@ struct Name{
     string middle = "";
     string last = "";
 };
-struct Addr{
+struct Addr{ //Address
     string address = "";
     string city = "";
     char state[2] = "";
-    string zip = 0;
+    int zip = 0;
 };
-struct Contact{
+struct Contact{ //Contact information
     Name name;
     string number = "";
 };
 
 class Patient{
 private:
-    Name* name;
-    Addr* address; //Patient's address
-    Contact* emergency; //Emergency contact information
+    Name *name;
+    Addr *address; //Patient's address
+    Contact *emergency; //Emergency contact information
     string number = ""; //Patient's contact number
 public:
     Patient(Name*, Addr*, Contact*, string);
-    Name* getName(){ return name; }
-    Addr* getAddr(){ return address; }
-    Contact* getContact(){ return emergency; }
-    string getNum(){ return number; }
+    Name* getName() const { return name; }
+    Addr* getAddr() const { return address; }
+    Contact* getContact() const { return emergency; }
+    string getNum() const { return number; }
+    void setName(Name *n){ name = n; }
+    void setAddr(Addr *a){ address = a; }
+    void setContact(Contact *e){ emergency = e; }
+    
 };
 
 #endif /* PATIENT_H */

@@ -5,10 +5,7 @@
  * Purpose: Paitent class definition
  */
 
-#include <iostream>
 #include "Patient.h"
-
-using namespace std;
 
 Patient::Patient(Name* n, Addr* a, Contact* c, string num){
     name = n;
