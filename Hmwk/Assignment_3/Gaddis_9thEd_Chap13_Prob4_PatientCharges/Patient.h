@@ -34,6 +34,7 @@ private:
     string number = ""; //Patient's contact number
 public:
     Patient(Name*, Addr*, Contact*, string);
+    ~Patient();
     Name* getName() const { return name; }
     Addr* getAddr() const { return address; }
     Contact* getContact() const { return emergency; }

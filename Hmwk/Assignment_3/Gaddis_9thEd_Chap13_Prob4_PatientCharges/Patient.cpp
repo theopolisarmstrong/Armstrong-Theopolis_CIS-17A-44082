@@ -13,3 +13,9 @@ Patient::Patient(Name* n, Addr* a, Contact* c, string num){
     emergency = c;
     number = num;
 }
+
+Patient::~Patient(){
+    delete name;
+    delete address;
+    delete emergency;
+}

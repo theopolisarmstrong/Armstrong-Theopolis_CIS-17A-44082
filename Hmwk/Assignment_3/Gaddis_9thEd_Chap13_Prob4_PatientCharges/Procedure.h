@@ -20,6 +20,7 @@ private:
     float charge = 0.0;
 public:
     Procedure(string, Date*, string, float);
+    ~Procedure(){ delete date; }
     string getName() const { return name; }
     Date* getDate() const { return date; }
     string getDoctor() const { return doctor; }

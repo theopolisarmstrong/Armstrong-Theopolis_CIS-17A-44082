@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Date.h</itemPath>
       <itemPath>Patient.h</itemPath>
       <itemPath>Procedure.h</itemPath>
     </logicalFolder>
@@ -14,7 +15,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Date.cpp</itemPath>
       <itemPath>Patient.cpp</itemPath>
+      <itemPath>Procedure.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -39,9 +42,15 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="Date.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Date.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Patient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Patient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Procedure.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Procedure.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -68,9 +77,15 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Date.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Date.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Patient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Patient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Procedure.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Procedure.h" ex="false" tool="3" flavor2="0">
       </item>

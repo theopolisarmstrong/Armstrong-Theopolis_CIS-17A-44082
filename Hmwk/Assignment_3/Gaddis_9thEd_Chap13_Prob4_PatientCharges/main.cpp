@@ -19,6 +19,7 @@ using namespace std;
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
 
 //Function Prototypes
+Date* initDate();
 void outProc(const Procedure&);
 
 //Execution Begins Here!
@@ -26,15 +27,11 @@ int main(int argc, char** argv) {
     //Set the random number seed
     
     //Declare Variables
-    const int MONTH = 4;
-    const int DAY = 30;
-    const int YEAR = 2019;
-    
     Name *name = new Name;
     Addr *address = new Addr;
     Contact *emergency = new Contact;
     Date* today = new Date; //Current date
-    float total = 0.0; //Total charge for all patient's proedures
+    float total = 0.0; //Total charge for all patient's procedures
     
     
     //Initialize or input i.e. set variable values
@@ -53,14 +50,12 @@ int main(int argc, char** argv) {
     
     Patient patient(name, address, emergency, "714-234-6983"); //Initialize patient using dynamically allocated structures
     
-    //Initialize date
-    today->setMonth(MONTH);
-    today->setDay(DAY);
-    today->setYear(YEAR);
-    
     //Initialize Procedures
+    today = initDate();
     Procedure proc1("Physical Exam", today, "Dr. Irvine", 250.0);
+    today = initDate();
     Procedure proc2("X-ray", today, "Dr. Jamison", 500.0);
+    today = initDate();
     Procedure proc3("Blood test", today, "Dr. Smith", 200.0);
     
     //Map inputs -> outputs
@@ -82,9 +77,6 @@ int main(int argc, char** argv) {
     cout << "\nTotal: $" << total << endl;
     
     //Exit stage right or left!
-    delete name;
-    delete address;
-    delete emergency;
     return 0;
 }
 
@@ -95,4 +87,17 @@ void outProc(const Procedure &proc){
     cout << "\n\tPerformed by " << proc.getDoctor() << endl;
     cout << setprecision(2) << fixed;
     cout << "\t$" << proc.getCharge() << endl;
+}
+
+Date* initDate(){
+    const int MONTH = 4;
+    const int DAY = 30;
+    const int YEAR = 2019;
+    Date *today = new Date;
+    
+    today->setMonth(MONTH);
+    today->setDay(DAY);
+    today->setYear(YEAR);
+    
+    return today;
 }
