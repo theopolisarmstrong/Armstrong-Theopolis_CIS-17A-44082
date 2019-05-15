@@ -22,12 +22,18 @@ int main(int argc, char** argv) {
     //Set the random number seed
     
     //Declare Variables
+    int days = 0;
     
     //Initialize or input i.e. set variable values
+    cout << "Enter the day of the year: ";
+    cin >> days;
+    
+    DayOfYear current(days);
     
     //Map inputs -> outputs
     
     //Display the outputs
+    current.print();
 
     //Exit stage right or left!
     return 0;

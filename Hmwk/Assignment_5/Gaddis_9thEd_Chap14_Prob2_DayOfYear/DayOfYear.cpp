@@ -7,9 +7,21 @@
 
 #include "DayOfYear.h"
 
-const string months[] = {"None", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+const string DayOfYear::months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+const int DayOfYear::monthDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 void DayOfYear::print(){
-    int month = day / 12; //Month 
+    int month = 0, i = 0;
+    
+    if(day > 0 && day < 366){ //Static array bounds check / input validation
+        //Find month
+        for (; i < day; i+=monthDays[month-1]){
+            month++;
+        }
+        month--;
+        i-=monthDays[month];
+        //Output date in month-day format
+        cout << months[month] << ", " << day-i << endl;
+    }
 }
 

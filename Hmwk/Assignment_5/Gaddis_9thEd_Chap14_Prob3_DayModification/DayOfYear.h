@@ -16,9 +16,18 @@ private:
     unsigned int day; //Day of the year
     static const string months[]; //Months in the year
     static const int monthDays[]; //Days in each month; parallel to months[]
+    char monthIndex(string); //Returns index of month in month[] matching month name string
 public:
     DayOfYear(unsigned int d) : day(d) {};
+    DayOfYear(string, unsigned int); //Converts month-day format to day of year
     void print(); //Outputs date in month-day format
+    unsigned int getDay() { return day; }
+    
+    //Overloaded operator functions
+    DayOfYear operator++();
+    DayOfYear operator++(int);
+    DayOfYear operator--();
+    DayOfYear operator--(int);
 };
 
 #endif /* DAYOFYEAR_H */
