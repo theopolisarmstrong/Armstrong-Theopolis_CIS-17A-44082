@@ -56,12 +56,10 @@ void SimpleVector<T>::push(T e){
     for (int i = 0; i < arraySize; i++)
         *(temp + i) = *(aptr + i);
     //Add new element
-    cout << "\nOld size: " << arraySize << endl << "e: " << e << endl;
     *(aptr + arraySize) = e;
     arraySize++;
-    cout << "New size: " << arraySize << endl;
     //Delete old array
-    delete aptr;
+//    delete aptr;
     aptr = temp;
 }
 
