@@ -39,8 +39,10 @@ public:
    // Overloaded [] operator declaration
    T &operator[](const int &);
    
-   //Push append function
+   //Push/Append element function
    void push(T);
+   //Pull/Truncate element function
+   T pull();
 };
 
 template <class T>
@@ -55,12 +57,30 @@ void SimpleVector<T>::push(T e){
     //Copy old array values to new array
     for (int i = 0; i < arraySize; i++)
         *(temp + i) = *(aptr + i);
-    //Add new element
-    *(aptr + arraySize) = e;
+    *(temp + arraySize) = e; //Add new element
     arraySize++;
-    //Delete old array
-//    delete aptr;
+    delete [] aptr; //Delete old array
+    aptr = temp; //Set SimpleVector array to larger array 
+}
+template <class T>
+T SimpleVector<T>::pull(){
+    int tempSize = arraySize - 1;
+    T pulled = *(aptr + arraySize-1); //Save the last element
+    //Allocate smaller array
+    T *temp = nullptr;
+    try{
+        temp = new T[tempSize];
+    } catch (bad_alloc){
+        memError();
+    }
+    //Copy old array values to new array
+    for (int i = 0; i < tempSize; i++)
+        *(temp + i) = *(aptr + i);
+    arraySize = tempSize;
+    //Set SimpleVector array to smaller array 
+    delete [] aptr;
     aptr = temp;
+    return pulled;
 }
 
 //***********************************************************

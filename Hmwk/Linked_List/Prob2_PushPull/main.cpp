@@ -30,19 +30,33 @@ int main(int argc, char** argv) {
     //Initialize or input i.e. set variable values
     cout << "Enter Simple Vector size: ";
     cin >> size;
-    
-    SimpleVector<int> sv(size);
-    
+    SimpleVector<int> sv(size); //Create SimpleVector
     //Map inputs -> outputs
     for (int i = 0; i < sv.size(); i++){
         sv[i] = (rand() % 100) + 10;
     }
+    SimpleVector<int> svOld(sv); //Save sv state
     //Push back 3 elements
     sv.push((rand() % 100) + 10);
-//    sv.push((rand() % 100) + 10);
-//    sv.push((rand() % 100) + 10);
+    sv.push((rand() % 100) + 10);
+    sv.push((rand() % 100) + 10);
+    SimpleVector<int> svPush(sv); //Save pushed state
+    //Pull/delete 2 elements
+    sv.pull();
+    sv.pull();
     
     //Display the outputs
+    cout << "Original SimpleVector: ";
+    for (int i = 0; i < svOld.size(); i++){
+        cout << svOld[i] << ' ';
+    }
+    cout << endl;
+    cout << "Adding three elements: ";
+    for (int i = 0; i < svPush.size(); i++){
+        cout << svPush[i] << ' ';
+    }
+    cout << endl;
+    cout << "Pulling four elements: ";
     for (int i = 0; i < sv.size(); i++){
         cout << sv[i] << ' ';
     }
