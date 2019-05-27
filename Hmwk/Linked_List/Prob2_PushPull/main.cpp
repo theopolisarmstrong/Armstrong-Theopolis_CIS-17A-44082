@@ -41,7 +41,9 @@ int main(int argc, char** argv) {
     sv.push((rand() % 100) + 10);
     sv.push((rand() % 100) + 10);
     SimpleVector<int> svPush(sv); //Save pushed state
-    //Pull/delete 2 elements
+    //Pull/delete 4 elements
+    sv.pull();
+    sv.pull();
     sv.pull();
     sv.pull();
     

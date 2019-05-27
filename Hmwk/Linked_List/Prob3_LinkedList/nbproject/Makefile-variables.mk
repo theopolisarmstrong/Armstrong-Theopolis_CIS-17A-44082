@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=Cygwin-Windows
 CND_ARTIFACT_DIR_Debug=dist/Debug/Cygwin-Windows
-CND_ARTIFACT_NAME_Debug=prob2_pushpull
-CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin-Windows/prob2_pushpull
+CND_ARTIFACT_NAME_Debug=prob3_linkedlist
+CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin-Windows/prob3_linkedlist
 CND_PACKAGE_DIR_Debug=dist/Debug/Cygwin-Windows/package
-CND_PACKAGE_NAME_Debug=prob2pushpull.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin-Windows/package/prob2pushpull.tar
+CND_PACKAGE_NAME_Debug=prob3linkedlist.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin-Windows/package/prob3linkedlist.tar
 # Release configuration
 CND_PLATFORM_Release=Cygwin-Windows
 CND_ARTIFACT_DIR_Release=dist/Release/Cygwin-Windows
-CND_ARTIFACT_NAME_Release=prob2_pushpull
-CND_ARTIFACT_PATH_Release=dist/Release/Cygwin-Windows/prob2_pushpull
+CND_ARTIFACT_NAME_Release=prob3_linkedlist
+CND_ARTIFACT_PATH_Release=dist/Release/Cygwin-Windows/prob3_linkedlist
 CND_PACKAGE_DIR_Release=dist/Release/Cygwin-Windows/package
-CND_PACKAGE_NAME_Release=prob2pushpull.tar
-CND_PACKAGE_PATH_Release=dist/Release/Cygwin-Windows/package/prob2pushpull.tar
+CND_PACKAGE_NAME_Release=prob3linkedlist.tar
+CND_PACKAGE_PATH_Release=dist/Release/Cygwin-Windows/package/prob3linkedlist.tar
 #
 # include compiler specific variables
 #
