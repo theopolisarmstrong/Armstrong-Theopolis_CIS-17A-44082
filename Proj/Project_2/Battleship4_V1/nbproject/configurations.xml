@@ -4,6 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Battleship.h</itemPath>
+      <itemPath>Map.h</itemPath>
       <itemPath>Player.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -13,6 +15,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Battleship.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -37,6 +40,12 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="Battleship.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Battleship.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Map.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Player.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
@@ -62,6 +71,12 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Battleship.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Battleship.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Map.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Player.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">

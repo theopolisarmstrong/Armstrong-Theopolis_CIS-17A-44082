@@ -19,18 +19,10 @@
 using namespace std;
 
 //User Libraries
+#include "Battleship.h"
 
 //Global Constants, no Global Variables are allowed
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
-const unsigned char CHARNUM = 48;   //Char constant to integer constant conversion
-const unsigned char SHIPNUM = 3; //Number of available ship types
-const unsigned char NAMELEN = 9; //Maximum length of player name
-const string S_FILE = "save.dat"; //Save file name
-
-//Enumerators
-enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size/ship health
-enum Options {NONE = 0, PVCPU, PVP, LOAD, SAVE = (static_cast<int>('s')-CHARNUM), SAVE_S = (static_cast<int>('S')-CHARNUM), EXIT = (static_cast<int>('e')-CHARNUM), EXIT_E = (static_cast<int>('E')-CHARNUM)}; //Menu choice options/game modes
-enum Winner {NO_WIN = -1, P1_WIN, P2_WIN, CPU_WIN = 1}; //Winner of the game
 
 //Structures
 struct Player{
@@ -60,7 +52,6 @@ void cpuMap(char**, const char, const Mapping type = PATROL);   //Generate compu
 void pMap(Player*, const char, const Mapping type = PATROL);
 //void sunk(char health[]);     TODO: requires ship positions validation
 void genTar(char& targetX, char& targetY, const char&);  //Generate unique random targets for computer player
-void updateV(const char &x, const char &y, vector<char>& pastX, vector<char>& pastY);
 bool attack(char, char, Player*, Player*);  //Player turn; pass opposing player's ship placements for comparison
 bool testEnd(char**, const char&);  //Test game end condition
 Winner turn(Player*, Player*, const char, bool&);
@@ -70,6 +61,7 @@ void load();
 //Options loadProg(Player*, Player*); //Initialize game w/ data from file
 //Execution Begins Here!
 int main(int argc, char** argv) {
+    Battleship game;
     //Set the random number seed
     srand(static_cast<unsigned int>(time(0)));
     
@@ -88,7 +80,7 @@ int main(int argc, char** argv) {
     string hit;   //Indicates a hit
     
     //Initialize game
-    title();
+    game.init();
     while(gameMode == NONE){   //Loop menu until game mode is chosen
         switch(menu(choice)){
             case PVCPU:
@@ -263,16 +255,6 @@ void destroy(char** array, const char size){
     delete array;
 }
 
-void title(){
-    cout << " ____        _   _   _           _     _" << endl;
-    cout << "|  _ \\      | | | | | |         | |   (_)" << endl;
-    cout << "| |_) | __ _| |_| |_| | ___  ___| |__  _ _ __" << endl;
-    cout << "|  _ < / _` | __| __| |/ _ \\/ __| '_ \\| | '_ \\" << endl;
-    cout << "| |_) | (_| | |_| |_| |  __/\\__ \\ | | | | |_) |" << endl;
-    cout << "|____/ \\__,_|\\__|\\__|_|\\___||___/_| |_|_| .__/" << endl;
-    cout << "                                      | |\n";
-    cout << "                                      |_|\n";
-}
 
 char menu(char& choice){
     cout << "Choose a menu item: \n";
@@ -522,11 +504,6 @@ void pMap(Player* p, const char size, Mapping type){
     destroy(temp, size);
 }
 
-void updateV(const char &x, const char &y, vector<char>& pastX, vector<char>& pastY){
-    pastX.push_back(x);
-    pastY.push_back(y);
-}
-
 void genTar(char& targetX, char& targetY, const char &size){
     static vector<char> pastX;  //Previous X-axis targets
     static vector<char> pastY;  //Previous Y-axis targets
@@ -544,7 +521,8 @@ void genTar(char& targetX, char& targetY, const char &size){
         }
     }
     //Update past target vectors
-    updateV(targetX, targetY, pastX, pastY);
+    pastX.push_back(targetX);
+    pastY.push_back(targetY);
 }
 
 bool attack(char targetX, char targetY, Player* target, Player* p){
