@@ -9,11 +9,11 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-MacOSX
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-MacOSX
-CND_ARTIFACT_NAME_Debug=battleship4_v2
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-MacOSX/battleship4_v2
+CND_ARTIFACT_NAME_Debug=battleship4_v3
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-MacOSX/battleship4_v3
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-MacOSX/package
-CND_PACKAGE_NAME_Debug=battleship4v2.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-MacOSX/package/battleship4v2.tar
+CND_PACKAGE_NAME_Debug=battleship4v3.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-MacOSX/package/battleship4v3.tar
 # Release configuration
 CND_PLATFORM_Release=Cygwin-Windows
 CND_ARTIFACT_DIR_Release=dist/Release/Cygwin-Windows

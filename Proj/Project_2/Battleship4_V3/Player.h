@@ -8,14 +8,20 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "PlayerClass.h"
+
 class Player : public PlayerClass{
 private:
-    
+    std::string shipName(Mapping);
+    void copyMap(int8_t**);
 public:
     Player() : PlayerClass() {}
+    Player(const uint8_t size) : PlayerClass(size, "Player") {}
     Player(const uint8_t size, const char name[]) : PlayerClass(size, name) {}
-    Player(const Player& orig) : PlayerClass() {}
+    Player(const Player& orig);
+    
+    void place(Mapping);
 };
 
-#endif /* PLAYER_H */
+#endif /* PLAYE*R_H */
 

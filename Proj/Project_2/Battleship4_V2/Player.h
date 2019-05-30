@@ -8,6 +8,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "PlayerClass.h"
+
 class Player : public PlayerClass{
 private:
     

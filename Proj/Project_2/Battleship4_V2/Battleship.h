@@ -10,6 +10,7 @@
 #include <vector>
 
 //User libraries
+#include "PlayerClass.h"
 #include "Input.h"
 
 //Global constants
@@ -35,7 +36,7 @@ private:
     enum PlayInd {P1, P2, CPU = 1};
     static const uint PLAYNUM; //Number of players
     
-    std::vector<class Player>players;
+    std::vector<PlayerClass*>players;
     uint8_t size = 0; //Map size
     enum Options gameMode = NONE; //game mode chosen in menu
     Winner winner = NO_WIN; //winner of the game

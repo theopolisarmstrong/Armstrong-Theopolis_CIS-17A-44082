@@ -25,19 +25,10 @@ using namespace std;
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
 
 //Structures
-struct Player{
-    char name[NAMELEN];
-    char** ships; //Dynamically allocated array of ship positions
-    char health[SHIPNUM] = {PATROL, DESTROY, CARRIER}; //Array of ship health
-};
 
 //Function Prototypes
 
-void destroy(char**, const char); //De-allocates two dimensional dynamic array
-
 //Game functions
-char menu(char& choice);    //Output menu and receives player's menu choice
-Player* initShip(const char size); //Initialize player structure
 string shipName(Mapping); //Return ship name as string
 void copyMap(char**, char**, const char);
 void map(char**, const char);   //Output map

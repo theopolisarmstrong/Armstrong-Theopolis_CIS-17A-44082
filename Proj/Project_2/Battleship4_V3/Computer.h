@@ -8,13 +8,17 @@
 #ifndef COMPUTER_H
 #define COMPUTER_H
 
-class Computer {
-public:
-    Computer();
-    Computer(const Computer& orig);
-    virtual ~Computer();
-private:
+#include "PlayerClass.h"
 
+class Computer : public PlayerClass{
+private:
+    void genPlace();
+public:
+    Computer() : PlayerClass(MAPMIN, "Computer") {}
+    Computer(const uint8_t size) : PlayerClass(size, "Computer") {}
+    Computer(const Computer& orig) : PlayerClass() {}
+    
+    void place();
 };
 
 #endif /* COMPUTER_H */

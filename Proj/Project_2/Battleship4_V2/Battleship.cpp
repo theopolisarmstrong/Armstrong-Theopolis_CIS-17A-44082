@@ -9,7 +9,8 @@
 using namespace std;
 
 #include "Battleship.h"
-#include "PlayerClass.h"
+#include "Player.h"
+#include "Computer.h"
 #include "Input.h"
 
 //Initialize static variables
@@ -30,8 +31,8 @@ void Battleship::init(){
                 minVal(size, 4, "Error: Size too low.\nEnter a valid size: ");
                 gameMode = PVCPU; //Set game mode
                 //Initialize ship arrays
-                players[P1] = Player(size, "Player 1");
-                players[CPU] = initShip(size);
+                players.push_back(new Player(size, "Player 1"));
+                players.push_back(new Computer());
                 //Initialize names
                 players[P1] = Player("Player 1");
                 players[P2] = Player("Computer");
