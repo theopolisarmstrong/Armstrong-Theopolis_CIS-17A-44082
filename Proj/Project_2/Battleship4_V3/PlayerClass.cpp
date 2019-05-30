@@ -9,26 +9,35 @@
 using namespace std;
 
 const uint8_t PlayerClass::NAMELEN = 9;
+const uint8_t PlayerClass::SHIPNUM = 3;
+
+//Constructors
 
 //TODO
 //Memory allocation exception handling
 //
+PlayerClass::PlayerClass() : size(MAPMIN), name("Player"){
+    initMap();
+}
 PlayerClass::PlayerClass(const uint8_t s) : size(s) {
     initMap();
 }
-//TODO
-//Memory allocation exception handling
-//
+PlayerClass::PlayerClass(const char n[]) : size(MAPMIN){
+    initMap();
+    strcpy(name, n);
+}
 PlayerClass::PlayerClass(const uint8_t s, const char n[]) : size(s) {
     strlcpy(name, n, NAMELEN); //Set name
     initMap(); //Initialize map
 }
 PlayerClass::~PlayerClass(){
     //Deallocate 2D map array
-    for (char i = 0; i < size; i++){
-        delete map[i];
+    if (size > 0){
+        for (char i = 0; i < size; i++){
+            delete [] map[i];
+        }
+        delete [] map;
     }
-    delete map;
 }
 
 //TODO
@@ -36,7 +45,13 @@ PlayerClass::~PlayerClass(){
 //
 void PlayerClass::initMap(){
     //Dynamically allocate two dimensional grid
-    map = new int8_t*[size];
+    try{
+        map = new int8_t*[size];
+    }
+    catch (bad_alloc){
+        cout << "Error: Memory allocation failure.\n";
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < size; i++){
         map[i] = new int8_t[size];
     }
@@ -47,6 +62,19 @@ void PlayerClass::initMap(){
         }
     }
 }
+bool PlayerClass::testEnd(PlayerClass& p){
+    bool end = true; //End gameplay loop flag
+    for (int row = 0; row < size; row++){
+        for (int col = 0; col < size; col++){
+//            int8_t *mapRow = p->operator[](row);
+            int8_t* mapRow = p[row];
+            if ( mapRow[col] > 0)
+                end = false;
+        }
+    }
+    return end;
+}
+
 void PlayerClass::showMap() const {
     //Output column headers and top divider
     cout << "     ";
@@ -110,3 +138,8 @@ int8_t* PlayerClass::operator[](const int &i){
     if(i >= 0 && i < size) return map[i];
     else return 0;
 }
+//int8_t& PlayerClass::operator()(const int &x, const int &y){
+//    if(x >= 0 && x < size &&
+//       y >= 0 && y < size)
+//        return map[x][y];
+//}

@@ -12,6 +12,7 @@
 
 class Player : public PlayerClass{
 private:
+    bool attack(PlayerClass&, const Coord&);
     std::string shipName(Mapping);
     void copyMap(int8_t**);
 public:
@@ -21,6 +22,7 @@ public:
     Player(const Player& orig);
     
     void place(Mapping);
+    bool turn(PlayerClass&);
 };
 
 #endif /* PLAYE*R_H */

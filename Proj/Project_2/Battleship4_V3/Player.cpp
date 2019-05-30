@@ -5,10 +5,11 @@
  * Purpose: Human Player class definition
  */
 
+#include <iomanip>
+using namespace std;
 
 #include "Input.h"
 #include "Player.h"
-using namespace std;
 
 Player::Player(const Player& orig) : PlayerClass(orig.size){
     strcpy(name, orig.name);
@@ -119,4 +120,47 @@ string Player::shipName(Mapping shipType){
             return "[No ship type found]";
             break;
     }
+}
+
+bool Player::attack(PlayerClass& enemy, const Coord &target){
+    
+    return false;
+}
+bool Player::turn(PlayerClass& enemy){
+    Coord coord {0, 0};
+    string hit; //Indicate a hit or miss
+    float healthPerc = 0.0f; //Overall ship health percentage
+    
+    cout << "\n" << enemy.getName() << "'s turn: \n";
+    //Get and validate target coordinates
+    cout << "Enter a target coordinates: ";
+    cin >> coord.x;
+    coord.x = atoi(reinterpret_cast<char*>(&coord.x));
+    //    if(targetX == SAVE || targetX == SAVE_S){
+    //        saveProg(target, p);
+    //    }
+    maxVal(coord.y, size, "Error: Target x-axis out of range.\n"); //Validate target x coordinate
+    cin >> coord.y;
+    coord.y = atoi(reinterpret_cast<char*>(&coord.y));
+    //    if(targetX == SAVE || targetX == SAVE_S){
+    //        saveProg(target, p);
+    //    }
+    maxVal(coord.y, size, "Error: Target y-axis out of range.\n");  //Validate target y coordinate
+    attack(enemy, coord) ? hit = "Hit!" : hit = "Miss!"; //Check for and calculate hit or miss
+    showMap();
+    cout << hit << endl;
+    //Calculate and display health
+    cout << "Health: ";
+    healthPerc = 0.0f;
+    for (char i : health){
+        cout << static_cast<int>(i) << ' ';
+        healthPerc += i;
+    }
+    cout << setprecision(2) << fixed;
+    cout << "\nTotal health: " << (healthPerc / 6) * 100 << '%' << endl;
+    
+    //Test for computer loss
+    if (testEnd(enemy))
+        return true;
+    return false;
 }

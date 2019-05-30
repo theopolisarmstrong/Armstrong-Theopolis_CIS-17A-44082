@@ -5,7 +5,8 @@
  * Purpose: Battleship game class definition
  */
 
-#include <fstream>
+#include <fstream> //File I/O operations
+#include <cstdio> //exit fucntion
 using namespace std;
 
 #include "Battleship.h"
@@ -18,7 +19,6 @@ const uint8_t
  Battleship::PLAYNUM = 2;
 
 void Battleship::init(){
-    
     title();
     while(gameMode == NONE){   //Loop menu until game mode is chosen
         switch(menu()){
@@ -33,19 +33,20 @@ void Battleship::init(){
                 gameMode = PVCPU; //Set game mode
                 //Initialize players
                 players[P1] = new Player(size, "Player 1");
-                players[P2] = new Computer(size);
+                players[CPU] = new Computer(size);
                 
                 //Set ship positions
                 cout << "Setting CPU ship positions...\n";
                 //Place computer player ships
-                cpuMap(players[CPU]->ships, size, CARRIER);
-                cpuMap(players[CPU]->ships, size, DESTROY);
-                cpuMap(players[CPU]->ships, size);
+//                players[CPU]->placeAll();
+                players[CPU]->place(CARRIER);
+                players[CPU]->place(DESTROY);
+                players[CPU]->place(PATROL);
 //                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
                 //Input and set player ships
-                pMap(players[P1], size, CARRIER);
-                pMap(players[P1], size, DESTROY);
-                pMap(players[P1], size, PATROL);
+                players[P1]->place(CARRIER);
+                players[P1]->place(DESTROY);
+                players[P1]->place(PATROL);
                 cout << endl;
                 break;
             case PVP:
@@ -57,19 +58,17 @@ void Battleship::init(){
                 minVal(size, 4, "Error: Size too low.\n");
                 gameMode = PVP; //Set game mode
                 //Initialize player structures
-                players[P1] = initShip(size);
-                players[P2] = initShip(size);
-                strlcpy(players[P1]->name, "Player 1", NAMELEN);
-                strlcpy(players[P2]->name, "Player 2", NAMELEN);
+                players[P1] = new Player(size, "Player 1");
+                players[P2] = new Player(size, "Player 2");
                 
                 //Set ship positions
-                pMap(players[P1], size, CARRIER);
-                pMap(players[P1], size, DESTROY);
-                pMap(players[P1], size);
+                players[P1]->place(CARRIER);
+                players[P1]->place(DESTROY);
+                players[P1]->place(PATROL);
                 cout << endl;
-                pMap(players[P2], size, CARRIER);
-                pMap(players[P2], size, DESTROY);
-                pMap(players[P2], size);
+                players[P2]->place(CARRIER);
+                players[P2]->place(DESTROY);
+                players[P2]->place(PATROL);
                 cout << endl;
                 break;
             case LOAD:
@@ -78,7 +77,7 @@ void Battleship::init(){
             case EXIT:
             case EXIT_E:
                 cout << "Goodbye.\n";
-                return 0;
+                exit(0);
                 break;
         }
     }
@@ -86,41 +85,43 @@ void Battleship::init(){
 
 //Gameplay loop
 void Battleship::loop(){
-    char targetX, targetY;  //Target coordinates
-    string hit;   //Indicates a hit
     
     cout << "********\n" <<"*BEGIN!*\n" << "********\n\n";
-    cout << "Enter " << static_cast<char>(EXIT_E+CHARNUM) << " at any time to quit.\n";
-    //    cout << "Enter " << static_cast<char>(SAVE_S+CHARNUM) << " at any time to save and quit.\n";
+    cout << "Enter " << static_cast<char>(EXIT_E+48) << " at any time to quit.\n";
+    cout << "Enter " << static_cast<char>(SAVE_S+48) << " at any time to save and quit.\n";
     switch(gameMode){
             //Player vs. CPU
         case PVCPU:{
-            while(!end){
+            while(!isEnd){
                 //Player turn
-                winner = turn(players[CPU], players[P1], size, end);
+                if(players[P1]->turn(players[CPU])){
+                    isEnd = true;
+                    winner = P1;
+                }
 //                map(players[CPU]->ships, size); //Map CPU ships for debugging
                 //Computer Turn
-                if (!end){
+                if (!isEnd){
                     cout << "\nComputer's turn: \n";
-                    genTar(targetX, targetY, size);
-                    cout << "The computer targets (" << static_cast<int>(targetX) << ", " << static_cast<int>(targetY) << ")." << endl;
-                    attack(targetX, targetY, players[P1], players[CPU]) ? hit = "Computer hits!" : hit = "Computer misses!";  //Take computer's turn using random X and Y target coord's [1-size of map]
-                    cout << hit << endl;
-                    //Test for player loss
-                    if (testEnd(players[P1]->ships, size)){
-                        end = true;
-                        winner = CPU_WIN;
+                    if (players[CPU]->turn(players[P1])){
+                        isEnd = true;
+                        winner = CPU;
                     }
                 }
             }
             break;}
         case PVP:{
-            while(!end){
+            while(!isEnd){
                 //Player 1's turn
-                winner = turn(players[P2], players[P1], size, end);
+                if(turn(players[P2])){
+                    isEnd = true;
+                    winner = P1;
+                }
                 //Player 2 Turn
-                if(!end){
-                    winner = turn(players[P1], players[P2], size, end);
+                if(!isEnd){
+                    if(players[P1]->turn(players[P2])){
+                        isEnd = true;
+                        winner = P2;
+                    }
                 }
             }
             break;}
@@ -157,5 +158,9 @@ char menu(){
 }
 
 void Battleship::save(){
+    
+}
+
+void Battleship::load(){
     
 }

@@ -14,16 +14,14 @@
 #include "Input.h"
 
 //Global constants
-const uint8_t SHIPNUM = 3; //Number of available ship types
 const char S_FILE[9] = "save.dat"; //Save file name
 //Enumerators
 
-//Menu choice options/game modes
-enum Winner {NO_WIN = -1, P1_WIN, P2_WIN, CPU_WIN = 1}; //Winner of the game
 //Structures
 struct Header{ //Binary file output header
     uint8_t mapSize = 0;
     uint playNum = 0;
+    Options gamemode = NONE;
 };
 
 //Battleship class
@@ -33,19 +31,20 @@ private:
         char x = 0;
         char y = 0;
     };
-    enum PlayInd {P1, P2, CPU = 1};
+    enum PlayInd {NONE = -1, P1, P2, CPU = 1};
     static const uint8_t PLAYNUM; //Number of players
     
     std::vector<PlayerClass*>players;
     uint8_t size = 0; //Map size
-    enum Options gameMode = NONE; //game mode chosen in menu
-    Winner winner = NO_WIN; //winner of the game
+    Options gameMode = NONE; //game mode chosen in menu
+    PlayInd winner = NONE; //winner of the game
     bool isEnd = false; //Game loop end flag
     
     //Internal game functions
     void title(); //Display title
     char menu(); //Output menu and receives player's menu choice
     void save(); //Save current game status
+    void load(); //Initialize game with save file progress
     
 public:
     Battleship(char pnum) : players(pnum) {}
