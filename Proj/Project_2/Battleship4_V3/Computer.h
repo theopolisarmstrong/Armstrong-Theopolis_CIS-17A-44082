@@ -12,15 +12,15 @@
 
 class Computer : public PlayerClass{
 private:
-    Coord& target();
-    virtual bool attack(PlayerClass&, const Coord&);
-public:
-    Computer() : PlayerClass(MAPMIN, "Computer") {}
-    Computer(const uint8_t size) : PlayerClass(size, "Computer") {}
-    
+    PlayerClass::Coord& target();
     void placeAll();
+    bool attack(PlayerClass&, const Coord&);
+public:
+    Computer() : PlayerClass(MAPMIN, "Computer") { placeAll(); }
+    Computer(const uint8_t size) : PlayerClass(size, "Computer") { placeAll(); }
+    
     virtual void place(Mapping) override;
-    virtual bool turn(PlayerClass&) override;
+    virtual bool turn(PlayerClass*) override;
 };
 
 #endif /* COMPUTER_H */

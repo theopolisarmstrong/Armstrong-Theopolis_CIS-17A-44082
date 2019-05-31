@@ -5,6 +5,8 @@
  * Purpose: Virtual Player class definition
  */
 
+#include <iostream>
+
 #include "PlayerClass.h"
 using namespace std;
 
@@ -53,7 +55,13 @@ void PlayerClass::initMap(){
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < size; i++){
-        map[i] = new int8_t[size];
+        try{
+            map[i] = new int8_t[size];
+        }
+        catch (bad_alloc){
+            cout << "Error: Memory allocation failure.\n";
+            exit(EXIT_FAILURE);
+        }
     }
     //Initialize map with 0's
     for (int i = 0; i < size; i++){
@@ -138,8 +146,3 @@ int8_t* PlayerClass::operator[](const int &i){
     if(i >= 0 && i < size) return map[i];
     else return 0;
 }
-//int8_t& PlayerClass::operator()(const int &x, const int &y){
-//    if(x >= 0 && x < size &&
-//       y >= 0 && y < size)
-//        return map[x][y];
-//}

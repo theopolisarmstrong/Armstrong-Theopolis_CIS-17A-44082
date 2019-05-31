@@ -7,8 +7,8 @@
 
 #ifndef BATTLESHIP_H
 #define BATTLESHIP_H
+#include <iostream>
 #include <vector>
-
 //User libraries
 #include "PlayerClass.h"
 #include "Input.h"
@@ -31,13 +31,13 @@ private:
         char x = 0;
         char y = 0;
     };
-    enum PlayInd {NONE = -1, P1, P2, CPU = 1};
+    enum PlayInd {NO_ONE = -1, P1, P2, CPU = 1};
     static const uint8_t PLAYNUM; //Number of players
     
     std::vector<PlayerClass*>players;
     uint8_t size = 0; //Map size
-    Options gameMode = NONE; //game mode chosen in menu
-    PlayInd winner = NONE; //winner of the game
+    Options gameMode; //game mode chosen in menu
+    PlayInd winner = NO_ONE; //winner of the game
     bool isEnd = false; //Game loop end flag
     
     //Internal game functions

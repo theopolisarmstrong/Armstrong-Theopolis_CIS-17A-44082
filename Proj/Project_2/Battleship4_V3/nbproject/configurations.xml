@@ -19,6 +19,7 @@
                    projectFiles="true">
       <itemPath>Battleship.cpp</itemPath>
       <itemPath>Computer.cpp</itemPath>
+      <itemPath>Input.cpp</itemPath>
       <itemPath>Player.cpp</itemPath>
       <itemPath>PlayerClass.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
@@ -52,6 +53,8 @@
       <item path="Computer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Computer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Input.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Input.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -93,6 +96,8 @@
       <item path="Computer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Computer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Input.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Input.h" ex="false" tool="3" flavor2="0">
       </item>

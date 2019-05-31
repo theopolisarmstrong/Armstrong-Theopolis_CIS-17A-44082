@@ -5,14 +5,15 @@
  * Purpose: Battleship game class definition
  */
 
+#include <iostream>
 #include <fstream> //File I/O operations
 #include <cstdio> //exit fucntion
 using namespace std;
 
 #include "Battleship.h"
-#include "Player.h"
 #include "Computer.h"
-#include "Input.h"
+#include "Player.h"
+
 
 //Initialize static variables
 const uint8_t
@@ -23,7 +24,6 @@ void Battleship::init(){
     while(gameMode == NONE){   //Loop menu until game mode is chosen
         switch(menu()){
             case PVCPU:
-                char** map;
                 //Initialize game
                 cout << "Initializing Player vs. Computer game mode.\nEnter " << static_cast<char>(EXIT_E+48) << " at any time to quit.\n";
                 cout << "Enter map size: ";
@@ -32,8 +32,14 @@ void Battleship::init(){
                 minVal(size, 4, "Error: Size too low.\nEnter a valid size: ");
                 gameMode = PVCPU; //Set game mode
                 //Initialize players
-                players[P1] = new Player(size, "Player 1");
-                players[CPU] = new Computer(size);
+                try{
+                    players[CPU] = new Computer(size);
+                    players[P1] = new Player(size, "Player 1");
+                }
+                catch (bad_alloc){
+                    cout << "Error: Memory allocation failure.\n";
+                    exit(0);
+                }
                 
                 //Set ship positions
                 cout << "Setting CPU ship positions...\n";
@@ -112,13 +118,13 @@ void Battleship::loop(){
         case PVP:{
             while(!isEnd){
                 //Player 1's turn
-                if(turn(players[P2])){
+                if(players[P1]->turn(players[P2])){
                     isEnd = true;
                     winner = P1;
                 }
                 //Player 2 Turn
                 if(!isEnd){
-                    if(players[P1]->turn(players[P2])){
+                    if(players[P2]->turn(players[P1])){
                         isEnd = true;
                         winner = P2;
                     }
@@ -126,6 +132,10 @@ void Battleship::loop(){
             }
             break;}
     }
+}
+
+void Battleship::end(){
+    cout << players[winner]->getName() << " wins!\n";
 }
     
 void Battleship::title(){
@@ -139,8 +149,8 @@ void Battleship::title(){
     cout << "                                      |_|\n";
 }
 
-char menu(){
-    uint8_t choice = 0;
+char Battleship::menu(){
+    char choice = 0;
     cout << "Choose a menu item: \n";
     cout << "1. Player vs. CPU\n";
     cout << "2. Player vs. Player\n";
@@ -148,7 +158,7 @@ char menu(){
     cout << "e. Exit\n";
     
     cin >> choice;
-    choice = atoi(reinterpret_cast<char*>(&choice));
+    choice = atoi(&choice);
     while (choice != PVCPU && choice != PVP && choice != LOAD && choice != SAVE && choice != EXIT && choice != EXIT_E){
         cout << "Error: Invalid menu choice\n";
         cin >> choice;

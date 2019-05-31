@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Battleship.o \
 	${OBJECTDIR}/Computer.o \
+	${OBJECTDIR}/Input.o \
 	${OBJECTDIR}/Player.o \
 	${OBJECTDIR}/PlayerClass.o \
 	${OBJECTDIR}/main.o
@@ -75,6 +76,11 @@ ${OBJECTDIR}/Computer.o: Computer.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Computer.o Computer.cpp
+
+${OBJECTDIR}/Input.o: Input.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Input.o Input.cpp
 
 ${OBJECTDIR}/Player.o: Player.cpp
 	${MKDIR} -p ${OBJECTDIR}

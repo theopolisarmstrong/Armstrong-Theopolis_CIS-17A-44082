@@ -22,7 +22,7 @@ public:
     Player(const Player& orig);
     
     void place(Mapping);
-    bool turn(PlayerClass&);
+    bool turn(PlayerClass*);
 };
 
 #endif /* PLAYE*R_H */
