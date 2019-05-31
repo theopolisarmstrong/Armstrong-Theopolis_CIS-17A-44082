@@ -12,7 +12,7 @@
 
 class Computer : public PlayerClass{
 private:
-    PlayerClass::Coord& target();
+    void target(Coord&);
     void placeAll();
     bool attack(PlayerClass&, const Coord&);
 public:

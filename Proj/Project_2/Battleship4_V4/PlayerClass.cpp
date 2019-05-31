@@ -74,8 +74,7 @@ bool PlayerClass::testEnd(PlayerClass& p) const {
     bool end = true; //End gameplay loop flag
     for (int row = 0; row < size; row++){
         for (int col = 0; col < size; col++){
-            int8_t* mapRow = p[row];
-            if ( mapRow[col] > 0)
+            if ( p[row][col] > 0)
                 end = false;
         }
     }

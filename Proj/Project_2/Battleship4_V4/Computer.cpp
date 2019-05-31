@@ -76,7 +76,7 @@ void Computer::place(Mapping type){
     }
 }
 
-PlayerClass::Coord& Computer::target(){
+void Computer::target(Coord &coord){
     static vector<char> pastX;  //Previous X-axis targets
     static vector<char> pastY;  //Previous Y-axis targets
 
@@ -84,7 +84,6 @@ PlayerClass::Coord& Computer::target(){
 //    Coord coord = {
 //        static_cast<uint8_t>(rand()%size+1),
 //        static_cast<uint8_t>(rand()%size+1)};
-    Coord coord;
     coord.x = rand()%size;
     coord.y = rand()%size;
 
@@ -100,18 +99,21 @@ PlayerClass::Coord& Computer::target(){
     //Update past target vectors
     pastX.push_back(coord.x);
     pastY.push_back(coord.y);
-
-    return coord;
+    cout << "Past X: ";
+    for (auto i : pastX) cout << static_cast<int>(i+1) << ' ';
+    cout << "\nPast Y: ";
+    for (auto i : pastY) cout << static_cast<int>(i+1) << ' ';
+    cout << endl;
 }
 
-bool Computer::attack(PlayerClass& enemy, const Coord& coord){
+bool Computer::attack(PlayerClass& enemy, const Coord& target){
     //Adjust target input for 2D array index
 //    Coord target {static_cast<uint8_t>(coord.x-1), static_cast<uint8_t>(coord.y-1)};
-    Coord target;
+//    Coord target;
     //Find target space status
-    if (enemy[target.x][target.y] > 0){   //Ship is present
+    if (enemy[target.y][target.x] > 0){   //Ship is present
         //Modify ship health
-        switch(enemy[target.x][target.y]){
+        switch(enemy[target.y][target.x]){
             case CARRIER:
                 enemy.setHealth(CARRIER-1, enemy.getHealth(CARRIER)-1);
                 break;
@@ -135,9 +137,10 @@ bool Computer::attack(PlayerClass& enemy, const Coord& coord){
 
 bool Computer::turn(PlayerClass* enemy){
     bool win = false;
-    Coord &coord = target(); //Generate target coordinates
+    Coord coord;
+    target(coord); //Generate target coordinates
     string hit; //Hit indication
-    cout << "The computer targets (" << static_cast<int>(coord.x) << ", " << static_cast<int>(coord.y) << ")." << endl;
+    cout << "The computer targets (" << static_cast<int>(coord.x+1) << ", " << static_cast<int>(coord.y+1) << ")." << endl;
     attack(*enemy, coord) ? hit = "Computer hits!" : hit = "Computer misses!"; //Attack generated target coordinates
     cout << hit << endl;
     //Test for player loss
