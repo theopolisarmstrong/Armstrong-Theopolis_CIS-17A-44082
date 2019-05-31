@@ -11,12 +11,13 @@ using namespace std;
 #include "Input.h"
 //Validation
 void maxVal(uint8_t& input, const int maxVal, const std::string error){
-    if (input == EXIT || input == EXIT_E){
+    if (input == EXIT-48 || input == EXIT_E-48){
         std::cout << "Goodbye!\n";
         exit(0);
     }
     while (input > maxVal && input != EXIT && input != SAVE){
         std::cout << error << std::endl;
+        std::cout << "entered: " << input << endl;
         std::cin >> input;
         input = atoi(reinterpret_cast<char*>(&input));
     }

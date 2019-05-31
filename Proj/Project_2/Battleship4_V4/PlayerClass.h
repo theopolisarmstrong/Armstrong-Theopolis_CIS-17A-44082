@@ -23,11 +23,10 @@ protected:
     char name[9];
     uint8_t size; //Map size
     int8_t **map; //Map status
-//    std::vector<std::vector<int8_t>> map;
     uint8_t health[3] = {PATROL, DESTROY, CARRIER}; //Ships health
     
     void initMap();
-    bool testEnd(PlayerClass&);
+    bool testEnd(PlayerClass&) const;
 public:
     //Constructors
     PlayerClass();
@@ -44,8 +43,9 @@ public:
     //Accessors
     uint8_t getSize() const { return size; }
     const char* getName() const { return name; }
-    void showMap() const;
-    uint8_t getHealth(const uint8_t shipType) const { return health[shipType-1]; }
+    void showMap() const; //Display the 2D map array as a map
+    uint8_t getHealth(const uint8_t shipType) const { return health[shipType-1]; } //Return the health of a particular ship
+    void debugMap() const; //Output the values of the map array
     
     //Pure virtual functions
     virtual void place(Mapping) = 0;

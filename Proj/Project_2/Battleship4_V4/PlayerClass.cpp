@@ -29,8 +29,8 @@ PlayerClass::PlayerClass(const char n[]) : size(MAPMIN){
     strcpy(name, n);
 }
 PlayerClass::PlayerClass(const uint8_t s, const char n[]) : size(s) {
-    strlcpy(name, n, NAMELEN); //Set name
     initMap(); //Initialize map
+    strlcpy(name, n, NAMELEN); //Set name
 }
 PlayerClass::~PlayerClass(){
     //Deallocate 2D map array
@@ -70,11 +70,10 @@ void PlayerClass::initMap(){
         }
     }
 }
-bool PlayerClass::testEnd(PlayerClass& p){
+bool PlayerClass::testEnd(PlayerClass& p) const {
     bool end = true; //End gameplay loop flag
     for (int row = 0; row < size; row++){
         for (int col = 0; col < size; col++){
-//            int8_t *mapRow = p->operator[](row);
             int8_t* mapRow = p[row];
             if ( mapRow[col] > 0)
                 end = false;
@@ -139,6 +138,15 @@ void PlayerClass::showMap() const {
         cout << endl;
     }
     cout << "C = Aircraft Carrier (3 spaces), D = Destroyer (2 spaces), P = Patrol Boat (1 space), X = Hit\n";
+}
+
+void PlayerClass::debugMap() const {
+    for (int i = 0; i < size; i++){
+        for (int j = 0; j < size; j++){
+            cout << static_cast<int>(map[i][j]) << ' ';
+        }
+        cout << endl;
+    }
 }
 
 //Overloaded Operators

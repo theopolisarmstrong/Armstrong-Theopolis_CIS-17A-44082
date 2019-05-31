@@ -9,24 +9,22 @@
 #define BATTLESHIP_H
 #include <iostream>
 #include <vector>
+
 //User libraries
 #include "PlayerClass.h"
 #include "Input.h"
 
-//Global constants
-const char S_FILE[9] = "save.dat"; //Save file name
-//Enumerators
 
 //Structures
-struct Header{ //Binary file output header
-    uint8_t mapSize = 0;
-    uint playNum = 0;
-    Options gamemode = NONE;
-};
 
 //Battleship class
 class Battleship{
 private:
+    struct Header{ //Binary file data header
+        uint8_t mapSize = 0;
+        uint8_t playNum = 0;
+        Options gamemode = NONE;
+    };
     struct coord{
         char x = 0;
         char y = 0;
@@ -47,12 +45,12 @@ private:
     void load(); //Initialize game with save file progress
     
 public:
+    //Constructors
     Battleship(char pnum) : players(pnum) {}
     //Mutators
     void setEnd(bool end) { isEnd = end; }
     //Accessors
     bool getEnd(){ return isEnd; }
-//    Player getPlayers(char i){ return players[i]; }
     
     void init();
     void loop();

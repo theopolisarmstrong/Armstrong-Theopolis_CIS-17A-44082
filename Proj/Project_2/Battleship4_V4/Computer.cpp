@@ -4,11 +4,22 @@
  * Created on May 29, 2019 4:39 AM
  * Purpose: Human Player class definition
  */
+#include <cstdlib>
 #include <iostream>
+#include <ctime>
 #include <vector>
 using namespace std;
 
 #include "Computer.h"
+
+Computer::Computer() : PlayerClass(MAPMIN, "Computer"){
+    srand(time(0));
+    placeAll();
+}
+Computer::Computer(const uint8_t size) : PlayerClass(size, "Computer") {
+    srand(time(0));
+    placeAll();
+}
 
 void Computer::placeAll(){
     place(PATROL);
@@ -74,23 +85,21 @@ PlayerClass::Coord& Computer::target(){
 //        static_cast<uint8_t>(rand()%size+1),
 //        static_cast<uint8_t>(rand()%size+1)};
     Coord coord;
-    coord.x = rand()%size+1;
-    coord.y = rand()%size+1;
+    coord.x = rand()%size;
+    coord.y = rand()%size;
 
     //Generate unique random X and Y targets
     for(int i = 0; i < pastX.size(); i++){
         if (coord.x == pastX[i] && coord.y == pastY[i]){
             i = 0;
-            coord.x = rand()%size+1;
-            coord.y = rand()%size+1;
+            coord.x = rand()%size;
+            coord.y = rand()%size;
         }
     }
 
     //Update past target vectors
     pastX.push_back(coord.x);
     pastY.push_back(coord.y);
-
-    cout << "The computer targets (" << static_cast<int>(coord.x) << ", " << static_cast<int>(coord.y) << ")." << endl;
 
     return coord;
 }
@@ -99,8 +108,6 @@ bool Computer::attack(PlayerClass& enemy, const Coord& coord){
     //Adjust target input for 2D array index
 //    Coord target {static_cast<uint8_t>(coord.x-1), static_cast<uint8_t>(coord.y-1)};
     Coord target;
-    target.x = coord.x-1;
-    target.y = coord.y-1;
     //Find target space status
     if (enemy[target.x][target.y] > 0){   //Ship is present
         //Modify ship health
@@ -130,6 +137,7 @@ bool Computer::turn(PlayerClass* enemy){
     bool win = false;
     Coord &coord = target(); //Generate target coordinates
     string hit; //Hit indication
+    cout << "The computer targets (" << static_cast<int>(coord.x) << ", " << static_cast<int>(coord.y) << ")." << endl;
     attack(*enemy, coord) ? hit = "Computer hits!" : hit = "Computer misses!"; //Attack generated target coordinates
     cout << hit << endl;
     //Test for player loss

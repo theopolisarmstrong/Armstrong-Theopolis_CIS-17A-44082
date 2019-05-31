@@ -20,15 +20,11 @@ using namespace std;
 
 //Function Prototypes
 
-//Game functions
-void copyMap(char**, char**, const char);
-
 //void saveProg(const Player*, const Player*); //Save game progress to file
 //Options loadProg(Player*, Player*); //Initialize game w/ data from file
 //Execution Begins Here!
 int main(int argc, char** argv) {
     //Set the random number seed
-    srand(static_cast<unsigned int>(time(0)));
     
     //Declare Variables
     Battleship game(2);
@@ -39,21 +35,9 @@ int main(int argc, char** argv) {
     //Gameplay loop
     game.loop();
     
-    //Exit stage right or left!
     game.end();
+    //Exit stage right or left!
     return 0;
-}
-
-void copyMap(char** array, char** copy, const char size){
-    char** temp = new char*[size];
-    for (int i = 0; i < size; i++){
-        temp[i] = new char[size];
-    }
-    for (int i = 0; i < size; i++){
-        for (int j = 0; j < size; j++){
-            copy[i][j] = array[i][j];
-        }
-    }
 }
 
 //void save(const Player* p1){
@@ -81,3 +65,4 @@ void copyMap(char** array, char** copy, const char size){
 
 //Quick init testing values
 //1 4 v 2 1 n h 4 3 n v 1 1 n 1 1 n
+//1 4 v 3 2 n h 1 2 n 1 1 n

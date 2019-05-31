@@ -14,15 +14,15 @@ class Player : public PlayerClass{
 private:
     bool attack(PlayerClass&, const Coord&);
     std::string shipName(Mapping);
-    void copyMap(int8_t**);
+    void copyMap(PlayerClass&);
 public:
     Player() : PlayerClass() {}
     Player(const uint8_t size) : PlayerClass(size, "Player") {}
     Player(const uint8_t size, const char name[]) : PlayerClass(size, name) {}
-    Player(const Player& orig);
+    Player(Player& orig);
     
-    void place(Mapping);
-    bool turn(PlayerClass*);
+    virtual void place(Mapping) override;
+    virtual bool turn(PlayerClass*) override;
 };
 
 #endif /* PLAYE*R_H */

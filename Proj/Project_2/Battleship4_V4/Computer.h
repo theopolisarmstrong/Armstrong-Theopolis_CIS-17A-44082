@@ -16,8 +16,8 @@ private:
     void placeAll();
     bool attack(PlayerClass&, const Coord&);
 public:
-    Computer() : PlayerClass(MAPMIN, "Computer") { placeAll(); }
-    Computer(const uint8_t size) : PlayerClass(size, "Computer") { placeAll(); }
+    Computer();
+    Computer(const uint8_t);
     
     virtual void place(Mapping) override;
     virtual bool turn(PlayerClass*) override;

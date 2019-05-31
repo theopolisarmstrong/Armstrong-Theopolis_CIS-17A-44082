@@ -16,16 +16,16 @@ using namespace std;
 
 
 //Initialize static variables
-const uint8_t
- Battleship::PLAYNUM = 2;
+const uint8_t Battleship::PLAYNUM = 2;
 
+//Main game functions
 void Battleship::init(){
     title();
     while(gameMode == NONE){   //Loop menu until game mode is chosen
         switch(menu()){
             case PVCPU:
                 //Initialize game
-                cout << "Initializing Player vs. Computer game mode.\nEnter " << static_cast<char>(EXIT_E+48) << " at any time to quit.\n";
+                cout << "Initializing Player vs. Computer game mode.\nEnter " << static_cast<char>(EXIT_E) << " at any time to quit.\n";
                 cout << "Enter map size: ";
                 cin >> size;
                 size = atoi(reinterpret_cast<char*>(&size));
@@ -42,12 +42,8 @@ void Battleship::init(){
                 }
                 //Set ship positions
                 cout << "Setting CPU ship positions...\n";
-                //Place computer player ships
-//                players[CPU]->placeAll();
-                players[CPU]->place(CARRIER);
-                players[CPU]->place(DESTROY);
-                players[CPU]->place(PATROL);
-//                map(players[CPU]->ships, size); //Map cpu ship placements for debugging
+                //Ship placements moved to Computer player class constructor
+//                players[CPU]->showMap(); //Map cpu ship placements for debugging
                 //Input and set player ships
                 players[P1]->place(CARRIER);
                 players[P1]->place(DESTROY);
@@ -87,26 +83,25 @@ void Battleship::init(){
         }
     }
 }
-
-//Gameplay loop
 void Battleship::loop(){
     
     cout << "********\n" <<"*BEGIN!*\n" << "********\n\n";
-    cout << "Enter " << static_cast<char>(EXIT_E+48) << " at any time to quit.\n";
-    cout << "Enter " << static_cast<char>(SAVE_S+48) << " at any time to save and quit.\n";
+    cout << "Enter " << static_cast<char>(EXIT_E) << " at any time to quit.\n";
+    cout << "Enter " << static_cast<char>(SAVE_S) << " at any time to save and quit.\n";
     switch(gameMode){
             //Player vs. CPU
         case PVCPU:{
             while(!isEnd){
                 //Player turn
+                cout << "\n" << players[P1]->getName() << "'s turn: \n";
                 if(players[P1]->turn(players[CPU])){
                     isEnd = true;
                     winner = P1;
                 }
-//                map(players[CPU]->ships, size); //Map CPU ships for debugging
+                players[CPU]->debugMap(); //Map CPU ships for debugging
                 //Computer Turn
                 if (!isEnd){
-                    cout << "\nComputer's turn: \n";
+                    cout << "\n" << players[CPU]->getName() << "'s turn: \n";
                     if (players[CPU]->turn(players[P1])){
                         isEnd = true;
                         winner = CPU;
@@ -117,12 +112,14 @@ void Battleship::loop(){
         case PVP:{
             while(!isEnd){
                 //Player 1's turn
+                cout << "\n" << players[P1]->getName() << "'s turn: \n";
                 if(players[P1]->turn(players[P2])){
                     isEnd = true;
                     winner = P1;
                 }
                 //Player 2 Turn
                 if(!isEnd){
+                    cout << "\n" << players[P2]->getName() << "'s turn: \n";
                     if(players[P2]->turn(players[P1])){
                         isEnd = true;
                         winner = P2;
@@ -132,11 +129,11 @@ void Battleship::loop(){
             break;}
     }
 }
-
 void Battleship::end(){
     cout << players[winner]->getName() << " wins!\n";
 }
-    
+
+//Internal game functions
 void Battleship::title(){
     cout << " ____        _   _   _           _     _" << endl;
     cout << "|  _ \\      | | | | | |         | |   (_)" << endl;
@@ -147,7 +144,6 @@ void Battleship::title(){
     cout << "                                      | |\n";
     cout << "                                      |_|\n";
 }
-
 char Battleship::menu(){
     char choice = 0;
     cout << "Choose a menu item: \n";
@@ -163,17 +159,14 @@ char Battleship::menu(){
     while (choice != PVCPU && choice != PVP && choice != LOAD && choice != SAVE && choice != EXIT && choice != EXIT_E){
         cout << "Error: Invalid menu choice\n";
         cin >> choice;
-        cout << "Character choice: " << static_cast<int>(choice) << endl;
-        choice = atoi(&choice);
-        cout << "Integer choice: " << static_cast<int>(choice) << endl;
     }
     return choice;
 }
-
 void Battleship::save(){
-    
+    const char S_FILE[9] = "save.dat"; //Save file name
 }
-
 void Battleship::load(){
     
 }
+
+

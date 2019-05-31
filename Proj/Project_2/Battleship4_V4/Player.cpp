@@ -11,14 +11,11 @@ using namespace std;
 #include "Player.h"
 #include "Input.h"
 
-Player::Player(const Player& orig) : PlayerClass(orig.size){
+Player::Player(Player& orig) : PlayerClass(){
     strcpy(name, orig.name);
-    //Copy map
-    for (int i = 0; i < size; i++){
-        for (int j = 0; j < size; i++){
-            map[i][j] = orig.map[i][j];
-        }
-    }
+    size = orig.size;
+    initMap();
+    copyMap(orig);
 }
 
 void Player::place(Mapping type){
@@ -32,11 +29,13 @@ void Player::place(Mapping type){
     Player temp(*this);
     temp.setName("temp");
     
+    //Display player's current map
+    cout << "Player 1 map: \n";
+    temp.showMap();
+    
     //Begin positioning ship
     cout << endl << name << ", position your " << shipName(type) << ": \n";
     do{
-        
-        
         //Determine orientation of the ship
         if (type != PATROL){
             cout << "Is your ship vertical or horizontal [V/h]? ";
@@ -92,15 +91,16 @@ void Player::place(Mapping type){
         if (answer == 'y' || answer == 'Y'){
             repos = true;
             //Re-initialize temporary ship position array with current ship positions
-            temp.copyMap(this->map);
+            temp.copyMap(*this);
         }
     }while(repos);
-    copyMap(temp.map);
+    copyMap(temp);
 }
 
-void Player::copyMap(int8_t** orig){
+void Player::copyMap(PlayerClass& orig){
+    size = orig.getSize();
     for (int i = 0; i < size; i++){
-        for (int j = 0; j < size; i++){
+        for (int j = 0; j < size; j++){
             map[i][j] = orig[i][j];
         }
     }
@@ -131,7 +131,6 @@ bool Player::turn(PlayerClass* enemy){
     string hit; //Indicate a hit or miss
     float healthPerc = 0.0f; //Overall ship health percentage
     
-    cout << "\n" << enemy->getName() << "'s turn: \n";
     //Get and validate target coordinates
     cout << "Enter a target coordinates: ";
     cin >> coord.x;
