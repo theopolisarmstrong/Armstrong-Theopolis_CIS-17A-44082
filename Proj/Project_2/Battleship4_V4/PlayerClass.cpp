@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <cstring>
 
 #include "PlayerClass.h"
 using namespace std;
@@ -38,6 +39,8 @@ PlayerClass::~PlayerClass(){
         delete [] map;
     }
 }
+
+void PlayerClass::setName(const char n[]){ strlcpy(name, n, NAMELEN); }
 
 void PlayerClass::initMap(){
     //Dynamically allocate two dimensional grid
@@ -181,11 +184,16 @@ bool PlayerClass::operator>(const PlayerClass &right){
         return true;
     return false;
 }
-ostream& operator<<(ostream& strm, const class PlayerClass& obj){
-    strm << obj.name;
+bool PlayerClass::operator<(const PlayerClass &right){
+    if (health < right.health)
+        return true;
+    return false;
+}
+ostream& operator<<(ostream& strm, const class PlayerClass* obj){
+    strm << obj->name;
     return strm;
 }
-istream &operator>>(istream& strm, class PlayerClass& obj){
-    strm >> obj.name;
+istream &operator>>(istream& strm, class PlayerClass* obj){
+    strm >> obj->name;
     return strm;
 }

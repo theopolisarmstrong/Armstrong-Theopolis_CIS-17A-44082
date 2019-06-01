@@ -53,7 +53,7 @@ void Battleship::init(){
                 break;
             case PVP:
                 //Initialize game
-                cout << "Initializing Player vs. Player game mode.";
+                cout << "Initializing Player vs. Player game mode.\n";
                 cout << "Enter map size: ";
                 read(size);
                 size = atoi(reinterpret_cast<char*>(&size));
@@ -85,7 +85,7 @@ void Battleship::init(){
     }
 }
 void Battleship::loop(){
-    cout << "********\n" <<"*BEGIN!*\n" << "********\n\n";
+    cout << "\n********\n" <<"*BEGIN!*\n" << "********\n\n";
     switch(gameMode){
             //Player vs. CPU
         case PVCPU:{
@@ -110,7 +110,7 @@ void Battleship::loop(){
         case PVP:{
             while(!isEnd){
                 //Player 1's turn
-                cout << "\n" << players[P1]->getName() << "'s turn: \n";
+                cout << players[P1]->getName() << "'s turn: \n";
                 if(players[P1]->turn(players[P2])){
                     isEnd = true;
                     winner = P1;

@@ -1,10 +1,14 @@
 /*
  * File:   main.cpp
  * Author: Theopolis Armstrong
- * Created on April 14, 2019 12:30 pM
- * Purpose: Project 2 - Battleship 4 V1
+ * Created on April 14, 2019 12:30 PM
+ * Purpose: Project 2 - Battleship 4 V4
  *
  * Title raw ASCII art generated using http://www.patorjk.com/software/taag/
+ *
+ * Quick init testing values
+ * PVCPU: 1 4 v 3 2 n h 1 2 n 1 1 n
+ * PVP: 2 4 v 3 2 n h 1 2 n 1 1 n 4 v 3 2 n h 1 2 n 1 1 n
  */
 
 //System Libraries
@@ -19,9 +23,9 @@ using namespace std;
 //Structures
 
 //Function Prototypes
-
 //void saveProg(const Player*, const Player*); //Save game progress to file
 //Options loadProg(Player*, Player*); //Initialize game w/ data from file
+
 //Execution Begins Here!
 int main(int argc, char** argv) {
     //Set the random number seed
@@ -63,6 +67,3 @@ int main(int argc, char** argv) {
 //    }
 //}
 
-//Quick init testing values
-//1 4 v 2 1 n h 4 3 n v 1 1 n 1 1 n
-//1 4 v 3 2 n h 1 2 n 1 1 n

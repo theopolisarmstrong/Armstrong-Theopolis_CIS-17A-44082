@@ -7,12 +7,13 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cstring>
 using namespace std;
 #include "Player.h"
 #include "Input.h"
 
 Player::Player(Player& orig) : PlayerClass(){
-    strcpy(name, orig.name);
+    strlcpy(name, orig.name, NAMELEN);
     size = orig.size;
     initMap();
     copyMap(orig);
@@ -128,25 +129,25 @@ bool Player::turn(PlayerClass* enemy){
     float healthPerc = 0.0f; //Overall ship health percentage
     
     //Get and validate target coordinates
+    showMap();
     cout << "Enter a target coordinates: ";
     read(coord.x);
     coord.x = atoi(reinterpret_cast<char*>(&coord.x));
-    maxVal(coord.y, size, "Error: Target x-axis out of range.\nEnter a new value: "); //Validate target x coordinate
+    maxVal(coord.x, size, "Error: Target x-axis out of range.\nEnter a new value: "); //Validate target x coordinate
     read(coord.y);
-    coord.y = atoi(reinterpret_cast<char*>(&coord.y));
+    coord.y -= 48;
     maxVal(coord.y, size, "Error: Target y-axis out of range.\nEnter a new value: ");  //Validate target y coordinate
     coord.x -= 1;
     coord.y -= 1;
-    attack(*enemy, coord) ? hit = "Hit!" : hit = "Miss!"; //Check for and calculate hit or miss
-    showMap();
-    cout << hit << endl;
+    attack(*enemy, coord) ? hit = "Hit" : hit = "Miss"; //Check for and calculate hit or miss
+    cout << endl << hit << ' ' << enemy << "'s ships!\n";
     //Calculate and display health
     healthPerc = 0.0f;
     for (char i : health){
         healthPerc += i;
     }
     cout << setprecision(2) << fixed;
-    cout << "\nTotal health: " << (healthPerc / 6) * 100 << '%' << endl;
+    cout << "Total health: " << (healthPerc / 6) * 100 << '%' << endl;
     
     //Test for computer loss
     if (testEnd(*enemy))

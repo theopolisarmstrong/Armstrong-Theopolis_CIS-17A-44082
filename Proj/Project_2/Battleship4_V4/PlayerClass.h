@@ -10,8 +10,8 @@
 
 enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size/ship health
 
-std::ostream& operator<<(std::ostream&, const class PlayerClass&);
-std::istream &operator>>(std::istream&, class PlayerClass&);
+std::ostream& operator<<(std::ostream&, const class PlayerClass*);
+std::istream &operator>>(std::istream&, class PlayerClass*);
 
 
 class PlayerClass{
@@ -43,7 +43,7 @@ public:
     
     //Mutators
     void setSize(uint8_t s) { size = s; }
-    void setName(const char n[]) { strcpy(name, n); }
+    void setName(const char[]);
     void setHealth(const uint8_t ship, const uint8_t value) { health[ship] = value; }
     
     //Accessors
@@ -61,8 +61,8 @@ public:
     int8_t* operator[](const int &);
     bool operator>(const PlayerClass&);
     bool operator<(const PlayerClass&);
-    friend std::ostream& operator<<(std::ostream&, const class PlayerClass&);
-    friend std::istream& operator>>(std::istream&, class PlayerClass&);
+    friend std::ostream& operator<<(std::ostream&, const class PlayerClass*);
+    friend std::istream& operator>>(std::istream&, class PlayerClass*);
 };
 
 #endif /* PLAYERCLASS_H */
