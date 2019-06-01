@@ -12,16 +12,13 @@ using namespace std;
 
 const uint8_t PlayerClass::NAMELEN = 9;
 const uint8_t PlayerClass::SHIPNUM = 3;
+const uint8_t PlayerClass::MAPMIN = 4;
 
 //Constructors
-
-//TODO
-//Memory allocation exception handling
-//
 PlayerClass::PlayerClass() : size(MAPMIN), name("Player"){
     initMap();
 }
-PlayerClass::PlayerClass(const uint8_t s) : size(s) {
+PlayerClass::PlayerClass(const uint8_t s) : size(s), name("Player") {
     initMap();
 }
 PlayerClass::PlayerClass(const char n[]) : size(MAPMIN){
@@ -42,9 +39,6 @@ PlayerClass::~PlayerClass(){
     }
 }
 
-//TODO
-//Memory allocation exception handling
-//
 void PlayerClass::initMap(){
     //Dynamically allocate two dimensional grid
     try{
@@ -69,6 +63,35 @@ void PlayerClass::initMap(){
             map[i][j] = 0;
         }
     }
+}
+
+bool PlayerClass::attack(PlayerClass& enemy, const Coord& target){
+    //Adjust target input for 2D array index
+    //Find target space status
+    if (target.x < size && target.y < size){
+        if (enemy[target.y][target.x] > 0){   //Ship is present
+            //Modify ship health
+            switch(enemy[target.y][target.x]){
+                case CARRIER:
+                    enemy.setHealth(CARRIER-1, enemy.getHealth(CARRIER)-1);
+                    break;
+                case DESTROY:
+                    enemy.setHealth(DESTROY-1, enemy.getHealth(DESTROY)-1);
+                    break;
+                case PATROL:
+                    enemy.setHealth(PATROL-1, enemy.getHealth(PATROL)-1);
+                    break;
+            }
+            //Indicate ship hit on map
+            enemy[target.y][target.x] = HIT;        //Notify ship hit
+            return true;
+        } else if (enemy[target.y][target.x] == 0){   //Ship is not present
+            enemy[target.y][target.x] = MISS;
+            return false;
+        } else if (enemy[target.y][target.x] == -1 || enemy[target.y][target.x] == -2){ //Target coordinates previously targeted
+            return false;
+        } else return false;
+    } else return false;
 }
 bool PlayerClass::testEnd(PlayerClass& p) const {
     bool end = true; //End gameplay loop flag
@@ -136,7 +159,7 @@ void PlayerClass::showMap() const {
         }
         cout << endl;
     }
-    cout << "C = Aircraft Carrier (3 spaces), D = Destroyer (2 spaces), P = Patrol Boat (1 space), X = Hit\n";
+    cout << "C = Aircraft Carrier (3 spaces), D = Destroyer (2 spaces), P = Patrol Boat (1 space), X = Hit, O = Miss\n";
 }
 
 void PlayerClass::debugMap() const {
@@ -152,4 +175,17 @@ void PlayerClass::debugMap() const {
 int8_t* PlayerClass::operator[](const int &i){
     if(i >= 0 && i < size) return map[i];
     else return 0;
+}
+bool PlayerClass::operator>(const PlayerClass &right){
+    if (health > right.health)
+        return true;
+    return false;
+}
+ostream& operator<<(ostream& strm, const class PlayerClass& obj){
+    strm << obj.name;
+    return strm;
+}
+istream &operator>>(istream& strm, class PlayerClass& obj){
+    strm >> obj.name;
+    return strm;
 }

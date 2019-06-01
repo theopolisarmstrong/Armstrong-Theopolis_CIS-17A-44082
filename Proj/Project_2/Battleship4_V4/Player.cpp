@@ -39,7 +39,7 @@ void Player::place(Mapping type){
         //Determine orientation of the ship
         if (type != PATROL){
             cout << "Is your ship vertical or horizontal [V/h]? ";
-            cin >> orient;
+            read(orient);
             valid(orient, 'v', 'h', 'V', 'H', "Error: Invalid orientation");
         }
         
@@ -49,10 +49,10 @@ void Player::place(Mapping type){
             case 'V':{
                 //Input ship position
                 cout << "Enter the top-most coordinates of the ship (ex. '5 3'): ";
-                cin >> posX;
+                read(posX);
                 posX = atoi(reinterpret_cast<char*>(&posX)); //Convert ASCII code to integer
                 maxVal(posX, size, "Error: Invalid x-axis (ensure the ship would not protrude outside the map)\nEnter a new x-axis value: ");
-                cin >> posY;
+                read(posY);
                 posY = atoi(reinterpret_cast<char*>(&posY)); //Convert ASCII code to integer
                 maxVal(posY, size - (type - 1), "Error: Invalid y-axis (ensure the ship would not protrude outside the map)\nEnter a new y-axis value: ");
                 
@@ -66,10 +66,10 @@ void Player::place(Mapping type){
             case 'H':{
                 //Input ship position
                 cout << "Enter the top-most coordinates of the ship (ex. '3 1'): ";
-                cin >> posX;
+                read(posX);
                 posX = atoi(reinterpret_cast<char*>(&posX)); //Convert ASCII code to integer
                 maxVal(posX, size - (type - 1), "Error: Invalid x-axis (ensure the ship would not protrude outside the map)\nEnter a new x-axis value: ");
-                cin >> posY;
+                read(posY);
                 posY = atoi(reinterpret_cast<char*>(&posY)); //Convert ASCII code to integer
                 maxVal(posY, size, "Error: Invalid y-axis (ensure the ship would not protrude outside the map)\nEnter a new y-axis value: ");
                 
@@ -86,7 +86,7 @@ void Player::place(Mapping type){
         //Prompt for repositioning
         repos = false;
         cout << "Would you like to reposition your ship [N/y]? ";
-        cin >> answer;
+        read(answer);
         valid(answer, 'y', 'n', 'Y', 'N', "Error: Invalid answer");
         if (answer == 'y' || answer == 'Y'){
             repos = true;
@@ -122,10 +122,6 @@ string Player::shipName(Mapping shipType){
     }
 }
 
-bool Player::attack(PlayerClass& enemy, const Coord &target){
-    
-    return false;
-}
 bool Player::turn(PlayerClass* enemy){
     Coord coord;
     string hit; //Indicate a hit or miss
@@ -133,26 +129,20 @@ bool Player::turn(PlayerClass* enemy){
     
     //Get and validate target coordinates
     cout << "Enter a target coordinates: ";
-    cin >> coord.x;
+    read(coord.x);
     coord.x = atoi(reinterpret_cast<char*>(&coord.x));
-    //    if(targetX == SAVE || targetX == SAVE_S){
-    //        saveProg(target, p);
-    //    }
-    maxVal(coord.y, size, "Error: Target x-axis out of range.\n"); //Validate target x coordinate
-    cin >> coord.y;
+    maxVal(coord.y, size, "Error: Target x-axis out of range.\nEnter a new value: "); //Validate target x coordinate
+    read(coord.y);
     coord.y = atoi(reinterpret_cast<char*>(&coord.y));
-    //    if(targetX == SAVE || targetX == SAVE_S){
-    //        saveProg(target, p);
-    //    }
-    maxVal(coord.y, size, "Error: Target y-axis out of range.\n");  //Validate target y coordinate
+    maxVal(coord.y, size, "Error: Target y-axis out of range.\nEnter a new value: ");  //Validate target y coordinate
+    coord.x -= 1;
+    coord.y -= 1;
     attack(*enemy, coord) ? hit = "Hit!" : hit = "Miss!"; //Check for and calculate hit or miss
     showMap();
     cout << hit << endl;
     //Calculate and display health
-    cout << "Health: ";
     healthPerc = 0.0f;
     for (char i : health){
-        cout << static_cast<int>(i) << ' ';
         healthPerc += i;
     }
     cout << setprecision(2) << fixed;

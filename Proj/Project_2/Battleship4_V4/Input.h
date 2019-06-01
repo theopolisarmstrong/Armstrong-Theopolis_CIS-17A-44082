@@ -8,10 +8,17 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-enum Options {NONE = 0, PVCPU = '1', PVP = '2', LOAD = '3',
-                SAVE = 's', SAVE_S = 'S',
-                EXIT = 'e', EXIT_E = 'E'};
+enum Options {NONE = 0, PVCPU = '1', PVP = '2', LOAD = '3', EXIT = 'e', EXIT_E = 'E'};
 
+template<class T>
+void read(T &input){
+    std::cin >> input;
+//    std::cout << "Read value: " << static_cast<int>(input) << std::endl;
+    if (input == EXIT || input == EXIT_E){
+        std::cout << "Goodbye!\n";
+        exit(0);
+    }
+}
 //Input validation
 void maxVal(uint8_t&, const int, const std::string);
 void minVal(uint8_t&, const int, const std::string);

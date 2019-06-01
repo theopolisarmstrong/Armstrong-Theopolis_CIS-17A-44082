@@ -81,9 +81,6 @@ void Computer::target(Coord &coord){
     static vector<char> pastY;  //Previous Y-axis targets
 
     //Initialize targets with random coordinates
-//    Coord coord = {
-//        static_cast<uint8_t>(rand()%size+1),
-//        static_cast<uint8_t>(rand()%size+1)};
     coord.x = rand()%size;
     coord.y = rand()%size;
 
@@ -99,40 +96,6 @@ void Computer::target(Coord &coord){
     //Update past target vectors
     pastX.push_back(coord.x);
     pastY.push_back(coord.y);
-    cout << "Past X: ";
-    for (auto i : pastX) cout << static_cast<int>(i+1) << ' ';
-    cout << "\nPast Y: ";
-    for (auto i : pastY) cout << static_cast<int>(i+1) << ' ';
-    cout << endl;
-}
-
-bool Computer::attack(PlayerClass& enemy, const Coord& target){
-    //Adjust target input for 2D array index
-//    Coord target {static_cast<uint8_t>(coord.x-1), static_cast<uint8_t>(coord.y-1)};
-//    Coord target;
-    //Find target space status
-    if (enemy[target.y][target.x] > 0){   //Ship is present
-        //Modify ship health
-        switch(enemy[target.y][target.x]){
-            case CARRIER:
-                enemy.setHealth(CARRIER-1, enemy.getHealth(CARRIER)-1);
-                break;
-            case DESTROY:
-                enemy.setHealth(DESTROY-1, enemy.getHealth(DESTROY)-1);
-                break;
-            case PATROL:
-                enemy.setHealth(PATROL-1, enemy.getHealth(PATROL)-1);
-                break;
-        }
-        //Indicate ship hit on map
-        enemy[target.y][target.x] = HIT;        //Notify ship hit
-        return true;
-    } else if (enemy[target.y][target.x] == 0){   //Ship is not present
-        enemy[target.y][target.x] = MISS;
-        return false;
-    } else if (enemy[target.y][target.x] == -1 || enemy[target.y][target.x] == -2){ //Target coordinates previously targeted
-        return false;
-    } else return false;
 }
 
 bool Computer::turn(PlayerClass* enemy){

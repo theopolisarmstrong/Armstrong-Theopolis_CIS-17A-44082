@@ -9,12 +9,17 @@
 #define PLAYERCLASS_H
 
 enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size/ship health
-const uint8_t MAPMIN = 4; //Minimum map size
+
+std::ostream& operator<<(std::ostream&, const class PlayerClass&);
+std::istream &operator>>(std::istream&, class PlayerClass&);
+
 
 class PlayerClass{
 protected:
     static const uint8_t NAMELEN; //Maximum length of player name
     static const uint8_t SHIPNUM; //Number of available ship types
+    static const uint8_t MAPMIN; //Minimum map size
+
     struct Coord{
         uint8_t x = 0;
         uint8_t y = 0;
@@ -26,6 +31,7 @@ protected:
     uint8_t health[3] = {PATROL, DESTROY, CARRIER}; //Ships health
     
     void initMap();
+    bool attack(PlayerClass&, const Coord&);
     bool testEnd(PlayerClass&) const;
 public:
     //Constructors
@@ -53,9 +59,10 @@ public:
     
     //Overloaded operator
     int8_t* operator[](const int &);
-    //Overload stream operators
-//    int8_t& operator()(const int&, const int&);
-    
+    bool operator>(const PlayerClass&);
+    bool operator<(const PlayerClass&);
+    friend std::ostream& operator<<(std::ostream&, const class PlayerClass&);
+    friend std::istream& operator>>(std::istream&, class PlayerClass&);
 };
 
 #endif /* PLAYERCLASS_H */

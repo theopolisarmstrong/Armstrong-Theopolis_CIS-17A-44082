@@ -12,7 +12,6 @@
 
 class Player : public PlayerClass{
 private:
-    bool attack(PlayerClass&, const Coord&);
     std::string shipName(Mapping);
     void copyMap(PlayerClass&);
 public:

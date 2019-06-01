@@ -14,7 +14,6 @@ class Computer : public PlayerClass{
 private:
     void target(Coord&);
     void placeAll();
-    bool attack(PlayerClass&, const Coord&);
 public:
     Computer();
     Computer(const uint8_t);
