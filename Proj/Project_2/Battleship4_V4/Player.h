@@ -17,7 +17,7 @@ private:
 public:
     Player() : PlayerClass() {}
     Player(const uint8_t size) : PlayerClass(size, "Player") {}
-    Player(const uint8_t size, const char name[]) : PlayerClass(size, name) {}
+    Player(const uint8_t size, const std::string name) : PlayerClass(size, name) {}
     Player(Player& orig);
     
     virtual void place(Mapping) override;

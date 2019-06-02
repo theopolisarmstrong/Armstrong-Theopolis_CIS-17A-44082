@@ -9,11 +9,14 @@
 #define COMPUTER_H
 
 #include "PlayerClass.h"
+#include <vector>
 
 class Computer : public PlayerClass{
 private:
     void target(Coord&);
     void placeAll();
+    vector<char> pastX;  //Previous X-axis targets
+    vector<char> pastY;  //Previous Y-axis targets
 public:
     Computer();
     Computer(const uint8_t);

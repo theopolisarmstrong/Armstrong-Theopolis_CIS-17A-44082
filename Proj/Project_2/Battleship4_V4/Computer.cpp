@@ -77,9 +77,7 @@ void Computer::place(Mapping type){
 }
 
 void Computer::target(Coord &coord){
-    static vector<char> pastX;  //Previous X-axis targets
-    static vector<char> pastY;  //Previous Y-axis targets
-
+    
     //Initialize targets with random coordinates
     coord.x = rand()%size;
     coord.y = rand()%size;

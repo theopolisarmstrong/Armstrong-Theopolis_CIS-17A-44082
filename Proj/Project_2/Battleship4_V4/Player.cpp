@@ -12,8 +12,8 @@ using namespace std;
 #include "Player.h"
 #include "Input.h"
 
-Player::Player(Player& orig) : PlayerClass(){
-    strlcpy(name, orig.name, NAMELEN);
+Player::Player(Player& orig) : PlayerClass(orig.name){
+//    strlcpy(name, orig.name, NAMELEN);
     size = orig.size;
     initMap();
     copyMap(orig);

@@ -20,17 +20,18 @@
 //Battleship class
 class Battleship{
 private:
+    static const char S_FILE[9]; //Save file name
     struct Header{ //Binary file data header
         uint8_t mapSize = 0;
-        uint8_t playNum = 0;
+        unsigned long playNum = 0; //Number of players
         Options gamemode = NONE;
+        int saveFileVer = 1; //Save file header version
     };
     struct coord{
         char x = 0;
         char y = 0;
     };
     enum PlayInd {NO_ONE = -1, P1, P2, CPU = 1};
-    static const uint8_t PLAYNUM; //Number of players
     
     std::vector<PlayerClass*>players;
     uint8_t size = 0; //Map size
@@ -42,6 +43,7 @@ private:
     void title(); //Display title
     char menu(); //Output menu and receives player's menu choice
     void save(); //Save current game status
+    std::string gmString (Options) const; //Convert gamemode enum to string
     void load(); //Initialize game with save file progress
     
 public:

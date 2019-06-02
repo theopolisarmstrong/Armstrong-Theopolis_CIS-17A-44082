@@ -11,25 +11,12 @@
 #include "PlayerClass.h"
 using namespace std;
 
-const uint8_t PlayerClass::NAMELEN = 9;
 const uint8_t PlayerClass::SHIPNUM = 3;
 const uint8_t PlayerClass::MAPMIN = 4;
 
 //Constructors
-PlayerClass::PlayerClass() : size(MAPMIN), name("Player"){
-    initMap();
-}
-PlayerClass::PlayerClass(const uint8_t s) : size(s), name("Player") {
-    initMap();
-}
-PlayerClass::PlayerClass(const char n[]) : size(MAPMIN){
-    initMap();
-    strcpy(name, n);
-}
-PlayerClass::PlayerClass(const uint8_t s, const char n[]) : size(s) {
-    initMap(); //Initialize map
-    strlcpy(name, n, NAMELEN); //Set name
-}
+
+//Deconstructor
 PlayerClass::~PlayerClass(){
     //Deallocate 2D map array
     if (size > 0){
@@ -40,8 +27,11 @@ PlayerClass::~PlayerClass(){
     }
 }
 
-void PlayerClass::setName(const char n[]){ strlcpy(name, n, NAMELEN); }
+//Mutators
 
+//Accessors
+
+//Internal player functins
 void PlayerClass::initMap(){
     //Dynamically allocate two dimensional grid
     try{
@@ -67,7 +57,6 @@ void PlayerClass::initMap(){
         }
     }
 }
-
 bool PlayerClass::attack(PlayerClass& enemy, const Coord& target){
     //Adjust target input for 2D array index
     //Find target space status
@@ -107,6 +96,7 @@ bool PlayerClass::testEnd(PlayerClass& p) const {
     return end;
 }
 
+//Player functions
 void PlayerClass::showMap() const {
     //Output column headers and top divider
     cout << "     ";
@@ -164,7 +154,6 @@ void PlayerClass::showMap() const {
     }
     cout << "C = Aircraft Carrier (3 spaces), D = Destroyer (2 spaces), P = Patrol Boat (1 space), X = Hit, O = Miss\n";
 }
-
 void PlayerClass::debugMap() const {
     for (int i = 0; i < size; i++){
         for (int j = 0; j < size; j++){
@@ -193,7 +182,7 @@ ostream& operator<<(ostream& strm, const class PlayerClass* obj){
     strm << obj->name;
     return strm;
 }
-istream &operator>>(istream& strm, class PlayerClass* obj){
+istream& operator>>(istream& strm, class PlayerClass* obj){
     strm >> obj->name;
     return strm;
 }

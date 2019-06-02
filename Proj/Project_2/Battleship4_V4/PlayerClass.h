@@ -13,44 +13,45 @@ enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indicati
 std::ostream& operator<<(std::ostream&, const class PlayerClass*);
 std::istream &operator>>(std::istream&, class PlayerClass*);
 
-
 class PlayerClass{
 protected:
-    static const uint8_t NAMELEN; //Maximum length of player name
     static const uint8_t SHIPNUM; //Number of available ship types
     static const uint8_t MAPMIN; //Minimum map size
-
     struct Coord{
         uint8_t x = 0;
         uint8_t y = 0;
     };
     
-    char name[9];
+    std::string name; //Player name
     uint8_t size; //Map size
     int8_t **map; //Map status
-    uint8_t health[3] = {PATROL, DESTROY, CARRIER}; //Ships health
+    uint8_t health[3] = {PATROL, DESTROY, CARRIER}; //Ships' health
     
     void initMap();
     bool attack(PlayerClass&, const Coord&);
     bool testEnd(PlayerClass&) const;
 public:
     //Constructors
-    PlayerClass();
-    PlayerClass(const char[]);
-    PlayerClass(const uint8_t);
-    PlayerClass(const uint8_t, const char[]);
+    PlayerClass() : size(MAPMIN), name("Player") { initMap(); }
+    PlayerClass(const std::string n) : size(MAPMIN), name(n) { initMap(); }
+    PlayerClass(const uint8_t s) : size(s), name("Player") { initMap(); }
+    PlayerClass(const uint8_t s, const std::string n) : size(s), name(n) { initMap(); }
+    //Deconstructor
     virtual ~PlayerClass();
     
     //Mutators
     void setSize(uint8_t s) { size = s; }
-    void setName(const char[]);
+    void setName(std::string n) { name = n; }
     void setHealth(const uint8_t ship, const uint8_t value) { health[ship] = value; }
     
     //Accessors
     uint8_t getSize() const { return size; }
-    const char* getName() const { return name; }
-    void showMap() const; //Display the 2D map array as a map
+    uint8_t getShipNum() const { return SHIPNUM; }
+    std::string getName() const { return name; }
+    const unsigned long int getNameLen() const { return name.length(); }
     uint8_t getHealth(const uint8_t shipType) const { return health[shipType-1]; } //Return the health of a particular ship
+    
+    void showMap() const; //Display the 2D map array as a map
     void debugMap() const; //Output the values of the map array
     
     //Pure virtual functions
