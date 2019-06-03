@@ -14,9 +14,6 @@
 #include "PlayerClass.h"
 #include "Input.h"
 
-
-//Structures
-
 //Battleship class
 class Battleship{
 private:

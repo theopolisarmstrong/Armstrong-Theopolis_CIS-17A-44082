@@ -60,8 +60,14 @@ void Battleship::init(){
                 minVal(size, 4, "Error: Size too low.\n");
                 gameMode = PVP; //Set game mode
                 //Initialize player structures
-                players[P1] = new Player(size, "Player 1");
-                players[P2] = new Player(size, "Player 2");
+                try{
+                    players[P1] = new Player(size, "Player 1");
+                    players[P2] = new Player(size, "Player 2");
+                }
+                catch (bad_alloc){
+                    cout << "Error: Memory allocation failure.\n";
+                    exit(0);
+                }
                 
                 //Set ship positions
                 players[P1]->place(CARRIER);
@@ -87,6 +93,8 @@ void Battleship::init(){
 }
 void Battleship::loop(){
     cout << "\n********\n" <<"*BEGIN!*\n" << "********\n\n";
+    cout << "Enter " << static_cast<char>(EXIT_E) << " at any time to quit.\n";
+    cout << "Progress will be saved every turn.\n";
     switch(gameMode){
             //Player vs. CPU
         case PVCPU:{
@@ -192,64 +200,63 @@ void Battleship::save(){
 void Battleship::load(){
     Header header;
     fstream saveFile(S_FILE, fstream::binary | fstream::in);
-    string name = "Name read error";
-    //Read header information
-    cout << "Reading save file...\n";
-    saveFile.read(reinterpret_cast<char*>(&header), sizeof(header));
-    players.resize(header.playNum);
-    for (int i = 0; i < header.playNum; i++){
-        if (header.gamemode == PVCPU && i == header.playNum - 1){ //Initialize computer player at end of players vector
-            cout << "Initializing CPU Player...\n";
+    if (saveFile){
+        string name = "Name read error";
+        //Read header information
+        cout << "Reading save file...\n";
+        saveFile.read(reinterpret_cast<char*>(&header), sizeof(header));
+        players.resize(header.playNum);
+        for (int i = 0; i < header.playNum; i++){
+            if (header.gamemode == PVCPU && i == header.playNum - 1){ //Initialize computer player at end of players vector
+                try{
+                    players[i] = new Computer(header.mapSize);
+                }
+                catch (bad_alloc){
+                    cout << "Error: Memory allocation failure while loading\n";
+                    exit(EXIT_FAILURE);
+                }
+            }else{
+                try{
+                    players[i] = new Player(header.mapSize, name);
+                }
+                catch (bad_alloc){
+                    cout << "Error: Memory allocation failure while loading\n";
+                    exit(EXIT_FAILURE);
+                }
+            }
+        }
+        for (auto i : players){
+            //Read name
+            unsigned long nameSize = 0;
+            string name = "No name read";
+            saveFile.read(reinterpret_cast<char*>(&nameSize), sizeof(unsigned long)); //Read name length
             try{
-                players[i] = new Computer(header.mapSize);
+                name.resize(nameSize);
             }
             catch (bad_alloc){
-                cout << "Error: Memory allocation failure while loading\n";
+                cout << "Error: String resize error\n";
                 exit(EXIT_FAILURE);
             }
-        }else{
-            cout << "Initializing Player " << i+1 << "...\n";
-            try{
-                players[i] = new Player(header.mapSize, name);
+            saveFile.read(&name[0], sizeof(char) * nameSize); //Read name
+            i->setName(name); //Set name
+            //Read map
+            for (int x = 0; x < header.mapSize; x++){
+                saveFile.read(reinterpret_cast<char*>(i->operator[](x)), sizeof(i->operator[](x)) * header.mapSize);
             }
-            catch (bad_alloc){
-                cout << "Error: Memory allocation failure while loading\n";
-                exit(EXIT_FAILURE);
+            //Read health
+            for (int x = 0; x < i->getShipNum(); x++){
+                uint8_t health = 0;
+                saveFile.read(reinterpret_cast<char*>(&health), sizeof(health));
+                i->setHealth(x, health);
             }
         }
-    }
-    for (auto i : players){
-        //Read name
-        unsigned long nameSize = 0;
-        string name = "No name read";
-        saveFile.read(reinterpret_cast<char*>(&nameSize), sizeof(unsigned long)); //Read name length
-        try{
-            name.resize(nameSize);
-        }
-        catch (bad_alloc){
-            cout << "Error: String resize error\n";
-            exit(EXIT_FAILURE);
-        }
-        saveFile.read(&name[0], sizeof(char) * nameSize); //Read name
-        i->setName(name); //Set name
-        //Read map
-        for (int x = 0; x < header.mapSize; x++){
-            saveFile.read(reinterpret_cast<char*>(i->operator[](x)), sizeof(i->operator[](x)) * header.mapSize);
-        }
-        //Read health
-        for (int x = 0; x < i->getShipNum(); x++){
-            uint8_t health = 0;
-            saveFile.read(reinterpret_cast<char*>(&health), sizeof(health));
-            i->setHealth(x, health);
-        }
-    }
-    //Initialize game
-    cout << "Initializing game...\n";
-    size = header.mapSize;
-    gameMode = header.gamemode; //Set gamemode; ends menu loop/begins game
-    cout << "Gamemode: " << gmString(gameMode) << endl;
-    //Close file
-    saveFile.close();
+        //Initialize game
+        cout << "Initializing game...\n";
+        size = header.mapSize;
+        gameMode = header.gamemode; //Set gamemode; ends menu loop/begins game
+        //Close file
+        saveFile.close();
+    } else cout << "Error: No existing save file\n";
 }
 string Battleship::gmString(Options gm) const {
     string str = "";

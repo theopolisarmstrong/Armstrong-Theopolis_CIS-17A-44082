@@ -23,8 +23,6 @@ using namespace std;
 //Structures
 
 //Function Prototypes
-//void saveProg(const Player*, const Player*); //Save game progress to file
-//Options loadProg(Player*, Player*); //Initialize game w/ data from file
 
 //Execution Begins Here!
 int main(int argc, char** argv) {
@@ -43,27 +41,3 @@ int main(int argc, char** argv) {
     //Exit stage right or left!
     return 0;
 }
-
-//void save(const Player* p1){
-//    fstream file(S_FILE, ios::out | ios::binary);
-//    file.write(reinterpret_cast<const char*>(&p1->name), NAMELEN);
-//    file.write(reinterpret_cast<const char*>(&p1->health), SHIPNUM);
-//}
-//void load(){
-//    fstream file(S_FILE, ios::in | ios::binary);
-//    char name[NAMELEN], health[SHIPNUM], total = 0;
-//    
-//    if(!file){ //Ensure file opened correctly
-//        cout << "Error loading file";
-//    } else {
-//        file.read(reinterpret_cast<char*>(&name), NAMELEN);
-//        file.read(reinterpret_cast<char*>(&health), SHIPNUM);
-//        
-//        //Calculate health total
-//        for (char i = 0; i < SHIPNUM; i++)
-//            total+=health[i];
-//        
-//        cout << name << " won the game with " << static_cast<int>(total) << " health remaining!\n";
-//    }
-//}
-
