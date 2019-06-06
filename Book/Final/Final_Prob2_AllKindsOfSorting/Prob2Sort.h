@@ -48,18 +48,40 @@ T * Prob2Sort<T>::sortArray(const T* array,int size,bool ascending){
 }
 template <class T>
 T * Prob2Sort<T>::sortArray(const T* array,int rows,int cols,int sortColumn,bool ascending){
+    sortColumn--;
     T* column = new T[rows];
     T* a = new T[rows*cols];
     //Copy array
-    for (int i = 0; i < rows*cols; i++) a[i] = array[i];
+    T* row = new T[rows];
+    //Sort
+    int minIndex;
+    T swap, min;
+    for (int i = sortColumn; i < rows - 1; i++){
+        minIndex = i;
+        min = a[i];
+        for (int j = i*cols+sortColumn+i; j < rows; j++){
+            if (a[j] < min){
+                min = a[j];
+                minIndex = j;
+            }
+        }
+        //Swap rows
+        swap = a[i];
+        a[i] = a[minIndex];
+        a[minIndex] = swap;
+    }
+    for(int i = 0; i < rows; i++){
+        cout << a[i] << ' ';
+    } cout << endl;
+//    for (int i = 0; i < rows*cols; i++) a[i] = array[i];
     //Sort column array
-    for(int i = 0; i < rows; i++){
-        column[i] = array[i*cols+sortColumn-1+i];
-    }
-    T* sortedColumn = sortArray(column, cols, ascending);
-    for(int i = 0; i < rows; i++){
-        cout << sortedColumn[i] << ' ';
-    }
+//    for(int i = 0; i < rows; i++){
+//        column[i] = array[i*cols+sortColumn-1+i];
+//    }
+//    T* sortedColumn = sortArray(column, cols, ascending);
+//    for(int i = 0; i < rows; i++){
+//        cout << sortedColumn[i] << ' ';
+//    } cout << endl;
 //    cout << "\nColumn: ";
 //    for (int i = 0; i < cols; i++)
 //        cout << column[i];

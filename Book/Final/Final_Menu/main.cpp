@@ -177,5 +177,5 @@ void prob5(){
 }
 
 void prob6(){
-    
+    cout << "3.75 base 10\t3.6 base 8\t3.C base 16\tHex Float: 78000002\n";
 }
