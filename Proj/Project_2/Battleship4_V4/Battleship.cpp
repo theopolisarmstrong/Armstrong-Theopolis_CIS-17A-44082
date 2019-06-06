@@ -258,21 +258,3 @@ void Battleship::load(){
         saveFile.close();
     } else cout << "Error: No existing save file\n";
 }
-string Battleship::gmString(Options gm) const {
-    string str = "";
-    switch(gm){
-        case NONE:
-            str = "None";
-            break;
-        case PVCPU:
-            str = "Player vs. Computer";
-            break;
-        case PVP:
-            str = "Player vs. Player";
-            break;
-        case LOAD:
-            str = "Load save";
-            break;
-    }
-    return str;
-}

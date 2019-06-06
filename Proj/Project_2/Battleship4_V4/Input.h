@@ -13,7 +13,6 @@ enum Options {NONE = 0, PVCPU = '1', PVP = '2', LOAD = '3', EXIT = 'e', EXIT_E =
 template<class T>
 void read(T &input){
     std::cin >> input;
-//    std::cout << "Read value: " << static_cast<int>(input) << std::endl;
     if (input == EXIT || input == EXIT_E){
         std::cout << "Goodbye!\n";
         exit(0);

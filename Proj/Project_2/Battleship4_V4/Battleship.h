@@ -40,7 +40,6 @@ private:
     void title(); //Display title
     char menu(); //Output menu and receives player's menu choice
     void save(); //Save current game status
-    std::string gmString (Options) const; //Convert gamemode enum to string
     void load(); //Initialize game with save file progress
     
 public:

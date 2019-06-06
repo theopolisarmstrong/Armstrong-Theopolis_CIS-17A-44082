@@ -38,7 +38,6 @@ void Computer::place(Mapping type){
         posY = rand()%(size-type);
 
         //Validate position
-        char unique = false;
         while(!unique){
             for(int i = posY; i < posY + type; i++){
                 if (map[posX][i] == 0){
@@ -98,9 +97,9 @@ void Computer::target(Coord &coord){
 
 bool Computer::turn(PlayerClass* enemy){
     bool win = false;
+    string hit; //Hit indication
     Coord coord;
     target(coord); //Generate target coordinates
-    string hit; //Hit indication
     cout << "The computer targets (" << static_cast<int>(coord.x+1) << ", " << static_cast<int>(coord.y+1) << ")." << endl;
     attack(*enemy, coord) ? hit = "Computer hits!" : hit = "Computer misses!"; //Attack generated target coordinates
     cout << hit << endl;
