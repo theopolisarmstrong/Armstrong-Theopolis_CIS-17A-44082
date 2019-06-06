@@ -188,7 +188,7 @@ void prob6(){
     cout << "  (" << a << " * 16^-2) * 7 = " << product << endl;
     cout << "  3.75 = 0 10000000 11100000000000000000000\n";
     //b)
-    cout << "0.7 base 10 = ~0.54632 base 8 = ~0.B334 base 16 = ~0.1011001100 base 2    Hex Float: \tScaled 2 bytes: 0xB334\n";
+    cout << "0.7 base 10 = ~0.54632 base 8 = ~0.B334 base 16 = ~0.1011001100 base 2    Hex Float: 59999900    Scaled 2 bytes: 0xB334\n";
     product = b * 7;
     product >>= 16; //2^-16
     cout << "  (" << b << " * 16^-4) * 7 = " << product << endl;

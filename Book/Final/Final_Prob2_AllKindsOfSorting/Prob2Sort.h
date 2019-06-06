@@ -32,10 +32,17 @@ T * Prob2Sort<T>::sortArray(const T* array,int size,bool ascending){
         minIndex = i;
         min = a[i];
         for (int j = i + 1; j < size; j++){
-            if (a[j] < min){
-                min = a[j];
-                minIndex = j;
-            }
+                if(ascending){
+                    if (a[j] > min){
+                        min = a[j];
+                        minIndex = j;
+                    }
+                } else {
+                    if (a[j] < min){
+                        min = a[j];
+                        minIndex = j;
+                    }
+                }
         }
         swap = a[i];
         a[i] = a[minIndex];
@@ -49,45 +56,55 @@ T * Prob2Sort<T>::sortArray(const T* array,int size,bool ascending){
 template <class T>
 T * Prob2Sort<T>::sortArray(const T* array,int rows,int cols,int sortColumn,bool ascending){
     sortColumn--;
-    T* column = new T[rows];
-    T* a = new T[rows*cols];
-    //Copy array
-    T* row = new T[rows];
-    //Sort
-    int minIndex;
-    T swap, min;
-    for (int i = sortColumn; i < rows - 1; i++){
-        minIndex = i;
-        min = a[i];
-        for (int j = i*cols+sortColumn+i; j < rows; j++){
-            if (a[j] < min){
-                min = a[j];
-                minIndex = j;
-            }
+    T* sorted = new T[rows*cols];
+    T** a = new T*[rows];
+    for (int i = 0; i < rows; i++)
+        a[i] = new T[cols];
+    //Copy array into 2D array
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols-1; j++){
+            a[i][j] = array[i*cols+j+i];
         }
-        //Swap rows
-        swap = a[i];
-        a[i] = a[minIndex];
-        a[minIndex] = swap;
     }
-    for(int i = 0; i < rows; i++){
-        cout << a[i] << ' ';
-    } cout << endl;
-//    for (int i = 0; i < rows*cols; i++) a[i] = array[i];
-    //Sort column array
-//    for(int i = 0; i < rows; i++){
-//        column[i] = array[i*cols+sortColumn-1+i];
-//    }
-//    T* sortedColumn = sortArray(column, cols, ascending);
-//    for(int i = 0; i < rows; i++){
-//        cout << sortedColumn[i] << ' ';
-//    } cout << endl;
-//    cout << "\nColumn: ";
-//    for (int i = 0; i < cols; i++)
-//        cout << column[i];
-//    cout << endl;
-    
-    return a;
+    //Sort
+    for (int i = 0; i < rows; i++){
+        int minIndex;
+        T *swap, *min;
+        for (int i = 0; i < rows - 1; i++){
+            minIndex = i;
+            min = a[i];
+            for (int j = i + 1; j < rows; j++){
+                if(ascending){
+                    if (a[j][sortColumn] > min[sortColumn]){
+                        min = a[j];
+                        minIndex = j;
+                    }
+                } else {
+                    if (a[j][sortColumn] < min[sortColumn]){
+                        min = a[j];
+                        minIndex = j;
+                    }
+                }
+            }
+            //Swap row pointers
+            swap = a[i];
+            a[i] = a[minIndex];
+            a[minIndex] = swap;
+        }
+    }
+    //Reinsert new line characters
+    for (int i = 0; i < rows; i++)
+        a[i][cols-1] = '\n';
+    //Copy into 1d array
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++)
+            sorted[i*cols+j] = a[i][j];
+    }
+    //Deallocate 2d sorting array
+    for(int i = 0; i < rows; i++)
+        delete [] a[i];
+    delete [] a;
+    return sorted;
 }
 #endif /* PROB2SORT_H */
 

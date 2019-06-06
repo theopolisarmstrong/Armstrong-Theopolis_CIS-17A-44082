@@ -6,7 +6,6 @@
                    projectFiles="true">
       <itemPath>Employee.h</itemPath>
       <itemPath>Prob1Random.h</itemPath>
-      <itemPath>Prob2Sort.h</itemPath>
       <itemPath>Prob3Table.h</itemPath>
       <itemPath>Prob3TableInherited.h</itemPath>
       <itemPath>SavingsAccount.h</itemPath>
@@ -55,8 +54,6 @@
       </item>
       <item path="Prob1Random.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Prob2Sort.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Prob3Table.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Prob3TableInherited.h" ex="false" tool="3" flavor2="0">
@@ -99,8 +96,6 @@
       <item path="Prob1Random.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Prob1Random.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Prob2Sort.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Prob3Table.h" ex="false" tool="3" flavor2="0">
       </item>

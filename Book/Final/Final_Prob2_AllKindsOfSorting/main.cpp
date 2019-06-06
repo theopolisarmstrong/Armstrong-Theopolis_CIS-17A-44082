@@ -31,17 +31,20 @@ int main(int argc, char** argv) {
     infile.close();
     cout<<endl;
     cout<<"Sorting on which column"<<endl;
+/*  No longer an issue
+ *    cout << "Note: Issues reading characters from file to array.\nAnother student also mentioned this issue in the Final Canvas discussion\n";
+ *    cout << "Last row in array (Kmlhmhc...) partially missing. Windows 10, NetBeans 9.0, CygWin GCC/G++ 7.4.0\n";
+ */
     int column;
     cin>>column;
-//    char *zc=rc.sortArray(ch2p,10*16,ascending);
     char *zc=rc.sortArray(ch2p,10,16,column,ascending);
-//    for(int i=0;i<10;i++)
-//    {
-//            for(int j=0;j<16;j++)
-//            {
-//                    cout<<zc[i*16+j];
-//            }
-//    }
+    for(int i=0;i<10;i++)
+    {
+            for(int j=0;j<16;j++)
+            {
+                    cout<<zc[i*16+j];
+            }
+    }
     delete []zc;
     cout<<endl;
 
