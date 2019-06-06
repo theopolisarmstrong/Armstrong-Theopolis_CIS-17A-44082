@@ -41,6 +41,9 @@ T * Prob2Sort<T>::sortArray(const T* array,int size,bool ascending){
         a[i] = a[minIndex];
         a[minIndex] = swap;
     }
+    for(int i = 0; i < size; i++){
+        cout << a[i] << ' ';
+    } cout << endl;
     return a;
 }
 template <class T>
@@ -51,28 +54,16 @@ T * Prob2Sort<T>::sortArray(const T* array,int rows,int cols,int sortColumn,bool
     for (int i = 0; i < rows*cols; i++) a[i] = array[i];
     //Sort column array
     for(int i = 0; i < rows; i++){
-        column[i] = array[i*cols+sortColumn-1];
+        column[i] = array[i*cols+sortColumn-1+i];
     }
-    cout << "\nColumn: ";
-    for (int i = 0; i < cols; i++)
-        cout << column[i];
-    cout << endl;
-    cout << "Column sort: " << sortColumn << endl;
-    cout << "Columns: " << cols << endl;
+    T* sortedColumn = sortArray(column, cols, ascending);
     for(int i = 0; i < rows; i++){
-        cout << i*cols+sortColumn-1 << ' ';
-    }cout << endl;
-    for(int i = 0; i < rows; i++){
-        cout << i << ' ';
-    }cout << endl;
-    for(int i = 0; i < rows; i++){
-        cout << i << '*' << cols << '+' << sortColumn << "-1 ";
-    }cout << endl;
-    for (int i = 0; i < rows; i++){
-        for (int j = 0; j < cols; j++)
-            cout << i*cols+j << ' ';
-        cout << endl;
+        cout << sortedColumn[i] << ' ';
     }
+//    cout << "\nColumn: ";
+//    for (int i = 0; i < cols; i++)
+//        cout << column[i];
+//    cout << endl;
     
     return a;
 }
