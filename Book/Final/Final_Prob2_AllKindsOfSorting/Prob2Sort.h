@@ -41,12 +41,6 @@ T * Prob2Sort<T>::sortArray(const T* array,int size,bool ascending){
         a[i] = a[minIndex];
         a[minIndex] = swap;
     }
-//    for (int i = 0; i < size-1 ; i++){
-        
-//        for (int j = i+1; j < size; j++){
-//            
-//        }
-//    }
     return a;
 }
 template <class T>
