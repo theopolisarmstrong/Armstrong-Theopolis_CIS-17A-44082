@@ -177,5 +177,26 @@ void prob5(){
 }
 
 void prob6(){
-    cout << "3.75 base 10\t3.6 base 8\t3.C base 16\tHex Float: 78000002\n";
+    unsigned short a = 0x3C0; //Extra byte to accommodate whole number
+    unsigned short b = 0xB334;
+    unsigned int c = 0x59E66667;
+    unsigned int product = 0;
+    //a)
+    cout << "3.75 base 10 = 3.6 base 8 = 3.C base 16 = 11.11 base 2    Hex Float: 78000002    Scaled 1 byte: 0x3C0\n";
+    product = a * 7;
+    product >>= 8; //2^-8
+    cout << "  (" << a << " * 16^-2) * 7 = " << product << endl;
+    cout << "  3.75 = 0 10000000 11100000000000000000000\n";
+    //b)
+    cout << "0.7 base 10 = ~0.54632 base 8 = ~0.B334 base 16 = ~0.1011001100 base 2    Hex Float: \tScaled 2 bytes: 0xB334\n";
+    product = b * 7;
+    product >>= 16; //2^-16
+    cout << "  (" << b << " * 16^-4) * 7 = " << product << endl;
+    cout << "  0.7 = 0 01111110 01100110011001100110011\n";
+    //c)
+    cout << "89.9 base 10 = 131.7146 base 8 = ~59.E667 base 16 = ~1011001.11100110011001 base 2    Hex Float: 5DCCCC06    Scaled 3 bytes: 0x59E66667\n";
+    product = c * 7;
+    product >>= 24; //2^-24
+    cout << "  (" << c << " * 16^-8) * 7 = " << product << endl;
+    cout << "  89.9 = 0 10000101 0110011110011001101101\n";
 }
