@@ -11,7 +11,6 @@ using namespace std;
 
 //User Libraries
 #include "Prob3TableInherited.h"
-//#include "Prob3Table.h"
 
 //Global Constants, no Global Variables are allowed
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...

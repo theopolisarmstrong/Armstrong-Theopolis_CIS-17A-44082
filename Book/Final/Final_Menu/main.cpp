@@ -13,6 +13,9 @@ using namespace std;
 //User Libraries
 #include "Prob1Random.h"
 #include "Prob2Sort.h"
+#include "Prob3TableInherited.h"
+#include "SavingsAccount.h"
+#include "Employee.h"
 
 //Global Constants, no Global Variables are allowed
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
@@ -20,6 +23,10 @@ using namespace std;
 //Function Prototypes
 void prob1();
 void prob2();
+void prob3();
+void prob4();
+void prob5();
+void prob6();
 
 //Execution Begins Here!
 int main(int argc, char** argv) {
@@ -29,16 +36,25 @@ int main(int argc, char** argv) {
     char choice = 0;
     
     //Initialize or input i.e. set variable values
-    cout << "Enter a problem to run:\n";
-    cout << "1. Random Sequence\n";
-    cout << "2. Sort\n";
-    cin >> choice;
-    
-    //Map inputs -> outputs
-    switch(choice){
-        case '1': { prob1(); break; }
-        case '2': { prob2(); break; }
-            
+    while(choice == 0 || choice > '0' && choice < '7'){
+        cout << "Enter a problem to run:\n";
+        cout << "1. Random Sequence (extra credit included)\n";
+        cout << "2. Sort\n";
+        cout << "3. Spreadsheet Stuff\n";
+        cout << "4. Savings Account Class\n";
+        cout << "5. Employee Class\n";
+        cout << "6. Conversions\n";
+        cin >> choice;
+
+        //Map inputs -> outputs
+        switch(choice){
+            case '1': { prob1(); break; }
+            case '2': { prob2(); break; }
+            case '3': { prob3(); break; }
+            case '4': { prob4(); break; }
+            case '5': { prob5(); break; }
+            case '6': { prob6(); break; }
+        }
     }
     
     //Display the outputs
@@ -51,7 +67,7 @@ void prob1(){
     char n=5;
     char rndseq[]={18,33,56,79,125};
     int ntimes=100000;
-    Prob1Random a(n,rndseq);
+    Prob1Random<char> a(n,rndseq);
     for(int i=1;i<=ntimes;i++)
     {
             a.randFromSet();
@@ -89,4 +105,77 @@ void prob2(){
     }
     delete []zc;
     cout<<endl;
+}
+
+void prob3(){
+    cout<<"Entering problem number 3"<<endl;
+    int rows=5;
+    int cols=6;
+    Prob3TableInherited<int> tab("Problem3.txt",rows,cols);
+    const int *naugT=tab.getTable();
+    for(int i=0;i<rows;i++)
+    {
+            for(int j=0;j<cols;j++)
+            {
+                    cout<<naugT[i*cols+j]<<" ";
+            }
+            cout<<endl;
+    }
+    cout<<endl;
+    const int *augT=tab.getAugTable();
+    for(int i=0;i<=rows;i++)
+    {
+            for(int j=0;j<=cols;j++)
+            {
+                    cout<<augT[i*(cols+1)+j]<<" ";
+            }
+            cout<<endl;
+    }
+}
+
+void prob4(){
+    srand(time(0));
+    SavingsAccount mine(-300);
+
+    for(int i=1;i<=10;i++)
+    {
+            mine.Transaction((float)(rand()%500)*(rand()%3-1));
+    }
+    mine.toString();
+    cout<<"Balance after 7 years given 10% interest = "
+            <<mine.Total((float)(0.10),7)<<endl;
+    cout<<"Balance after 7 years given 10% interest = "
+            <<mine.TotalRecursive((float)(0.10),7)
+            <<" Recursive Calculation "<<endl;
+}
+
+void prob5(){
+    Employee Mark("Mark","Boss",215.50);
+    Mark.setHoursWorked(-3);
+    Mark.toString();
+    Mark.CalculatePay(Mark.setHourlyRate(20.0),
+            Mark.setHoursWorked(25));
+    Mark.toString();
+    Mark.CalculatePay(Mark.setHourlyRate(40.0),
+            Mark.setHoursWorked(25));
+    Mark.toString();
+    Mark.CalculatePay(Mark.setHourlyRate(60.0),
+            Mark.setHoursWorked(25));
+    Mark.toString();
+
+    Employee Mary("Mary","VP",50.0);
+    Mary.toString();
+    Mary.CalculatePay(Mary.setHourlyRate(50.0),
+            Mary.setHoursWorked(40));
+    Mary.toString();
+    Mary.CalculatePay(Mary.setHourlyRate(50.0),
+            Mary.setHoursWorked(50));
+    Mary.toString();
+    Mary.CalculatePay(Mary.setHourlyRate(50.0),
+            Mary.setHoursWorked(60));
+    Mary.toString();
+}
+
+void prob6(){
+    
 }
