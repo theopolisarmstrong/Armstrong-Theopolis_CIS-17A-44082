@@ -1,9 +1,8 @@
 /* 
  * File:   main.cpp
  * Author: Theopolis Armstrong
- * Created on June th, 2019, 12:36 PM
- * Purpose:  Creation of Template to be used for all
- *           future projects
+ * Created on June th, 2019, 5:52 PM
+ * Purpose: 
  */
 
 //System Libraries
@@ -22,26 +21,15 @@ using namespace std;
 
 //Execution Begins Here!
 int main(int argc, char** argv) {
-    Prob2Sort<char> rc;
+    Prob2Sort<string> rc;
     bool ascending=true;
     ifstream infile;
-    infile.open("Problem2.txt",ios::in);
+    infile.open("Ballot.txt",ios::in);
     char *ch2=new char[10*16];
     char *ch2p=ch2;
     while(infile.get(*ch2)){cout<<*ch2;ch2++;}
     infile.close();
-    cout<<endl;
-/*  No longer an issue
- *    cout << "Note: Issues reading characters from file to array.\nAnother student also mentioned this issue in the Final Canvas discussion\n";
- *    cout << "Last row in array (Kmlhmhc...) partially missing. Windows 10, NetBeans 9.0, CygWin GCC/G++ 7.4.0\n";
- */
-    string column;
-    regex regCol(R"(\d*)");
-    do{
-        cout<<"Sorting on which column"<<endl;
-        cin>>column;
-    }while(!regex_match(column, regCol));
-    char *zc=rc.sortArray(ch2p,10,16,stoi(column),ascending);
+    char *zc=rc.sortArray(ch2p,10,16);
     for(int i=0;i<10;i++)
     {
             for(int j=0;j<16;j++)

@@ -8,6 +8,7 @@
 //System Libraries
 #include <iostream>  //Input/Output Library
 #include <fstream>
+#include <regex>
 using namespace std;
 
 //User Libraries
@@ -38,8 +39,8 @@ int main(int argc, char** argv) {
     //Initialize or input i.e. set variable values
     while(choice == 0 || choice > '0' && choice < '7'){
         cout << "Enter a problem to run:\n";
-        cout << "1. Random Sequence (extra credit included)\n";
-        cout << "2. Sort\n";
+        cout << "1. Random Sequence (template extra credit)\n";
+        cout << "2. Sort (regex extra credit)\n";
         cout << "3. Spreadsheet Stuff\n";
         cout << "4. Savings Account Class\n";
         cout << "5. Employee Class\n";
@@ -80,7 +81,6 @@ void prob1(){
     }
     cout<<"The total number of random numbers is "<<a.getNumRand()<<endl;
 }
-
 void prob2(){
     cout<<"The start of Problem 2, the sorting problem"<<endl;
     Prob2Sort<char> rc;
@@ -92,10 +92,13 @@ void prob2(){
     while(infile.get(*ch2)){cout<<*ch2;ch2++;}
     infile.close();
     cout<<endl;
-    cout<<"Sorting on which column"<<endl;
-    int column;
-    cin>>column;
-    char *zc=rc.sortArray(ch2p,10,16,column,ascending);
+    string column;
+    regex regCol(R"(\d*)");
+    do{
+        cout<<"Sorting on which column"<<endl;
+        cin>>column;
+    }while(!regex_match(column, regCol));
+    char *zc=rc.sortArray(ch2p,10,16,stoi(column),ascending);
     for(int i=0;i<10;i++)
     {
             for(int j=0;j<16;j++)
@@ -106,7 +109,6 @@ void prob2(){
     delete []zc;
     cout<<endl;
 }
-
 void prob3(){
     cout<<"Entering problem number 3"<<endl;
     int rows=5;
@@ -132,7 +134,6 @@ void prob3(){
             cout<<endl;
     }
 }
-
 void prob4(){
     srand(time(0));
     SavingsAccount mine(-300);
@@ -148,7 +149,6 @@ void prob4(){
             <<mine.TotalRecursive((float)(0.10),7)
             <<" Recursive Calculation "<<endl;
 }
-
 void prob5(){
     Employee Mark("Mark","Boss",215.50);
     Mark.setHoursWorked(-3);
@@ -175,7 +175,6 @@ void prob5(){
             Mary.setHoursWorked(60));
     Mary.toString();
 }
-
 void prob6(){
     unsigned short a = 0x3C0; //Extra byte to accommodate whole number
     unsigned short b = 0xB334;

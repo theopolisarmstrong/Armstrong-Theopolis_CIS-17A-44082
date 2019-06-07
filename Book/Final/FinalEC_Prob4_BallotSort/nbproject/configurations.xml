@@ -4,12 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>Employee.h</itemPath>
-      <itemPath>Prob1Random.h</itemPath>
-      <itemPath>Prob2Sort.h</itemPath>
-      <itemPath>Prob3Table.h</itemPath>
-      <itemPath>Prob3TableInherited.h</itemPath>
-      <itemPath>SavingsAccount.h</itemPath>
+      <itemPath>Prob4Ballot.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -18,9 +13,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>Employee.cpp</itemPath>
-      <itemPath>Prob1Random.cpp</itemPath>
-      <itemPath>SavingsAccount.cpp</itemPath>
+      <itemPath>Prob4Ballot.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -34,8 +27,7 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>Problem2.txt</itemPath>
-    <itemPath>Problem3.txt</itemPath>
+    <itemPath>Ballot.txt</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -47,27 +39,11 @@
       </toolsSet>
       <compileType>
       </compileType>
-      <item path="Employee.cpp" ex="false" tool="1" flavor2="0">
+      <item path="Ballot.txt" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Employee.h" ex="false" tool="3" flavor2="0">
+      <item path="Prob4Ballot.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Prob1Random.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Prob1Random.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Prob2Sort.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Prob3Table.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Prob3TableInherited.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Problem2.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Problem3.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="SavingsAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SavingsAccount.h" ex="false" tool="3" flavor2="0">
+      <item path="Prob4Ballot.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -92,27 +68,11 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="Employee.cpp" ex="false" tool="1" flavor2="0">
+      <item path="Ballot.txt" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Employee.h" ex="false" tool="3" flavor2="0">
+      <item path="Prob4Ballot.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Prob1Random.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Prob1Random.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Prob2Sort.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Prob3Table.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Prob3TableInherited.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Problem2.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Problem3.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="SavingsAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SavingsAccount.h" ex="false" tool="3" flavor2="0">
+      <item path="Prob4Ballot.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
