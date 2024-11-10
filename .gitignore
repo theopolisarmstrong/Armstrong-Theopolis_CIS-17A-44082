@@ -9,3 +9,8 @@
 /Proj/Project_2/Battleship4_V2/build/
 /Proj/Project_2/Battleship4_V3/build/
 /Proj/Project_2/Battleship4_V3/dist/
+
+**/nbproject/private
+**/build
+**/dist
+**/.idea
