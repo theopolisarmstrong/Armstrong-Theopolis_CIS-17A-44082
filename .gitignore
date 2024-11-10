@@ -10,7 +10,10 @@
 /Proj/Project_2/Battleship4_V3/build/
 /Proj/Project_2/Battleship4_V3/dist/
 
+**/.DS_Store
+
 **/nbproject/private
 **/build
 **/dist
 **/.idea
+**/.vscode
