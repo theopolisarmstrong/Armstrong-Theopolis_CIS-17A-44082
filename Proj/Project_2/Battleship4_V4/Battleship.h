@@ -32,7 +32,7 @@ private:
     
     std::vector<PlayerClass*>players;
     uint8_t size = 0; //Map size
-    Options gameMode; //game mode chosen in menu
+    Options gameMode = NONE; //game mode chosen in menu
     PlayInd winner = NO_ONE; //winner of the game
     bool isEnd = false; //Game loop end flag
     

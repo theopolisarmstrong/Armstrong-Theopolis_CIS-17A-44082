@@ -8,6 +8,8 @@
 #ifndef PLAYERCLASS_H
 #define PLAYERCLASS_H
 
+#include <cstdint>
+
 enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indications/ship size/ship health
 
 std::ostream& operator<<(std::ostream&, const class PlayerClass*);

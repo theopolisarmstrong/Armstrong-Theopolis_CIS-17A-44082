@@ -8,6 +8,8 @@
 #include <iostream>
 #include <iomanip>
 #include <cstring>
+#include <cstdint>
+
 using namespace std;
 #include "Player.h"
 #include "Input.h"
