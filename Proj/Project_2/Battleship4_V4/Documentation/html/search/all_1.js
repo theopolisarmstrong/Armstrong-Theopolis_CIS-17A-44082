@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['computer',['Computer',['../class_computer.html',1,'']]],
-  ['coord',['Coord',['../struct_player_class_1_1_coord.html',1,'PlayerClass']]]
+  ['computer_0',['Computer',['../classComputer.html',1,'']]],
+  ['coord_1',['Coord',['../structPlayerClass_1_1Coord.html',1,'PlayerClass']]]
 ];

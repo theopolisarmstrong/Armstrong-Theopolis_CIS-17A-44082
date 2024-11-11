@@ -1,0 +1,36 @@
+\doxysection{Computer.\+h}
+\hypertarget{Computer_8h_source}{}\label{Computer_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ File:\ \ \ Computer.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *\ Author:\ Theopolis\ Armstrong}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ Created\ on\ May\ 29,\ 2019\ 4:39\ AM}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ Purpose:\ Human\ Player\ class\ definition}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ COMPUTER\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ COMPUTER\_H}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}PlayerClass.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classComputer}{Computer}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classPlayerClass}{PlayerClass}}\{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ target(\mbox{\hyperlink{structPlayerClass_1_1Coord}{Coord}}\&);}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ placeAll();}
+\DoxyCodeLine{00018\ \ \ \ \ vector<char>\ pastX;\ \ \textcolor{comment}{//Previous\ X-\/axis\ targets}}
+\DoxyCodeLine{00019\ \ \ \ \ vector<char>\ pastY;\ \ \textcolor{comment}{//Previous\ Y-\/axis\ targets}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{classComputer}{Computer}}();}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classComputer}{Computer}}(\textcolor{keyword}{const}\ uint8\_t);}
+\DoxyCodeLine{00023\ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ place(Mapping)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ turn(\mbox{\hyperlink{classPlayerClass}{PlayerClass}}*)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ enable\_debug\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ COMPUTER\_H\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00031\ }
+
+\end{DoxyCode}

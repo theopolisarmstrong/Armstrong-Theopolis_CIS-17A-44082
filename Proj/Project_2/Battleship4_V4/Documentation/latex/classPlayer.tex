@@ -1,0 +1,118 @@
+\doxysection{Player Class Reference}
+\hypertarget{classPlayer}{}\label{classPlayer}\index{Player@{Player}}
+Inheritance diagram for Player\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPlayer}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPlayer_a87229c604cf4ffc0d9e3b4dab38c8e17}\label{classPlayer_a87229c604cf4ffc0d9e3b4dab38c8e17} 
+{\bfseries Player} (const uint8\+\_\+t size)
+\item 
+\Hypertarget{classPlayer_a6f03bb9aa1bbff2fce057724ae640fd5}\label{classPlayer_a6f03bb9aa1bbff2fce057724ae640fd5} 
+{\bfseries Player} (const uint8\+\_\+t size, const std\+::string name)
+\item 
+\Hypertarget{classPlayer_af14d533923f3497c47a4cf930178e090}\label{classPlayer_af14d533923f3497c47a4cf930178e090} 
+{\bfseries Player} (\mbox{\hyperlink{classPlayer}{Player}} \&orig)
+\item 
+virtual void \mbox{\hyperlink{classPlayer_ad7707554e3dc42c23b95bc50db1b00b7}{place}} (Mapping) override
+\item 
+virtual bool \mbox{\hyperlink{classPlayer_a6996f8d1615ece361f04e6523cec2e61}{turn}} (\mbox{\hyperlink{classPlayerClass}{Player\+Class}} \texorpdfstring{$\ast$}{*}) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classPlayerClass}{Player\+Class}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Player\+Class} (const std\+::string n)
+\item 
+{\bfseries Player\+Class} (const uint8\+\_\+t s)
+\item 
+{\bfseries Player\+Class} (const uint8\+\_\+t s, const std\+::string n)
+\item 
+void {\bfseries set\+Size} (uint8\+\_\+t s)
+\item 
+void {\bfseries set\+Name} (std\+::string n)
+\item 
+void {\bfseries set\+Health} (const uint8\+\_\+t ship, const uint8\+\_\+t value)
+\item 
+uint8\+\_\+t {\bfseries get\+Size} () const
+\item 
+uint8\+\_\+t {\bfseries get\+Ship\+Num} () const
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+const unsigned long int {\bfseries get\+Name\+Len} () const
+\item 
+uint8\+\_\+t {\bfseries get\+Health} (const uint8\+\_\+t ship\+Type) const
+\item 
+void {\bfseries show\+Map} () const
+\item 
+void {\bfseries debug\+Map} () const
+\item 
+int8\+\_\+t \texorpdfstring{$\ast$}{*} {\bfseries operator\mbox{[}$\,$\mbox{]}} (const int \&)
+\item 
+bool {\bfseries operator$>$} (const \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&)
+\item 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&)
+\item 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&rhs) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classPlayerClass}{Player\+Class}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries init\+Map} ()
+\item 
+bool {\bfseries attack} (\mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&, const \mbox{\hyperlink{structPlayerClass_1_1Coord}{Coord}} \&)
+\item 
+bool {\bfseries test\+End} (\mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classPlayerClass}{Player\+Class}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name}
+\item 
+uint8\+\_\+t {\bfseries size}
+\item 
+int8\+\_\+t \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} {\bfseries map}
+\item 
+uint8\+\_\+t {\bfseries health} \mbox{[}3\mbox{]} = \{PATROL, DESTROY, CARRIER\}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{classPlayerClass}{Player\+Class}}}
+\begin{DoxyCompactItemize}
+\item 
+static const uint8\+\_\+t {\bfseries SHIPNUM} = 3
+\item 
+static const uint8\+\_\+t {\bfseries MAPMIN} = 4
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classPlayer_ad7707554e3dc42c23b95bc50db1b00b7}\index{Player@{Player}!place@{place}}
+\index{place@{place}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{place()}{place()}}
+{\footnotesize\ttfamily \label{classPlayer_ad7707554e3dc42c23b95bc50db1b00b7} 
+void Player\+::place (\begin{DoxyParamCaption}\item[{Mapping}]{type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classPlayerClass}{Player\+Class}}.
+
+\Hypertarget{classPlayer_a6996f8d1615ece361f04e6523cec2e61}\index{Player@{Player}!turn@{turn}}
+\index{turn@{turn}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{turn()}{turn()}}
+{\footnotesize\ttfamily \label{classPlayer_a6996f8d1615ece361f04e6523cec2e61} 
+bool Player\+::turn (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classPlayerClass}{Player\+Class}} \texorpdfstring{$\ast$}{*}}]{enemy}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classPlayerClass}{Player\+Class}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Player.\+h\item 
+Player.\+cpp\end{DoxyCompactItemize}

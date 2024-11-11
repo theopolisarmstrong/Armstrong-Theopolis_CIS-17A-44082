@@ -1,0 +1,124 @@
+\doxysection{Player\+Class Class Reference}
+\hypertarget{classPlayerClass}{}\label{classPlayerClass}\index{PlayerClass@{PlayerClass}}
+Inheritance diagram for Player\+Class\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPlayerClass}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structPlayerClass_1_1Coord}{Coord}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPlayerClass_a0db0cefe143eeea2e4861af370be63d8}\label{classPlayerClass_a0db0cefe143eeea2e4861af370be63d8} 
+{\bfseries Player\+Class} (const std\+::string n)
+\item 
+\Hypertarget{classPlayerClass_a517fb3c542ad872414d330fd8b2d2115}\label{classPlayerClass_a517fb3c542ad872414d330fd8b2d2115} 
+{\bfseries Player\+Class} (const uint8\+\_\+t s)
+\item 
+\Hypertarget{classPlayerClass_a54a5c2175c63d78c799fe28779f384ee}\label{classPlayerClass_a54a5c2175c63d78c799fe28779f384ee} 
+{\bfseries Player\+Class} (const uint8\+\_\+t s, const std\+::string n)
+\item 
+\Hypertarget{classPlayerClass_ac2fe3cd6653da37eae60e888c79f3a15}\label{classPlayerClass_ac2fe3cd6653da37eae60e888c79f3a15} 
+void {\bfseries set\+Size} (uint8\+\_\+t s)
+\item 
+\Hypertarget{classPlayerClass_a4794a1ce7a3778492a105825636a63eb}\label{classPlayerClass_a4794a1ce7a3778492a105825636a63eb} 
+void {\bfseries set\+Name} (std\+::string n)
+\item 
+\Hypertarget{classPlayerClass_ac94c0f0dc9c72be7496587f7626ccead}\label{classPlayerClass_ac94c0f0dc9c72be7496587f7626ccead} 
+void {\bfseries set\+Health} (const uint8\+\_\+t ship, const uint8\+\_\+t value)
+\item 
+\Hypertarget{classPlayerClass_afa4f22907dc8c45703a4df9c914cccea}\label{classPlayerClass_afa4f22907dc8c45703a4df9c914cccea} 
+uint8\+\_\+t {\bfseries get\+Size} () const
+\item 
+\Hypertarget{classPlayerClass_ac165d8152364b3d27e2ac2c940197bea}\label{classPlayerClass_ac165d8152364b3d27e2ac2c940197bea} 
+uint8\+\_\+t {\bfseries get\+Ship\+Num} () const
+\item 
+\Hypertarget{classPlayerClass_a896115c19c6fb09172afac43cb8c4eea}\label{classPlayerClass_a896115c19c6fb09172afac43cb8c4eea} 
+std\+::string {\bfseries get\+Name} () const
+\item 
+\Hypertarget{classPlayerClass_ad779ff20e6557c05130b6b29974bc3b5}\label{classPlayerClass_ad779ff20e6557c05130b6b29974bc3b5} 
+const unsigned long int {\bfseries get\+Name\+Len} () const
+\item 
+\Hypertarget{classPlayerClass_ae231ed4b1d9bef35b6858a3c12f4793c}\label{classPlayerClass_ae231ed4b1d9bef35b6858a3c12f4793c} 
+uint8\+\_\+t {\bfseries get\+Health} (const uint8\+\_\+t ship\+Type) const
+\item 
+\Hypertarget{classPlayerClass_a06d9d492f22494c85873613ab8228ceb}\label{classPlayerClass_a06d9d492f22494c85873613ab8228ceb} 
+void {\bfseries show\+Map} () const
+\item 
+\Hypertarget{classPlayerClass_a94c3182464ed48138c0d8e5bf8c4bde5}\label{classPlayerClass_a94c3182464ed48138c0d8e5bf8c4bde5} 
+void {\bfseries debug\+Map} () const
+\item 
+\Hypertarget{classPlayerClass_af3190d139b6cfc8cc234468b195d7751}\label{classPlayerClass_af3190d139b6cfc8cc234468b195d7751} 
+virtual void {\bfseries place} (Mapping)=0
+\item 
+\Hypertarget{classPlayerClass_a60dc08da52603fe55c4dfda07c44ff66}\label{classPlayerClass_a60dc08da52603fe55c4dfda07c44ff66} 
+virtual bool {\bfseries turn} (\mbox{\hyperlink{classPlayerClass}{Player\+Class}} \texorpdfstring{$\ast$}{*})=0
+\item 
+\Hypertarget{classPlayerClass_a761e6d548e15c201997578eb723100e1}\label{classPlayerClass_a761e6d548e15c201997578eb723100e1} 
+int8\+\_\+t \texorpdfstring{$\ast$}{*} {\bfseries operator\mbox{[}$\,$\mbox{]}} (const int \&)
+\item 
+\Hypertarget{classPlayerClass_ac183fa351b5ce540abaa8eec19a99a5e}\label{classPlayerClass_ac183fa351b5ce540abaa8eec19a99a5e} 
+bool {\bfseries operator$>$} (const \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&)
+\item 
+\Hypertarget{classPlayerClass_a8917796fc275944cd84b8a2f1e8298ab}\label{classPlayerClass_a8917796fc275944cd84b8a2f1e8298ab} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&)
+\item 
+\Hypertarget{classPlayerClass_a90b593b2796f498d7ca176542721cd12}\label{classPlayerClass_a90b593b2796f498d7ca176542721cd12} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&rhs) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPlayerClass_ae2a729fc13bea6b77e52546e45dd255f}\label{classPlayerClass_ae2a729fc13bea6b77e52546e45dd255f} 
+void {\bfseries init\+Map} ()
+\item 
+\Hypertarget{classPlayerClass_af85f6427f35b58d9397b9ff149fe6a45}\label{classPlayerClass_af85f6427f35b58d9397b9ff149fe6a45} 
+bool {\bfseries attack} (\mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&, const \mbox{\hyperlink{structPlayerClass_1_1Coord}{Coord}} \&)
+\item 
+\Hypertarget{classPlayerClass_a25be647df1b829a7f46519feb6eae151}\label{classPlayerClass_a25be647df1b829a7f46519feb6eae151} 
+bool {\bfseries test\+End} (\mbox{\hyperlink{classPlayerClass}{Player\+Class}} \&) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPlayerClass_abe87e5b9f5bf141fd2a5def5cda30511}\label{classPlayerClass_abe87e5b9f5bf141fd2a5def5cda30511} 
+std\+::string {\bfseries name}
+\item 
+\Hypertarget{classPlayerClass_a9bbc1158845fb8e69a7f84b02117989e}\label{classPlayerClass_a9bbc1158845fb8e69a7f84b02117989e} 
+uint8\+\_\+t {\bfseries size}
+\item 
+\Hypertarget{classPlayerClass_a4444c07762d4e71c95d4687d2b34303e}\label{classPlayerClass_a4444c07762d4e71c95d4687d2b34303e} 
+int8\+\_\+t \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} {\bfseries map}
+\item 
+\Hypertarget{classPlayerClass_a92446c5124d2888ea97ca65a34f1a3bb}\label{classPlayerClass_a92446c5124d2888ea97ca65a34f1a3bb} 
+uint8\+\_\+t {\bfseries health} \mbox{[}3\mbox{]} = \{PATROL, DESTROY, CARRIER\}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPlayerClass_ad9ced08966e2e15f477955d9b2c3b645}\label{classPlayerClass_ad9ced08966e2e15f477955d9b2c3b645} 
+static const uint8\+\_\+t {\bfseries SHIPNUM} = 3
+\item 
+\Hypertarget{classPlayerClass_a74fccd841ac9195b821d1b4650fef727}\label{classPlayerClass_a74fccd841ac9195b821d1b4650fef727} 
+static const uint8\+\_\+t {\bfseries MAPMIN} = 4
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPlayerClass_a52acbc2e7cd7fd7b8034072c6bf3fa8c}\label{classPlayerClass_a52acbc2e7cd7fd7b8034072c6bf3fa8c} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&, const class \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classPlayerClass_acb7c8fcb9f563d881055aba2d3a25307}\label{classPlayerClass_acb7c8fcb9f563d881055aba2d3a25307} 
+std\+::istream \& {\bfseries operator$>$$>$} (std\+::istream \&, class \mbox{\hyperlink{classPlayerClass}{Player\+Class}} \texorpdfstring{$\ast$}{*})
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Player\+Class.\+h\item 
+Player\+Class.\+cpp\end{DoxyCompactItemize}

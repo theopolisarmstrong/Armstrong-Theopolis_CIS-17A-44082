@@ -1,0 +1,70 @@
+\doxysection{Battleship.\+h}
+\hypertarget{Battleship_8h_source}{}\label{Battleship_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ File:\ \ \ Player.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *\ Author:\ Theopolis\ Armstrong}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ Created\ on\ May\ 28,\ 2019\ 5:05\ AM}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ Purpose:\ Battleship\ game\ class\ declaration}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ BATTLESHIP\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ BATTLESHIP\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//User\ libraries}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}PlayerClass.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}Input.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//Battleship\ class}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classBattleship}{Battleship}}\{}
+\DoxyCodeLine{00019\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ S\_FILE[9];\ \textcolor{comment}{//Save\ file\ name}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{struct\ }Header\{\ \textcolor{comment}{//Binary\ file\ data\ header}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ uint8\_t\ mapSize\ =\ 0;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ playNum\ =\ 0;\ \textcolor{comment}{//Number\ of\ players}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ Options\ gamemode\ =\ NONE;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ saveFileVer\ =\ 1;\ \textcolor{comment}{//Save\ file\ header\ version}}
+\DoxyCodeLine{00026\ \ \ \ \ \};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{struct\ }coord\{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ x\ =\ 0;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ y\ =\ 0;}
+\DoxyCodeLine{00030\ \ \ \ \ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ std::unordered\_set<PlayerClass*>\ players;}
+\DoxyCodeLine{00033\ \ \ \ \ uint8\_t\ size\ =\ 0;\ \textcolor{comment}{//Map\ size}}
+\DoxyCodeLine{00034\ \ \ \ \ Options\ gameMode\ =\ NONE;\ \textcolor{comment}{//game\ mode\ chosen\ in\ menu}}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classPlayerClass}{PlayerClass}}*\ winner\ =\ \textcolor{keyword}{nullptr};\ \textcolor{comment}{//winner\ of\ the\ game}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{bool}\ isEnd\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{//Game\ loop\ end\ flag}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ numPlayers\ =\ 2;}
+\DoxyCodeLine{00038\ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//Internal\ game\ functions}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ title();\ \textcolor{comment}{//Display\ title}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{char}\ menu();\ \textcolor{comment}{//Output\ menu\ and\ receives\ player's\ menu\ choice}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ setup();\ \textcolor{comment}{//Setup\ game}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ save();\ \textcolor{comment}{//Save\ current\ game\ status}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ load();\ \textcolor{comment}{//Initialize\ game\ with\ save\ file\ progress}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ place\_ships();\ \textcolor{comment}{//Prompt\ players\ for\ ship\ placements}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classBattleship}{\string~Battleship}}()\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ player\ :\ players)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ player;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//Mutators}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ setEnd(\textcolor{keywordtype}{bool}\ end)\ \{\ isEnd\ =\ end;\ \}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//Accessors}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ getEnd()\ \{\ \textcolor{keywordflow}{return}\ isEnd;\ \}}
+\DoxyCodeLine{00058\ \ \ \ \ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ init();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ loop();}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ end();}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ BATTLESHIP\_H\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00065\ }
+
+\end{DoxyCode}

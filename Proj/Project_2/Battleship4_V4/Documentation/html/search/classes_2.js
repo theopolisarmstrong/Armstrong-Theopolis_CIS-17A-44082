@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['player',['Player',['../class_player.html',1,'']]],
-  ['playerclass',['PlayerClass',['../class_player_class.html',1,'']]]
+  ['hash_3c_20playerclass_20_2a_20_3e_0',['hash&lt; PlayerClass * &gt;',['../structstd_1_1hash_3_01PlayerClass_01_5_01_4.html',1,'std']]]
 ];
