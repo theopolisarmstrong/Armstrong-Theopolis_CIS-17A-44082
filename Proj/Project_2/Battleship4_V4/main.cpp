@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     //Set the random number seed
     
     //Declare Variables
-    Battleship game(2);
+    Battleship game;
     
     //Initialize game
     game.init();

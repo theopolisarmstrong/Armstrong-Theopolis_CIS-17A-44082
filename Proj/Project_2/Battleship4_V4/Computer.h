@@ -23,6 +23,8 @@ public:
     
     virtual void place(Mapping) override;
     virtual bool turn(PlayerClass*) override;
+
+    bool enable_debug = false;
 };
 
 #endif /* COMPUTER_H */

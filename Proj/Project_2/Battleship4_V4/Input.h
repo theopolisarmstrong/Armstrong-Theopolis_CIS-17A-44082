@@ -8,6 +8,8 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#include <cstdint>
+
 enum Options {NONE = 0, PVCPU = '1', PVP = '2', LOAD = '3', EXIT = 'e', EXIT_E = 'E'};
 
 template<class T>

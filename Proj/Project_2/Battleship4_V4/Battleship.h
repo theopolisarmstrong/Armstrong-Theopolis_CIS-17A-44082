@@ -9,6 +9,7 @@
 #define BATTLESHIP_H
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
 //User libraries
 #include "PlayerClass.h"
@@ -28,12 +29,11 @@ private:
         char x = 0;
         char y = 0;
     };
-    enum PlayInd {NO_ONE = -1, P1, P2, CPU = 1};
-    
-    std::vector<PlayerClass*>players;
+
+    std::unordered_map<std::string, PlayerClass*>players;
     uint8_t size = 0; //Map size
     Options gameMode = NONE; //game mode chosen in menu
-    PlayInd winner = NO_ONE; //winner of the game
+    PlayerClass* winner = nullptr; //winner of the game
     bool isEnd = false; //Game loop end flag
     
     //Internal game functions
@@ -41,14 +41,13 @@ private:
     char menu(); //Output menu and receives player's menu choice
     void save(); //Save current game status
     void load(); //Initialize game with save file progress
-    
+    void place_ships(); //Prompt players for ship placements
+
 public:
-    //Constructors
-    Battleship(char pnum) : players(pnum) {}
     //Mutators
     void setEnd(bool end) { isEnd = end; }
     //Accessors
-    bool getEnd(){ return isEnd; }
+    bool getEnd() { return isEnd; }
     
     void init();
     void loop();

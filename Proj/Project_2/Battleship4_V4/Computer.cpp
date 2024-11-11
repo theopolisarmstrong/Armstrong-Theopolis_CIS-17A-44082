@@ -14,11 +14,9 @@ using namespace std;
 
 Computer::Computer() : PlayerClass(MAPMIN, "Computer"){
     srand(time(0));
-    placeAll();
 }
 Computer::Computer(const uint8_t size) : PlayerClass(size, "Computer") {
     srand(time(0));
-    placeAll();
 }
 
 void Computer::placeAll(){
@@ -96,6 +94,7 @@ void Computer::target(Coord &coord){
 }
 
 bool Computer::turn(PlayerClass* enemy){
+  if (enable_debug) showMap();
     bool win = false;
     string hit; //Hit indication
     Coord coord;
