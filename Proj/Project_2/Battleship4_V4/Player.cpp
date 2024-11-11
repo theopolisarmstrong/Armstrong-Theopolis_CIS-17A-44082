@@ -141,8 +141,8 @@ bool Player::turn(PlayerClass* enemy){
     maxVal(coord.y, size, "Error: Target y-axis out of range.\nEnter a new value: ");  //Validate target y coordinate
     coord.x -= 1;
     coord.y -= 1;
-    attack(*enemy, coord) ? hit = "Hit" : hit = "Miss"; //Check for and calculate hit or miss
-    cout << endl << hit << ' ' << enemy << "'s ships!\n";
+    attack(*enemy, coord) ? hit = "hit" : hit = "missed"; //Check for and calculate hit or miss
+    cout << endl << "You " << hit << ' ' << enemy << "'s ships!\n";
     //Calculate and display health
     healthPerc = 0.0f;
     for (char i : health){
