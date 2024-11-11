@@ -15,6 +15,7 @@ enum Mapping {HIT = -2, MISS = -1, PATROL = 1, DESTROY, CARRIER}; //Map indicati
 std::ostream& operator<<(std::ostream&, const class PlayerClass*);
 std::istream &operator>>(std::istream&, class PlayerClass*);
 
+
 class PlayerClass{
 protected:
     static const uint8_t SHIPNUM; //Number of available ship types
@@ -64,8 +65,19 @@ public:
     int8_t* operator[](const int &);
     bool operator>(const PlayerClass&);
     bool operator<(const PlayerClass&);
+    bool operator==(const PlayerClass& rhs) const {
+      return getName() == rhs.getName();
+    }
     friend std::ostream& operator<<(std::ostream&, const class PlayerClass*);
     friend std::istream& operator>>(std::istream&, class PlayerClass*);
+};
+
+template<>
+struct std::hash<PlayerClass*> {
+  std::size_t operator()(const PlayerClass* player) const noexcept {
+    std::size_t res = std::hash<std::string>{}(player->getName());
+    return res;
+  }
 };
 
 #endif /* PLAYERCLASS_H */

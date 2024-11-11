@@ -8,9 +8,11 @@
 #include <iostream>
 #include <fstream> //File I/O operations
 #include <cstdio> //exit fucntion
+#include <deque>
 #include <queue>
 #include <algorithm>
 #include <list>
+#include <random>
 
 using namespace std;
 
@@ -30,16 +32,17 @@ void Battleship::init(){
             case PVCPU: {
               gameMode = PVCPU; //Set game mode
               cout << "Selected Player vs. Computer mode!\n";
+              setup();
             } break;
 
             case PVP: {
               //Initialize game
               gameMode = PVP; //Set game mode
               cout << "Initializing Player vs. Player game mode.\n";
+              setup();
             } break;
 
             case LOAD:
-                //WIP
                 load();
                 break;
             case EXIT:
@@ -72,14 +75,16 @@ void Battleship::setup() {
         player->setName("CPU");
         dynamic_cast<Computer*>(player)->enable_debug = true;
       } else {
-        // Add human player
-        std::string name;
-        std::cout << "Enter player name: ";
-        std::cin >> name;
-        player = new Player(size, name);
+        do {
+          // Add human player
+          std::string name;
+          std::cout << "Enter player name: ";
+          std::cin >> name;
+          player = new Player(size, name);
+        } while (std::find_if(players.begin(), players.end(), [&](const PlayerClass* p) { return p->getName() == player->getName(); }) != players.end());
       }
 
-      players[player->getName()] = player;
+      players.emplace(player);
     }
     catch (bad_alloc) {
       cout << "Error: Memory allocation failure.\n";
@@ -91,20 +96,38 @@ void Battleship::setup() {
 }
 
 void Battleship::loop(){
-  setup();
-
     cout << "\n********\n" <<"*BEGIN!*\n" << "********\n\n";
     cout << "Enter " << static_cast<char>(EXIT_E) << " at any time to quit.\n";
     cout << "Progress will be saved every turn.\n";
 
-    std::queue<PlayerClass*> q;
-    std::for_each(players.begin(), players.end(), [&](auto p){ q.push(p.second); });
+    // Create shuffled player queue
+    std::deque<PlayerClass*> pDeque;
+    std::copy(players.cbegin(), players.cend(), std::back_inserter(pDeque));
 
+    // Display players
+    std::sort(pDeque.begin(), pDeque.end());
+    std::cout << "Player list:\n";
+    for (const auto player : pDeque) {
+      cout << player->getName() << std::endl;
+    }
+
+    // Shuffle players
+    std::shuffle(pDeque.begin(), pDeque.end(), std::mt19937(std::random_device()()));
+
+    // Display turn order
+    std::cout << "\nTurn order:\n";
+    for (const auto player : pDeque) {
+      cout << player->getName() << std::endl;
+    }
+
+    // Begin gameplay
+    std::queue<PlayerClass*> q(pDeque);
     while(!isEnd){
       auto player = q.front();
       q.pop();
       q.push(player);
       cout << "\n" << player->getName() << "'s turn: \n";
+      cout << (*min_element(players.begin(), players.end()))->getName() << " is in the lead!\n";
       if(player->turn(q.front())){
           isEnd = true;
           winner = player;
@@ -151,8 +174,9 @@ void Battleship::save(){
     fstream saveFile(S_FILE, fstream::binary | fstream::out);
     saveFile.write(reinterpret_cast<char*>(&header), sizeof(header)); //Write save file header information
     //Save player data
-    for (auto [name, player] : players){
+    for (auto player : players){
         //Save name
+        std::string name = player->getName();
         unsigned long nameSize = name.size();
         saveFile.write(reinterpret_cast<char*>(&nameSize), sizeof(nameSize)); //Write name length
         saveFile.write(&name[0], nameSize); //Write name
@@ -176,35 +200,30 @@ void Battleship::load(){
         //Read header information
         cout << "Reading save file...\n";
         saveFile.read(reinterpret_cast<char*>(&header), sizeof(header));
+
         std::list<PlayerClass*> pList;
-        for (int i = 0; i < header.playNum; i++){
-            if (header.gamemode == PVCPU && i == header.playNum - 1){ //Initialize computer player at end of players vector
-                try{
-                    auto cpu = new Computer(header.mapSize);
-                    cpu->setName("CPU");
-                    pList.push_back(cpu);
-                }
-                catch (bad_alloc){
-                    cout << "Error: Memory allocation failure while loading\n";
-                    exit(EXIT_FAILURE);
-                }
-            }else{
-              try{
-                auto player = new Player(header.mapSize);
-                players[player->getName()] = player;
-                pList.push_back(player);
-              }
-                catch (bad_alloc){
-                    cout << "Error: Memory allocation failure while loading\n";
-                    exit(EXIT_FAILURE);
-                }
+
+        for (int i = 0; i < header.playNum; i++) {
+          PlayerClass *player;
+          try {
+            if (header.gamemode == PVCPU && i == 0) { //Initialize computer player
+              player = new Computer(header.mapSize);
+            } else {
+              player = new Player(header.mapSize);
             }
+            pList.push_back(player);
+          }
+          catch (bad_alloc) {
+            cout << "Error: Memory allocation failure while loading\n";
+            exit(EXIT_FAILURE);
+          }
         }
+
         for (auto it = pList.begin(); it != pList.end(); it++) {
           auto player = *it;
             //Read name
             unsigned long nameSize = 0;
-            string name = "No name read";
+            string name = "No name";
             saveFile.read(reinterpret_cast<char*>(&nameSize), sizeof(unsigned long)); //Read name length
             try{
                 name.resize(nameSize);
@@ -217,7 +236,7 @@ void Battleship::load(){
             player->setName(name); //Set name
             //Read map
             for (int x = 0; x < header.mapSize; x++){
-                saveFile.read(reinterpret_cast<char*>((*player)[x]), sizeof((*player)[x]) * header.mapSize);
+                saveFile.read(reinterpret_cast<char*>((*player)[x]), sizeof((*player)[x]));
             }
             //Read health
             for (int x = 0; x < player->getShipNum(); x++){
@@ -226,20 +245,23 @@ void Battleship::load(){
                 player->setHealth(x, health);
             }
         }
+
+        std::copy(pList.begin(), pList.end(), std::inserter(players, players.begin()));
+
+      //Close file
+      saveFile.close();
         //Initialize game
         cout << "Initializing game...\n";
         size = header.mapSize;
         gameMode = header.gamemode; //Set gamemode; ends menu loop/begins game
-        //Close file
-        saveFile.close();
     } else cout << "Error: No existing save file\n";
 }
 
 void Battleship::place_ships() {
-  for (auto it = players.begin(); it != players.end(); it++) {
-    it->second->place(CARRIER);
-    it->second->place(DESTROY);
-    it->second->place(PATROL);
+  for (auto player : players) {
+    player->place(CARRIER);
+    player->place(DESTROY);
+    player->place(PATROL);
   }
   cout << endl;
 }

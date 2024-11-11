@@ -8,8 +8,7 @@
 #ifndef BATTLESHIP_H
 #define BATTLESHIP_H
 #include <iostream>
-#include <vector>
-#include <unordered_map>
+#include <unordered_set>
 
 //User libraries
 #include "PlayerClass.h"
@@ -30,7 +29,7 @@ private:
         char y = 0;
     };
 
-    std::unordered_map<std::string, PlayerClass*>players;
+    std::unordered_set<PlayerClass*> players;
     uint8_t size = 0; //Map size
     Options gameMode = NONE; //game mode chosen in menu
     PlayerClass* winner = nullptr; //winner of the game
@@ -46,6 +45,12 @@ private:
     void place_ships(); //Prompt players for ship placements
 
 public:
+    ~Battleship() {
+      for (auto player : players) {
+        delete player;
+      }
+    }
+
     //Mutators
     void setEnd(bool end) { isEnd = end; }
     //Accessors
