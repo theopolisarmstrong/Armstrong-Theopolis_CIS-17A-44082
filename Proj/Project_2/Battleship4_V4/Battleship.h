@@ -35,10 +35,12 @@ private:
     Options gameMode = NONE; //game mode chosen in menu
     PlayerClass* winner = nullptr; //winner of the game
     bool isEnd = false; //Game loop end flag
+    int numPlayers = 2;
     
     //Internal game functions
     void title(); //Display title
     char menu(); //Output menu and receives player's menu choice
+    void setup(); //Setup game
     void save(); //Save current game status
     void load(); //Initialize game with save file progress
     void place_ships(); //Prompt players for ship placements

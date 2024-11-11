@@ -28,56 +28,14 @@ void Battleship::init(){
     while(gameMode == NONE){   //Loop menu until game mode is chosen
         switch(menu()){
             case PVCPU: {
-              //Initialize game
               gameMode = PVCPU; //Set game mode
-
-              cout << "Initializing Player vs. Computer game mode.\n";
-              cout << "Enter " << static_cast<char>(EXIT_E) << " at any time to quit.\n";
-              cout << "Enter map size: ";
-              read(size);
-              size = atoi(reinterpret_cast<char *>(&size));
-              minVal(size, 4, "Error: Size too low.\nEnter a valid size: ");
-              //Initialize players
-              auto cpu = new Computer(size);
-              cpu->setName("CPU 1");
-              cpu->enable_debug = true;
-              auto player = new Player(size, "Player 1");
-              try {
-                players[cpu->getName()] = cpu;
-                players[player->getName()] = player;
-              }
-              catch (bad_alloc) {
-                cout << "Error: Memory allocation failure.\n";
-                exit(0);
-              }
-              place_ships();
+              cout << "Selected Player vs. Computer mode!\n";
             } break;
 
             case PVP: {
               //Initialize game
-              int numPLayers = 2;
               gameMode = PVP; //Set game mode
-
               cout << "Initializing Player vs. Player game mode.\n";
-              cout << "Enter map size: ";
-              read(size);
-              size = atoi(reinterpret_cast<char *>(&size));
-              minVal(size, 4, "Error: Size too low.\n");
-
-              //Initialize player structures
-              for (size_t i = 0; i < numPLayers; i++) {
-                std::string name;
-                std::cout << "Enter player " << i << "1's name: ";
-                getline(cin, name);
-                try {
-                  auto player = new Player(size, name);
-                }
-                catch (bad_alloc) {
-                  cout << "Error: Memory allocation failure.\n";
-                  exit(0);
-                }
-              }
-              place_ships();
             } break;
 
             case LOAD:
@@ -92,7 +50,49 @@ void Battleship::init(){
         }
     }
 }
+
+void Battleship::setup() {
+  cout << "Enter " << static_cast<char>(EXIT_E) << " at any time to quit.\n";
+  cout << "Enter map size: ";
+  read(size);
+  size = atoi(reinterpret_cast<char *>(&size));
+  minVal(size, 4, "Error: Size too low.\nEnter a valid size: ");
+
+  //Initialize players
+  cout << "Enter the number of players: ";
+  read(numPlayers);
+  
+
+  for (size_t i = 0; i < numPlayers; i++) {
+    PlayerClass* player;
+    try {
+      if (i == 0 && gameMode == PVCPU) {
+        // Add CPU player
+        player = new Computer(size);
+        player->setName("CPU");
+        dynamic_cast<Computer*>(player)->enable_debug = true;
+      } else {
+        // Add human player
+        std::string name;
+        std::cout << "Enter player name: ";
+        std::cin >> name;
+        player = new Player(size, name);
+      }
+
+      players[player->getName()] = player;
+    }
+    catch (bad_alloc) {
+      cout << "Error: Memory allocation failure.\n";
+      exit(0);
+    }
+  }
+
+  place_ships();
+}
+
 void Battleship::loop(){
+  setup();
+
     cout << "\n********\n" <<"*BEGIN!*\n" << "********\n\n";
     cout << "Enter " << static_cast<char>(EXIT_E) << " at any time to quit.\n";
     cout << "Progress will be saved every turn.\n";
@@ -158,7 +158,7 @@ void Battleship::save(){
         saveFile.write(&name[0], nameSize); //Write name
         //Save map
         for (int x = 0; x < header.mapSize; x++){
-            saveFile.write(reinterpret_cast<char*>((*player)[x]), sizeof((*player)[x]) * header.mapSize);
+            saveFile.write(reinterpret_cast<char*>((*player)[x]), sizeof((*player)[x]));
         }
         //Save health
         for (int x = 0; x < player->getShipNum(); x++){
@@ -181,7 +181,7 @@ void Battleship::load(){
             if (header.gamemode == PVCPU && i == header.playNum - 1){ //Initialize computer player at end of players vector
                 try{
                     auto cpu = new Computer(header.mapSize);
-                    cpu->setName("CPU 1");
+                    cpu->setName("CPU");
                     pList.push_back(cpu);
                 }
                 catch (bad_alloc){
